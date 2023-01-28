@@ -6,8 +6,8 @@
  *   
  */
 import path from "path-browserify"
-import { BatchBackendBaseOptions } from "../types";
-import BatchBackend from "./BatchBackend" 
+import { BatchBackendBaseOptions } from "../../types";
+import BatchBackend from "voerkalogger/BatchBackend" 
 
 export interface FileSystem{
     exists(filename: string):Promise<boolean>;

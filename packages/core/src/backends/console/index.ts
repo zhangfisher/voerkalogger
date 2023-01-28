@@ -3,8 +3,8 @@
  
  * 
  */
-import BackendBase from "./BackendBase"
-import { BackendBaseOptions, LogRecord } from "../types"
+import BackendBase from "../../BackendBase"
+import { LogRecord } from "../../types"
 
 const consoleMethods=[
     console.log,

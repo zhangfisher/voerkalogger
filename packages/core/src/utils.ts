@@ -6,6 +6,7 @@ import isFunction from "lodash/isFunction";
 import type { LogMethodOptions, LogMethodVars, LogRecord } from "./types";
 import { LogLevelNames } from "./consts";
 import  isPlainObject from "lodash/isPlainObject";
+import type { Logger } from "./Logger";
 
 /**
  * 执行一个函数，如果出错则返回错误信息
@@ -67,18 +68,20 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
 /**
  * 返回插值变量字典，用来对message进行插值替换
  */
- export function getInterpolatedVars(record:LogRecord):Record<string,any>{
+ export function getInterpolatedVars(this:Logger,record:LogRecord):Record<string,any>{
+    const logger = this
     const { message, level, timestamp, error,tags,module,...extras } = record
-    let D = dayjs(record.timestamp)
+    let now = dayjs(record.timestamp)
     let levelName = LogLevelNames[level]
     return { 
         level   : levelName.padEnd(5).toUpperCase(),
-        datetime: D.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
+        datetime: now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
         message,
-        date    : D.format('YYYY-MM-DD'),
-        time    : D.format('HH:mm:ss'),
+        date    : now.format('YYYY-MM-DD'),
+        time    : now.format('HH:mm:ss'),
         tags    : tags ? (Array.isArray(tags) ? tags.join(",") : String(tags)) : '',
         module  : module || '', 
-        ...extras
+        ...extras,
+        ...logger.options.context || {}
     }
 }

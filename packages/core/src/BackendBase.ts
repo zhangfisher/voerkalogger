@@ -1,9 +1,14 @@
 import merge from "lodash/merge"   
-import formatters from "../formatters"
-import { BackendBaseOptions, LogFormatter, LogRecord } from "../types"
+import formatters from "./formatters"
+import { BackendBaseOptions, LogFormatter, LogRecord } from "./types"
 
 
-export default class BackendBase<T extends BackendBaseOptions = any>{
+
+/**
+ * LogRow
+ * 
+ */
+export class BackendBase<T extends BackendBaseOptions = any,LogRow = any>{
     #options:T
     #formatter:LogFormatter = formatters.default
     constructor(options:T){

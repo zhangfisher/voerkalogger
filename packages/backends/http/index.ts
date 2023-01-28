@@ -1,6 +1,6 @@
-import BatchBackend from './BatchBackend';
+import BatchBackend from 'voerkalogger/BatchBackendBase';
 import axios,{AxiosInstance} from 'axios';
-import { BatchBackendBaseOptions } from '../types';
+import { BatchBackendBaseOptions } from 'voerkalogger';
 
 
 

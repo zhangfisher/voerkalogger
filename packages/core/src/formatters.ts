@@ -1,8 +1,10 @@
+import type { Logger } from "./Logger"
 import { LogFormatters, LogRecord } from "./types"
 import { getInterpolatedVars } from "./utils"
   
 // 默认的格式化器
-function defaultFormatter(record:LogRecord){     
+function defaultFormatter(this:Logger,record:LogRecord){     
+    const logger = this
     let extra = []
     if(Array.isArray(record.tags) && record.tags.length>0){
         extra.push(`tags=${record.tags.join(',')}`)

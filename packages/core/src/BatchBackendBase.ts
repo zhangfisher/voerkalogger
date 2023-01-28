@@ -11,11 +11,11 @@
  * 
  */
 
-import { BatchBackendBaseOptions, LogRecord } from "../types"
-import BackendBase from "./BackendBase"
+import { BatchBackendBaseOptions, LogRecord } from "./types"
+import { BackendBase } from "./BackendBase"
 
 
-export default class BatchBackend<T extends BatchBackendBaseOptions> extends BackendBase<T>{
+export class BatchBackendBase<T extends BatchBackendBaseOptions> extends BackendBase<T>{
     #buffer:LogRecord[]=[]
     #intervalId:any=0
     #flushing:boolean=false

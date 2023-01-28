@@ -22,19 +22,17 @@
  */
 import { DefaultLoggerOptions, LogLevel  } from "./consts" 
 import { handleLogArgs } from "./utils";
-import BackendBase from "./backends/BackendBase";
-import BatchBackend from "./backends/BatchBackend";
+import {BackendBase} from "./BackendBase";
 import { LoggerOptions, LogMethodOptions, LogMethodVars, LogRecord } from "./types";
-import ConsoleBackend from "./backends/ConsoleBackend";
-import FileBackend, { FileBackendOptions } from "./backends/FileBackend";
-import HttpBackend, { HttpBackendOptions } from "./backends/HttpBackend";
+import ConsoleBackend from "./backends/console";
+import { BatchBackendBase } from "./BatchBackendBase";
+  
 
-
-export default class Logger{
+export class Logger{
     static LoggerInstance:Logger;
-    #outputBackendInstances:Record<string,BackendBase>={}
+    #backendInstances:Record<string,BackendBase>={}
     #options:Required<LoggerOptions> = DefaultLoggerOptions
-    constructor(options:LoggerOptions) {
+    constructor(options?:LoggerOptions) {
         if(Logger.LoggerInstance){
             return Logger.LoggerInstance
         } 
@@ -44,52 +42,28 @@ export default class Logger{
         this.catchGlobalErrors();
         Logger.LoggerInstance = this        
     }    
+    get options() {return this.#options}
     get enabled() { return this.#options.enabled; }
     set enabled(value) { this.#options.enabled = value; }
     get level() { return this.#options.level }
     set level(value:LogLevel) {this.#options.level = value;} 
     get output() { return this.#options.output }   
-    get backends() { return this.#outputBackendInstances; }
+    get backends() { return this.#backendInstances; }
     
+    /**
+     * 安装后端实例
+     */
+    use(backend:BackendBase){
+
+    }
+
+
     /**
      * 重置所有后端实例
      */
     private _resetBackends(){ 
-        let finalOutput:string[] = this.output.split(",")
-        Object.entries(this.#outputBackendInstances).forEach(([name,backend])=>{
-            try{
-                if(!finalOutput.includes(name) ){
-                    backend.enabled = false
-                }else{
-                    this.resetBackend(name) 
-                }
-            }catch(e:any){
-                console.warn(e.stack)
-            } 
-        })
-        finalOutput.forEach(name=>{
-            if(!(name in this.#outputBackendInstances)){
-                this.addBackend(name,this._createBackendInstance(name) ) 
-            }
-        })
-    }
-    
-    /**
-     * 返回内置的后端实例
-     * @param {}} name
-     */
-    private _createBackendInstance(name:string):BackendBase {
-        let backendInstance:BackendBase
-        let options = this._getBackendOptions(name) 
-        if(name=='file'){
-            backendInstance = (new FileBackend(options as FileBackendOptions)) as unknown  as BackendBase
-        }else if(name=='http'){
-            backendInstance = (new HttpBackend(options as HttpBackendOptions)) as unknown  as BackendBase
-        }else{
-            backendInstance = (new ConsoleBackend(options)) as unknown  as BackendBase
-        }
-        return backendInstance
-    }
+         
+    } 
     /**
      * 读取后端配置参数
      * @param name 
@@ -111,36 +85,36 @@ export default class Logger{
      */
     addBackend(name:string,backendInstance:BackendBase) {
         try {
-            this.#outputBackendInstances[name] = backendInstance;
+            this.#backendInstances[name] = backendInstance;
             if (this.#options.debug) console.debug('Logger backend[{name}] is enabled'.params(name));
         } catch (e:any) {
             console.warn('Error on loading logger backend[{name}] : {error}'.params(name, e.message));
         }
     }
     removeBackend(name:string) {
-        delete this.#outputBackendInstances[name];
+        delete this.#backendInstances[name];
     }
     resetBackend(name:string) {
-        if(!(name in this.#outputBackendInstances)) return 
+        if(!(name in this.#backendInstances)) return 
         let options = this._getBackendOptions(name) 
-        this.#outputBackendInstances[name].reset(options).catch(e=>console.error("重置日志后端时出错:",e.stack))
+        this.#backendInstances[name].reset(options).catch(e=>console.error("重置日志后端时出错:",e.stack))
     }
     /**
      * 将缓冲区的日志输出到存储
      */
     async flush(){ 
-        await Promise.allSettled(Object.values(this.#outputBackendInstances).map(backend=>{
-            if(backend instanceof BatchBackend){
+        await Promise.allSettled(Object.values(this.#backendInstances).map(backend=>{
+            if(backend instanceof BatchBackendBase){
                 backend.flush() 
             } 
         }))
     }
     /**
-     * 获取启用的有效后端实例并保存在_outputBackendInstances
+     * 获取启用的有效后端实例并保存在_backendInstances
      */
     private loadOutputBackends() {
         let output = this.#options.output.split(",");
-        this.#outputBackendInstances = {};
+        this.#backendInstances = {};
         // 当开启debug时自动启用控制台输出
         if (this.#options.debug && !output.includes('console')) output.push('console');
         // 构建配置的输出存储后端
@@ -169,7 +143,7 @@ export default class Logger{
     private _log(message:string | Function,vars:LogMethodVars={},options:LogMethodOptions={}) {  
         if (!this.#options.enabled) return
         let record =Object.assign({},this.#options.context, handleLogArgs(message,vars,options))    
-        Promise.allSettled(Object.values(this.#outputBackendInstances).map((backendInst) => {
+        Promise.allSettled(Object.values(this.#backendInstances).map((backendInst) => {
             const limitLevel = backendInst.level || this.#options.level
             if (backendInst.enabled && (record.level >= limitLevel || limitLevel === LogLevel.NOTSET || this.#options.debug)) {                        
                 return backendInst._output(record);

@@ -7,9 +7,19 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "voerkalogger":"workspace:^1.0.0" 
+    "rotating-file-stream": "^3.0.4",
+    "voerkalogger": "workspace:^1.0.0"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/core": "^1.3.31",
+    "@types/node": "^18.11.18",
+    "ts-essentials": "^9.3.0",
+    "ts-node": "^10.9.1",
+    "tsup": "^6.5.0",
+    "type-fest": "^3.5.4",
+    "typescript": "^4.9.5"
+  }
 }

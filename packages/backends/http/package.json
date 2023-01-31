@@ -1,7 +1,7 @@
 {
-  "name": "voerka-logger-http-backend",
+  "name": "@voerkalogger/http",
   "version": "1.0.0",
-  "description": "",
+  "description": "voerkalogger file backend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "voerkalogger": "workspace:^1.0.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.3.31",
+    "@types/node": "^18.11.18",
+    "ts-essentials": "^9.3.0",
+    "ts-node": "^10.9.1",
+    "tsup": "^6.5.0",
+    "type-fest": "^3.5.4",
+    "typescript": "^4.9.5"
   }
 }

@@ -12,7 +12,7 @@ function defaultFormatter(this:Logger,record:LogRecord){
     if(record.module){
         extra.push(`module=${record.module}` )
     }     
-    return `[{level}] - {datetime} : {message}${extra.length>0 ? '('+extra.join(",")+')' : ''}`.params(getInterpolatedVars(record) )
+    return `[{level}] - {datetime} : {message}${extra.length>0 ? '('+extra.join(",")+')' : ''}`.params(getInterpolatedVars.call(this,record) )
 } 
 
 function jsonFormatter(record:LogRecord){ 

@@ -7,8 +7,9 @@ import { BackendBaseOptions, LogFormatter, LogRecord } from "./types"
 /**
  * LogRow
  * 
- */
-export class BackendBase<T extends BackendBaseOptions = any,LogRow = any>{
+
+*/
+export class BackendBase<T extends BackendBaseOptions = any,LogFormatedRecord = LogRecord >{
     #options:T
     #formatter:LogFormatter = formatters.default
     constructor(options:T){
@@ -56,15 +57,15 @@ export class BackendBase<T extends BackendBaseOptions = any,LogRow = any>{
      * @param {*} record = {message: string, level: number, timestamp: string, error: *,tags:[],module:string}
      * @param context
      */
-     format(record:LogRecord){
+     format(record:LogRecord):LogFormatedRecord{
          if(typeof(this.#formatter)=="function"){
              try{
                  return this.#formatter(record)
              }catch(e){
-                return record
+                return record as LogFormatedRecord
              }            
          }else{
-            return record
+            return record as LogFormatedRecord
          } 
     }
     /**

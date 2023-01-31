@@ -1,14 +1,17 @@
 import { LogLevel } from "./consts"
+import { BackendBase } from './BackendBase';
+import { BatchBackendBase } from './BatchBackendBase';
 
 // 日志配置
 export interface LoggerOptions{
-    enabled?:boolean                            // 全局开关
-    level?:LogLevel                             // 全局日志级别
-    debug?:boolean                              // 是否在调试阶段，=true时所有日志均会输出
-    output?: string[]                           // 启用的输出后端
-    context?:Record<string,any>                 // 全局上下文，可以用为输出时的插值变量
-    catchGlobalErrors?: boolean                 // 是否捕获全局错误
-    tags?:string[]                              // 全局标签
+    enabled?:boolean                                    // 全局开关
+    level?:LogLevel                                     // 全局日志级别
+    debug?:boolean                                      // 是否在调试阶段，=true时所有日志均会输出
+    output?: string[]                                   // 启用的输出后端
+    context?:Record<string,any>  | null                        // 全局上下文，可以用为输出时的插值变量
+    catchGlobalErrors?: boolean                         // 是否捕获全局错误
+    tags?:string[],                                     // 全局标签
+    backends:(BackendBase | BatchBackendBase)[]         // 注册的格式化器实例，也可以调用.use注册后端
 }
 
 // 日志记录
@@ -18,7 +21,7 @@ export interface LogRecord{
     timestamp?: number                          // 时间戳
     error?: string | Error                      // 错误信息
     tags?:string[]                              // 日志标签
-    module?:string,                             // 应用模块名称
+    module?:string,                             // 应用模块名称或源文件
     [key: string]:any                           // 额外的信息
 }
 

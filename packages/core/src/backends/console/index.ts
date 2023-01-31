@@ -3,7 +3,7 @@
  
  * 
  */
-import BackendBase from "../../BackendBase"
+import {BackendBase} from "../../BackendBase"
 import { LogRecord } from "../../types"
 
 const consoleMethods=[

@@ -17,7 +17,7 @@ export const DefaultLoggerOptions:Required<LoggerOptions> = {
     enabled: true,
     level:  LogLevel.WARN,
     debug:  false,
-    output: process.env.NODE_ENV === 'test' ?  "file" : 'console',
+    output: [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
     catchGlobalErrors: true,                // 是否自动捕获全局错误，
     backends:{
         console:{

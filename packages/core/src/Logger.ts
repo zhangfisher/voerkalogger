@@ -26,17 +26,18 @@ import {BackendBase} from "./BackendBase";
 import { LoggerOptions, LogMethodOptions, LogMethodVars, LogRecord } from "./types";
 import ConsoleBackend from "./backends/console";
 import { BatchBackendBase } from "./BatchBackendBase";
-import {DeepRequired} from "ts-essentials"  
+import { DeepRequired } from "ts-essentials"  
 
 export class Logger{
     static LoggerInstance:Logger;
-    #backendInstances:Record<string,BackendBase>={}
+    #backendInstances:Record<string,BackendBase>={}                     // 后端实例
     #options:DeepRequired<LoggerOptions> = DefaultLoggerOptions
     constructor(options?:LoggerOptions) {
         if(Logger.LoggerInstance){
             return Logger.LoggerInstance
         } 
         this.#options = Object.assign({
+            id:"",
             enabled: true,
             level:  LogLevel.WARN,
             debug:  false,
@@ -44,8 +45,9 @@ export class Logger{
             tags:[],
             output: ['console'],
             catchGlobalErrors: true,                // 是否自动捕获全局错误，
-            backends:[]
-        },options || {})        
+            backends:[]                             // 后端配置
+        },options || {}) as DeepRequired<LoggerOptions>      
+        // 注册默认的控制台日志输出
         this.use(new ConsoleBackend())
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();

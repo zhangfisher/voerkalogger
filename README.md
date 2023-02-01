@@ -4,13 +4,43 @@
 
 [文档](https://zhangfisher.github.io/voerka-logger/)
 
-**主要特性**
+## 主要特性
 
 - 基于`TypeScript`开发
 - 可扩展多种输出后端，包括`console/file/indexdb`等。
 
+## 快速使用
 
-**开源推荐：** 
+
+```typescript
+
+import { Logger } from 'voerkaLogger';
+import FileBackend from 'voerkaLogger/backends/file';
+import HttpBackend from 'voerkaLogger/backends/http';
+
+
+let logger = new Logger({
+    level:LogLevel.DEBUG,
+    output:"console,file",                     // 启用的日志后端
+    injectGlobal:true                          // 在globalThis注入一个logger全局变量
+    backends:{
+        file:{
+            class:HttpBackend,
+            //.....构造配置参数.....
+        },
+        http:{
+            class:HttpBackend
+            //.....构造配置参数.....
+        }
+    }    
+});
+
+
+```
+
+
+
+## 开源推荐： 
 
 - **`VoerkaI18n`**: [基于Nodejs/React/Vue的一键国际化解决方案](https://zhangfisher.github.io/voerka-i18n/)
 - **`Logsets`**: [命令行应用增强输出库](https://zhangfisher.github.io/logsets/)

@@ -11,12 +11,12 @@
  * 
  */
 
-import { BatchBackendBaseOptions, LogRecord } from "./types"
+import { BatchBackendBaseOptions, VoerkaLoggerRecord } from "./types"
 import { BackendBase } from "./BackendBase"
 
 
 export class BatchBackendBase<T extends BatchBackendBaseOptions=any> extends BackendBase<T>{
-    #buffer:LogRecord[]=[]
+    #buffer:VoerkaLoggerRecord[]=[]
     #intervalId:any=0
     #flushing:boolean=false
     constructor(options:T){
@@ -66,7 +66,7 @@ export class BatchBackendBase<T extends BatchBackendBaseOptions=any> extends Bac
             }          
         }        
     }
-    async output(result:any,record:LogRecord){
+    async output(result:any,record:VoerkaLoggerRecord){
         this.#buffer.push(result)   
         // 如果超出缓冲区，则马上进行提交
         if(!this.#flushing && this.#buffer.length>=(this.options.bufferSize || 100)){

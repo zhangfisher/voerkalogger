@@ -20,47 +20,40 @@
  *  
  * 
  */
-import { DefaultLoggerOptions, LogLevel  } from "./consts" 
+import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
 import { handleLogArgs } from "./utils";
 import {BackendBase} from "./BackendBase";
-import { LoggerOptions, LogMethodOptions, LogMethodVars, LogRecord } from "./types";
+import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
 import ConsoleBackend from "./backends/console";
 import { BatchBackendBase } from "./BatchBackendBase";
 import { DeepRequired } from "ts-essentials"  
 
-export class Logger{
-    static LoggerInstance:Logger;
+export class VoerkaLogger{
+    static LoggerInstance:VoerkaLogger;
     #backendInstances:Record<string,BackendBase>={}                     // 后端实例
-    #options:DeepRequired<LoggerOptions> = DefaultLoggerOptions
-    constructor(options?:LoggerOptions) {
-        if(Logger.LoggerInstance){
-            return Logger.LoggerInstance
+    #options?:DeepRequired<VoerkaLoggerOptions> 
+    constructor(options?:VoerkaLoggerOptions) {
+        if(VoerkaLogger.LoggerInstance){
+            return VoerkaLogger.LoggerInstance
         } 
-        this.#options = Object.assign({
-            id:"",
-            enabled: true,
-            level:  LogLevel.WARN,
-            debug:  false,
-            context: null,
-            tags:[],
-            output: ['console'],
-            catchGlobalErrors: true,                // 是否自动捕获全局错误，
-            backends:[]                             // 后端配置
-        },options || {}) as DeepRequired<LoggerOptions>      
+        this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>      
         // 注册默认的控制台日志输出
         this.use(new ConsoleBackend())
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
-        Logger.LoggerInstance = this        
+        VoerkaLogger.LoggerInstance = this        
     }    
-    get options() {return this.#options}
-    get enabled() { return this.#options.enabled; }
-    set enabled(value) { this.#options.enabled = value; }
-    get level() { return this.#options.level }
-    set level(value:LogLevel) {this.#options.level = value;} 
-    get output() { return this.#options.output }   
+    get options() {return this.#options!}
+    get enabled() { return this.options.enabled; }
+    set enabled(value) { this.options.enabled = value; }
+    get level() { return this.options.level }
+    set level(value:VoerkaLoggerLevel) {this.options.level = value;} 
+    get output() { return this.options.output }   
     get backends() { return this.#backendInstances; }
     
+    private loadBackends(){
+
+    }
     /**
      * 安装后端实例
      */
@@ -138,7 +131,7 @@ export class Logger{
     */
     private catchGlobalErrors() {
         if(!this.#options.catchGlobalErrors) return 
-        let self:Logger = this;
+        let self:VoerkaLogger = this;
        ;
         window.onerror = function (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error): any{
             self.error(String(event), error);
@@ -156,7 +149,7 @@ export class Logger{
         let record =Object.assign({},this.#options.context, handleLogArgs(message,vars,options))    
         Promise.allSettled(Object.values(this.#backendInstances).map((backendInst) => {
             const limitLevel = backendInst.level || this.#options.level
-            if (backendInst.enabled && (record.level >= limitLevel || limitLevel === LogLevel.NOTSET || this.#options.debug)) {                        
+            if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.#options.debug)) {                        
                 return backendInst._output(record);
             }
         }))
@@ -168,19 +161,19 @@ export class Logger{
      *  如果变量或message是函数会自动调用
      */
     debug(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign(options || {}, {level:LogLevel.DEBUG}));
+        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.DEBUG}));
     }
     info(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions){
-        this._log(message,vars,Object.assign(options || {}, {level:LogLevel.INFO}));
+        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.INFO}));
     }
     warn(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions){
-        this._log(message,vars,Object.assign(options || {}, {level:LogLevel.WARN}));
+        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.WARN}));
     }
     error(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign(options || {}, {level:LogLevel.ERROR}));
+        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.ERROR}));
     }
     fatal(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign(options || {}, {level:LogLevel.FATAL}));
+        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.FATAL}));
     } 
     /**
      * 重置日志后端

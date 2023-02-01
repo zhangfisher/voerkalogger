@@ -1,9 +1,10 @@
-import type { Logger } from "./Logger"
-import { LogFormatters, LogRecord } from "./types"
-import { getInterpolatedVars } from "./utils"
-  
+import type { BackendBase } from "../BackendBase"
+import type { VoerkaLogger } from "../Logger"
+import type { VoerkaLoggerRecord } from "../types"
+import { getInterpolatedVars } from "../utils"
+
 // 默认的格式化器
-function defaultFormatter<R=LogRecord>(this:Logger,record:LogRecord):R{     
+export function standard<R=VoerkaLoggerRecord>(this:VoerkaLogger,record:VoerkaLoggerRecord,backend?:BackendBase):R{     
     const logger = this
     let extra = []
     if(Array.isArray(record.tags) && record.tags.length>0){
@@ -14,12 +15,3 @@ function defaultFormatter<R=LogRecord>(this:Logger,record:LogRecord):R{
     }     
     return `[{level}] - {datetime} : {message}${extra.length>0 ? '('+extra.join(",")+')' : ''}`.params(getInterpolatedVars.call(this,record) ) as R
 } 
-
-function jsonFormatter(record:LogRecord){ 
-    return JSON.stringify(record)
-}
-
- export default {
-     default: defaultFormatter,
-     json   : jsonFormatter,
- } as LogFormatters

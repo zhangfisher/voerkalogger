@@ -24,17 +24,24 @@ let logger = new Logger({
     output:"console,file",                     // 启用的日志后端
     injectGlobal:true                          // 在globalThis注入一个logger全局变量
     backends:{
+        console:{
+            template:"ffff"
+        },
         file:{
-            class:HttpBackend,
+            class:FileBackend,
             //.....构造配置参数.....
         },
         http:{
-            class:HttpBackend
+            class:HttpBackend,
+            format:(record:LogRecord)=>record
             //.....构造配置参数.....
         }
     }    
 });
 
+logger.use(HttpBackend,{})
+logger.use(FileBackend,{})
+ 
 
 ```
 

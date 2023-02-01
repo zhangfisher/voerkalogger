@@ -3,10 +3,10 @@ import mapValues from "lodash/mapValues";
 import dayjs from "dayjs";
 import isError from "lodash/isError";
 import isFunction from "lodash/isFunction";
-import type { LogMethodOptions, LogMethodVars, LogRecord } from "./types";
-import { LogLevelNames } from "./consts";
+import type { LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
+import { VoerkaLoggerLevelNames } from "./consts";
 import  isPlainObject from "lodash/isPlainObject";
-import type { Logger } from "./Logger";
+import type { VoerkaLogger } from "./Logger";
 
 /**
  * 执行一个函数，如果出错则返回错误信息
@@ -68,15 +68,16 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
 /**
  * 返回插值变量字典，用来对message进行插值替换
  */
- export function getInterpolatedVars(this:Logger,record:LogRecord):Record<string,any>{
+ export function getInterpolatedVars(this:VoerkaLogger,record:VoerkaLoggerRecord):Record<string,any>{
     const logger = this
     const { message, level, timestamp, error,tags,module,...extras } = record
     let now = dayjs(record.timestamp)
-    let levelName = LogLevelNames[level]
+    let levelName = VoerkaLoggerLevelNames[level]
     return { 
         level   : levelName.padEnd(5).toUpperCase(),
         datetime: now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
         message,
+        timestamp,
         date    : now.format('YYYY-MM-DD'),
         time    : now.format('HH:mm:ss'),
         tags    : tags ? (Array.isArray(tags) ? tags.join(",") : String(tags)) : '',

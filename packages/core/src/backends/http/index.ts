@@ -1,23 +1,23 @@
 import BatchBackend from 'voerkalogger/BatchBackendBase';
 import axios,{AxiosInstance} from 'axios';
 import { BatchBackendBaseOptions } from 'voerkalogger';
+import { VoerkaLogger } from '../../Logger';
+import { VoerkaLoggerRecord } from '../../types';
 
 
 
-export interface HttpBackendOptions extends BatchBackendBaseOptions{
+export interface HttpBackendOptions<Output=VoerkaLoggerRecord> extends BatchBackendBaseOptions<Output>{
     url      : string
-    format   : boolean   
     method   : 'post' 
     headers   : Record<string, any>      // 认证信息
 }
 
 
 
-export default class HttpBackend extends BatchBackend<HttpBackendOptions> {
-    constructor(options:HttpBackendOptions) {
+export default class HttpBackends extends BatchBackend<HttpBackendOptions> {
+    constructor(options?:HttpBackendOptions) {
         super(Object.assign({
                 url      : '',
-                format   : false,                       // 输出JSON日志
                 method   : 'post',                      // 访问头
                 headers   : {},                         // 认证信息
             },options)

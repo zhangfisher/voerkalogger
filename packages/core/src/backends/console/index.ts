@@ -4,7 +4,7 @@
  * 
  */
 import {BackendBase} from "../../BackendBase"
-import { LogRecord } from "../../types"
+import { VoerkaLoggerRecord } from "../../types"
 
 const consoleMethods=[
     console.log,
@@ -17,7 +17,7 @@ const consoleMethods=[
 
 export default class ConsoleBackend extends BackendBase{ 
     // 负责输出日志内容
-    async output(result:any,record:LogRecord){
+    async output(result:any,record:VoerkaLoggerRecord){
         // 进行单元测试时不在 console 中输出
         if(process.env.NODE_ENV === "test") return 
         try{

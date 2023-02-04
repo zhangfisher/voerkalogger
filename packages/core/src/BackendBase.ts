@@ -14,11 +14,15 @@ import { BackendBaseOptions, VoerkaLoggerFormatter, VoerkaLoggerRecord } from ".
 export class BackendBase<T extends BackendBaseOptions = BackendBaseOptions,LogOutputRecord = VoerkaLoggerRecord >{
     #options:DeepRequired<T>
     #formatter:VoerkaLoggerFormatter = formatters.default   
+    #name:string = ""
     constructor(options?:T){
         this.#options=Object.assign({
             enabled   : true
         },options || {}) as DeepRequired<T>
+        
     }
+    get name() { return this.#name}
+    set name(value:string) { this.#name = value}
     get level() { return this.#options.level }
     get enabled() { 
         return this.#options.enabled 

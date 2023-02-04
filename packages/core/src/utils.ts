@@ -86,3 +86,10 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
         ...logger.options.context || {}
     }
 }
+
+
+export function safeCall(fn:Function){
+    try{
+        return fn()
+    }catch{}
+}

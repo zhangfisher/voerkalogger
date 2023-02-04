@@ -21,12 +21,15 @@
  * 
  */
 import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
-import { handleLogArgs } from "./utils";
+import { handleLogArgs, safeCall } from "./utils";
 import {BackendBase} from "./BackendBase";
 import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
 import ConsoleBackend from "./backends/console";
 import { BatchBackendBase } from "./BatchBackendBase";
 import { DeepRequired } from "ts-essentials"  
+
+
+
 
 export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
@@ -36,9 +39,10 @@ export class VoerkaLogger{
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>      
+        this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
+
         // 注册默认的控制台日志输出
-        this.use(new ConsoleBackend())
+        this.use("console",new ConsoleBackend())
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
         VoerkaLogger.LoggerInstance = this        
@@ -48,61 +52,21 @@ export class VoerkaLogger{
     set enabled(value) { this.options.enabled = value; }
     get level() { return this.options.level }
     set level(value:VoerkaLoggerLevel) {this.options.level = value;} 
-    get output() { return this.options.output }   
-    get backends() { return this.#backendInstances; }
-    
-    private loadBackends(){
-
+    get output() { return this.options.output  }   
+    set output(value:string[]){
+        this.options.output = value
+        for(const backend of Object.values(this.backends)){
+            backend.enabled = this.options.output.includes(backend.name)
+        }
     }
-    /**
+    get backends() { return this.#backendInstances; }
+     /**
      * 安装后端实例
      */
-    use(backend:BackendBase){
-
-    }
-
-
-    /**
-     * 重置所有后端实例
-     */
-    private _resetBackends(){ 
-         
-    } 
-    /**
-     * 读取后端配置参数
-     * @param name 
-     * @returns 
-     */
-    private _getBackendOptions(name:string) {
-        let options = {
-            enabled:true,
-            level:this.#options.level,
-            format:this.#options.format
-        };
-        if (name in this.#options.backends) {
-            Object.assign(options, this.#options.backends[name]);
-        }
-        return options
-    }
-    /**
-     * 添加持久化后端实例
-     */
-    addBackend(name:string,backendInstance:BackendBase) {
-        try {
-            this.#backendInstances[name] = backendInstance;
-            if (this.#options.debug) console.debug('Logger backend[{name}] is enabled'.params(name));
-        } catch (e:any) {
-            console.warn('Error on loading logger backend[{name}] : {error}'.params(name, e.message));
-        }
-    }
-    removeBackend(name:string) {
-        delete this.#backendInstances[name];
-    }
-    resetBackend(name:string) {
-        if(!(name in this.#backendInstances)) return 
-        let options = this._getBackendOptions(name) 
-        this.#backendInstances[name].reset(options).catch(e=>console.error("重置日志后端时出错:",e.stack))
-    }
+    use(name:string,backendInstance:BackendBase){
+        backendInstance.name = name
+        this.#backendInstances[name] =  backendInstance
+    }      
     /**
      * 将缓冲区的日志输出到存储
      */
@@ -112,33 +76,34 @@ export class VoerkaLogger{
                 backend.flush() 
             } 
         }))
-    }
-    /**
-     * 获取启用的有效后端实例并保存在_backendInstances
-     */
-    private loadOutputBackends() {
-        let output = this.#options.output.split(",");
-        this.#backendInstances = {};
-        // 当开启debug时自动启用控制台输出
-        if (this.#options.debug && !output.includes('console')) output.push('console');
-        // 构建配置的输出存储后端
-        output.forEach((name:string) => {
-            this.addBackend(name,this._createBackendInstance(name) );
-        });
-    }
+    }    
     /**
      * 捕获全局错误,自动添加到日志中
     */
     private catchGlobalErrors() {
-        if(!this.#options.catchGlobalErrors) return 
+        if(!this.options.catchGlobalErrors) return 
         let self:VoerkaLogger = this;
-       ;
-        window.onerror = function (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error): any{
-            self.error(String(event), error);
-        };
-        window.addEventListener('unhandledrejection', function(e:any) {
-            self.error(String(e.stack || e.message || e));
-        });
+        safeCall(() => {
+            window.onerror = function (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error): any{
+                self.error(String(event), error);
+            }
+        })  
+        safeCall(()=>{
+            window.addEventListener('unhandledrejection', function(event:PromiseRejectionEvent) {
+                self.error(`Unhandled promise rejection: ${event.reason}`);
+                event.preventDefault();
+            });            
+        })
+        safeCall(()=>{
+            process.on('unhandledRejection', function (reason, promise) { 
+                self.error(`Unhandled promise rejection at: ${promise},reason:${reason}`);
+            })
+        })
+        safeCall(()=>{
+          process.on("uncaughtException",function(error:any){
+                self.error(error.stack);
+            })             
+        })
     }
     /**
      * 输出日志
@@ -182,6 +147,7 @@ export class VoerkaLogger{
         this._resetBackends()
     }
 }
+ 
  
 
 export * from "./consts"

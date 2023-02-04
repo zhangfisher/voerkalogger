@@ -21,26 +21,13 @@ import HttpBackend from 'voerkaLogger/backends/http';
 
 let logger = new Logger({
     level:LogLevel.DEBUG,
-    output:"console,file",                     // 启用的日志后端
-    injectGlobal:true                          // 在globalThis注入一个logger全局变量
-    backends:{
-        console:{
-            template:"ffff"
-        },
-        file:{
-            class:FileBackend,
-            //.....构造配置参数.....
-        },
-        http:{
-            class:HttpBackend,
-            format:(record:LogRecord)=>record
-            //.....构造配置参数.....
-        }
-    }    
+    output:["console","file"],         // 启用的日志后端
+    injectGlobal:true                  // 在globalThis注入一个logger全局变量
 });
 
-logger.use(HttpBackend,{})
-logger.use(FileBackend,{})
+logger.use("http",new HttpBackend({}))
+logger.use("file", new FileBackend({}))
+
  
 
 ```

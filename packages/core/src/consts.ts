@@ -1,3 +1,4 @@
+import { Class } from "flex-tools";
 import { DeepRequired } from "ts-essentials";
 import { VoerkaLoggerOptions } from "./types";
 
@@ -16,7 +17,6 @@ export const VoerkaLoggerLevelNames = [ 'NOSET', 'DEBUG', 'INFO', 'WARN', 'ERROR
 
 export const DefaultLoggerOptions:VoerkaLoggerOptions = {
     id:"",
-    enabled: true,
     level:  VoerkaLoggerLevel.WARN,
     debug:  false,
     output: [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
@@ -39,7 +39,8 @@ export const DefaultLoggerOptions:VoerkaLoggerOptions = {
             enabled     : true,
             maxFileSize: 1024 * 1024 * 10,                      //文件最大字节数
             maxFiles   : 5,                                     // 最多保留5个文件
-            format     : '[{level}] {datetime} - {message}'     // 启用的格式化器,支持插值变量
+            // 启用的格式化器,支持插值变量
+            format     : '[{level}] {datetime} - {message}{<,>module}{<,>tags}'     
         },
         http: {
             enabled    : true,
@@ -51,4 +52,8 @@ export const DefaultLoggerOptions:VoerkaLoggerOptions = {
         }
     }
 }  
+ 
+
+
+
  

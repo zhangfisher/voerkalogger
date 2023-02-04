@@ -15,7 +15,6 @@ export interface VoerkaLoggerOptions{
     injectGlobal?:boolean                               // 注入一个全局的logger变量名称
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
     tags?:string[],                                     // 全局标签
-    // 后端配置
     backends:Record<string,BackendBaseOptions | BackendBaseOptions>         
 }
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
@@ -49,7 +48,7 @@ export type VoerkaLoggerInlineFormatters = keyof typeof formatters
 export interface BackendBaseOptions<Output=VoerkaLoggerRecord>{
     enabled?   : boolean                                            // 可以单独关闭指定的日志后端
     level?    : VoerkaLoggerLevel
-    format?   : VoerkaLoggerInlineFormatters | VoerkaLoggerFormatter<Output> | boolean | null      //     
+    format?   : VoerkaLoggerInlineFormatters | VoerkaLoggerFormatter<Output> | string | null      //     
     [key: string]: any
 }
 

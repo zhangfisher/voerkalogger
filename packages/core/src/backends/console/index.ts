@@ -4,7 +4,7 @@
  * 
  */
 import {BackendBase} from "../../BackendBase"
-import { VoerkaLoggerRecord } from "../../types"
+import { BackendBaseOptions, VoerkaLoggerRecord } from "../../types"
 
 const consoleMethods=[
     console.log,
@@ -14,6 +14,9 @@ const consoleMethods=[
 	console.error,
 	console.error
 ]
+export interface ConsoleBackendOptions extends BackendBaseOptions<string>{
+    template:"[{level}] - {datetime} : {message}{,tags}{,module}"    
+}
 
 export default class ConsoleBackend extends BackendBase{ 
     // 负责输出日志内容

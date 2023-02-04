@@ -2,7 +2,8 @@ import { VoerkaLoggerLevel } from "./consts"
 import type { BackendBase } from './BackendBase';
 import type { BatchBackendBase } from './BatchBackendBase';
 import type { VoerkaLogger } from './Logger';
-  
+import * as formatters from './formatters';
+
 // 日志配置
 export interface VoerkaLoggerOptions{
     id?: string                                         // 当前应用ID
@@ -41,10 +42,14 @@ export type LogMethodVars = Record<string,any> | any[] | Error  | Function | any
 export type VoerkaLoggerFormatter<R=VoerkaLoggerRecord>= (this:VoerkaLogger,record:VoerkaLoggerRecord,backend?:BackendBase)=>R
 export type VoerkaLoggerFormatters = Record<string,VoerkaLoggerFormatter>
 
+// 内置支持的格式化器名称
+export type VoerkaLoggerInlineFormatters = keyof typeof formatters
+
+
 export interface BackendBaseOptions<Output=VoerkaLoggerRecord>{
     enabled?   : boolean                                            // 可以单独关闭指定的日志后端
     level?    : VoerkaLoggerLevel
-    format?   : string | VoerkaLoggerFormatter<Output> | boolean | null      //     
+    format?   : VoerkaLoggerInlineFormatters | VoerkaLoggerFormatter<Output> | boolean | null      //     
     [key: string]: any
 }
 

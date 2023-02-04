@@ -4,17 +4,16 @@ import *  as formatters from "./formatters"
 import { BackendBaseOptions, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
 
 
-
 /**
  * LogRow
  * 
  * 
+ * 
  * <LogOutputRecord> 是日志经过Formatter后的输出结果类型，可能LogRecord，也可以
-
 */
-export class BackendBase<T extends BackendBaseOptions = any,LogOutputRecord = VoerkaLoggerRecord >{
+export class BackendBase<T extends BackendBaseOptions = BackendBaseOptions,LogOutputRecord = VoerkaLoggerRecord >{
     #options:DeepRequired<T>
-    #formatter:VoerkaLoggerFormatter = formatters.standard
+    #formatter:VoerkaLoggerFormatter = formatters.default   
     constructor(options?:T){
         this.#options=Object.assign({
             enabled   : true
@@ -38,8 +37,8 @@ export class BackendBase<T extends BackendBaseOptions = any,LogOutputRecord = Vo
             return (record:VoerkaLoggerRecord) => record 
         }else if(typeof(formatter)==="function"){   // 函数：输入参数时info
             return formatter as VoerkaLoggerFormatter
-        }else if(typeof(formatter)==="string" && (formatter in formatters)){ 
-            return formatters[formatter] 
+        }else if(typeof(formatter)==="string"){ 
+            return formatter in formatters ? (formatters as any)[formatter] : formatters.default
         }else{
             return formatters.default
         }

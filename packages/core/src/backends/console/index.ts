@@ -3,7 +3,7 @@
  
  * 
  */
-import {BackendBase} from "../../BackendBase"
+import { BackendBase } from '../../BackendBase';
 import { BackendBaseOptions, VoerkaLoggerRecord } from "../../types"
 
 const consoleMethods=[
@@ -12,15 +12,20 @@ const consoleMethods=[
 	console.info,
 	console.warn,
 	console.error,
-	console.error
+    console.error
 ]
+
 export interface ConsoleBackendOptions extends BackendBaseOptions<string>{
-    template:"[{level}] - {datetime} : {message}{,tags}{,module}"    
+    //format:"[{level}] - {datetime} : {message}{,tags}{,module}"    
 }
 
-export default class ConsoleBackend extends BackendBase{ 
+ 
+export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,string>{ 
+    async format(record: VoerkaLoggerRecord){
+        return ""
+    }
     // 负责输出日志内容
-    async output(result:any,record:VoerkaLoggerRecord){
+    async output(result:string,record:VoerkaLoggerRecord){
         // 进行单元测试时不在 console 中输出
         if(process.env.NODE_ENV === "test") return 
         try{

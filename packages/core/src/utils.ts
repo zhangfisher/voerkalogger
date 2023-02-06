@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import isError from "lodash/isError";
 import isFunction from "lodash/isFunction";
 import type { LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
-import { VoerkaLoggerLevelNames } from "./consts";
+import { VoerkaLoggerLevelNames, VoerkaLoggerLevel } from './consts';
 import  isPlainObject from "lodash/isPlainObject";
 import type { VoerkaLogger } from "./Logger";
 
@@ -20,6 +20,9 @@ function callWithError(fn:Function):any{
     }
 }
 
+function getLevelName(level:number):string{
+    return VoerkaLoggerLevelNames[level<1 || level>5 ? 3 : level]
+}
 /**
  * 处理日志参数
  * 
@@ -30,13 +33,14 @@ function callWithError(fn:Function):any{
  * @param {*} options 
  * @returns  {Object}  info =  {message,timestamp,tags,module,.....}
  */
-export function handleLogArgs(message:string | Function, vars:LogMethodVars,options:LogMethodOptions={}) {
+export function handleLogArgs(message:string | Function, vars:LogMethodVars,options:LogMethodOptions={}):VoerkaLoggerRecord {
     try{
         let opts = Object.assign({
             tags: [],                       // 
             module: undefined,   		    // 日志来源模块名称
-            level:'WARN',					// 默认级别WARN
+            level:VoerkaLoggerLevel.WARN,					// 默认级别WARN
         }, options)
+
         let { tags, module, ...extras } = opts
         // 处理插值变量 
         let interpVars = isFunction(vars) ? callWithError(vars) : (isError(vars) ? vars.stack : vars )
@@ -48,6 +52,7 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
         }else{
             interpVars = [String(interpVars)]
         }
+        interpVars["levelName"]= getLevelName(interpVars.level)
 
         // 处理日志信息
         const msg = isError(message) ? message.stack : (isFunction(message) ? callWithError(message) : String(message))
@@ -60,7 +65,7 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
             timestamp: Date.now()
         }
     }catch{
-        return {message:String(message),timestamp: Date.now(),...options}
+        return {level:VoerkaLoggerLevel.WARN, message:String(message),timestamp: Date.now(),...options}
     }
 }
 

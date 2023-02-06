@@ -38,7 +38,7 @@ export type LogMethodOptions =Partial<Omit<VoerkaLoggerRecord,'message' & 'times
 export type LogMethodVars = Record<string,any> | any[] | Error  | Function | any
 
 // 对日志记录进行格式化以便输出到后端
-export type VoerkaLoggerFormatter<R=VoerkaLoggerRecord>= (this:VoerkaLogger,record:VoerkaLoggerRecord,backend?:BackendBase)=>R
+export type VoerkaLoggerFormatter<Output=VoerkaLoggerRecord> = (record:VoerkaLoggerRecord,backend?:BackendBase<any,any>)=>Output
 export type VoerkaLoggerFormatters = Record<string,VoerkaLoggerFormatter>
 
 // 内置支持的格式化器名称

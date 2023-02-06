@@ -15,17 +15,17 @@ import { BatchBackendBaseOptions, VoerkaLoggerRecord } from "./types"
 import { BackendBase } from "./BackendBase"
 
 
-export class BatchBackendBase<T extends BatchBackendBaseOptions=any> extends BackendBase<T>{
+export class BatchBackendBase<Options extends BatchBackendBaseOptions=any,OutputRecord = VoerkaLoggerRecord> extends BackendBase<Options,OutputRecord>{
     #buffer:VoerkaLoggerRecord[]=[]
     #intervalId:any=0
     #flushing:boolean=false
-    constructor(options:T){
+    constructor(options:Options){
         super(Object.assign({
             flushInterval:1000 * 60,            // 延迟输出时间间隔
             bufferSize:100                      // 默认缓冲区大小 
         },options))        
     }  
-    get options() : Required<T> { return super.options as Required<T>}
+    get options() : Required<Options> { return super.options as Required<Options>}
     get enabled() { return super.enabled as boolean}
     set enabled(value:boolean) { 
         this.options.enabled = value
@@ -36,7 +36,7 @@ export class BatchBackendBase<T extends BatchBackendBaseOptions=any> extends Bac
         }
     }
     async reset(){
-        await super.reset()           
+        // await super.reset()           
         this._delayFlushLogs()
     }
     /**

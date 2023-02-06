@@ -55,8 +55,8 @@ export class VoerkaLogger{
     get output() { return this.options.output  }   
     set output(value:string[]){
         this.options.output = value
-        for(const backend of Object.values(this.backends)){
-            backend.enabled = this.options.output.includes(backend.name)
+        for(const [name,backend] of Object.entries(this.backends)){
+            backend.enabled = this.options.output.includes(name)
         }
     }
     get backends() { return this.#backendInstances; }
@@ -64,7 +64,7 @@ export class VoerkaLogger{
      * 安装后端实例
      */
     use(name:string,backendInstance:BackendBase){
-        backendInstance.name = name
+        backendInstance._bind(this)
         this.#backendInstances[name] =  backendInstance
     }      
     /**
@@ -110,12 +110,12 @@ export class VoerkaLogger{
      * @param {*}  
      */
     private _log(message:string | Function,vars:LogMethodVars={},options:LogMethodOptions={}) {  
-        if (!this.#options.enabled) return
-        let record =Object.assign({},this.#options.context, handleLogArgs(message,vars,options))    
+        if (!this.options.enabled) return
+        let record:VoerkaLoggerRecord =Object.assign({},this.options.context, handleLogArgs(message,vars,options))    
         Promise.allSettled(Object.values(this.#backendInstances).map((backendInst) => {
-            const limitLevel = backendInst.level || this.#options.level
-            if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.#options.debug)) {                        
-                return backendInst._output(record);
+            const limitLevel = backendInst.level || this.options.level
+            if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
+                backendInst._output(record);
             }
         }))
     }
@@ -139,15 +139,12 @@ export class VoerkaLogger{
     }
     fatal(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
         this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.FATAL}));
-    } 
-    /**
-     * 重置日志后端
-     */
-    reset() {
-        this._resetBackends()
-    }
+    }  
 }
  
  
 
 export * from "./consts"
+
+
+ 

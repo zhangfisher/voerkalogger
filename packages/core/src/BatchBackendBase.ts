@@ -25,7 +25,6 @@ export class BatchBackendBase<Options extends BatchBackendBaseOptions=any,Output
             bufferSize:100                      // 默认缓冲区大小 
         },options))        
     }  
-    get options() : Required<Options> { return super.options as Required<Options>}
     get enabled() { return super.enabled as boolean}
     set enabled(value:boolean) { 
         this.options.enabled = value

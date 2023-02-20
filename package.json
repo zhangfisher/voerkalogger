@@ -20,6 +20,7 @@
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.11.18",
     "@types/path-browserify": "^1.0.0",
+    "ts-node": "^10.9.1",
     "tsup": "^6.5.0"
   }
 }

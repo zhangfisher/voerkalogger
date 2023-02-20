@@ -48,14 +48,14 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
         if (Array.isArray(interpVars)) {
             interpVars = interpVars.map(v => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
         } else if (isPlainObject(interpVars)) {
-            interpVars = mapValues(interpVars, v => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
+            interpVars = mapValues(interpVars, (v: any) => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
         }else{
             interpVars = [String(interpVars)]
         }
         interpVars["levelName"]= getLevelName(interpVars.level)
 
         // 处理日志信息
-        const msg = isError(message) ? message.stack : (isFunction(message) ? callWithError(message) : String(message))
+        const msg = isError(message) ? (message as any).stack : (isFunction(message) ? callWithError((message as any)) : String(message))
 
         return {
             ...extras,

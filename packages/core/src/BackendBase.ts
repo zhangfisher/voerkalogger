@@ -1,32 +1,26 @@
-import merge from "lodash/merge"   
-import { DeepRequired } from "ts-essentials"
+import type { DeepRequired } from "ts-essentials"
 import *  as formatters from "./formatters"
 import { BackendBaseOptions, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
 import { VoerkaLogger } from './Logger';
 
-
+ 
 /** 
  * 
  * <OutputRecord> 是日志经过Formatter后的输出结果类型 
 */
 export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions,OutputRecord = VoerkaLoggerRecord >{
     #options:DeepRequired<Options>
-    #formatter:VoerkaLoggerFormatter<OutputRecord> = formatters.default   
     #logger?:VoerkaLogger 
     constructor(options?:Options){
         this.#options=Object.assign({
             enabled   : true
-        },options || {}) as DeepRequired<Options>
-        
+        },options) as DeepRequired<Options>        
     }
-
     get level() { return this.#options.level }
-    get enabled() { 
-        return this.#options.enabled 
-    }
+    get enabled() { return this.#options.enabled  }
     set enabled(value) { this.#options.enabled = value }
     get options() { return this.#options }
-    set options(value) { merge(this.#options, value) }
+    set options(value) { Object.assign(this.#options, value) }
     get logger() { return this.#logger}    
     /**
      * 绑定日志实例
@@ -71,15 +65,7 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
      */
     async clear(){
         console.clear()
-    }
-    /**
-     * 可选的，读取获取日志记录
-     * 用来从后端存储中读取日志记录，应用层可以读取显示
-        @param {condition}  查询条件
-     */
-    async getRecords(query:string){
-        return []
-    }
+    } 
     /**
      * 本方法由日志实例调用
      * @param {*} info =  {{message: string, level: number, timestamp: string, error: *,tags:[],module:string}}
@@ -87,7 +73,7 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
     async _output(record:VoerkaLoggerRecord){
         if(!this.options.enabled) return        
         // 进行格式化,然后再输出
-        const result = this.format(record) 
+        const result = await this.format(record) 
         await this.output(result,record)
     }
 

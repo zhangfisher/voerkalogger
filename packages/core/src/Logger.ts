@@ -42,7 +42,7 @@ export class VoerkaLogger{
         this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
 
         // 注册默认的控制台日志输出
-        this.use("console",new ConsoleBackend())
+        this.use("console",(new ConsoleBackend()) as unknown as BackendBase)
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
         VoerkaLogger.LoggerInstance = this        
@@ -55,14 +55,15 @@ export class VoerkaLogger{
     get output() { return this.options.output  }   
     set output(value:string[]){
         this.options.output = value
+        // 如果不在输出列表中，则需要禁用
         for(const [name,backend] of Object.entries(this.backends)){
             backend.enabled = this.options.output.includes(name)
         }
     }
     get backends() { return this.#backendInstances; }
-     /**
-     * 安装后端实例
-     */
+    /**
+    * 部署安装后端实例
+    */
     use(name:string,backendInstance:BackendBase){
         backendInstance._bind(this)
         this.#backendInstances[name] =  backendInstance

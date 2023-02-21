@@ -122,12 +122,12 @@ export class VoerkaLogger{
             record.error = record.error.message
             record.errorStack = (record.error as unknown as Error).stack
         }
-        Promise.allSettled(Object.values(this.#backendInstances).map((backendInst) => {
+        Object.values(this.#backendInstances).forEach((backendInst) => {
             const limitLevel = backendInst.level || this.options.level
             if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
-                backendInst._output(record,vars);
+                try{backendInst._output(record,vars)}catch{}
             }
-        }))
+        })
     }
     /**
      *  

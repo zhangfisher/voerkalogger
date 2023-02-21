@@ -7,27 +7,19 @@ import { BackendBase } from '../../BackendBase';
 import { BackendBaseOptions,  LogMethodVars,  VoerkaLoggerRecord } from "../../types"
 import logsets from "logsets"
 import { VoerkaLoggerLevel } from '../../consts';
+import { getInterpolatedVars } from '../../utils';
 
 
 const logLevelColors = [
-    "lightGray",                            // NOSET
-    "lightGray",                            // DEBUG
-    "dim",                                  // INFO
+    "darkGray",                            // NOSET
+    "dim",                                  // DEBUG
+    "lightGray",                            // INFO
     "yellow",                               // WARN
     "red",                                  // ERROR
-    "red,dim"                               // FA
+    "red,bright"                               // FA
 ]
 
-
-function colorizeLog(level:VoerkaLoggerLevel,template: string,vars:any){
-    // 先做插值处理
-    let result = template.params(vars,{
-        
-    })
-
-    
-}
-
+ 
 const consoleMethods=[
     logsets.log,
 	logsets.debug,
@@ -41,30 +33,39 @@ export interface ConsoleBackendOptions extends BackendBaseOptions{
     
 }
 
-export type ConsoleBackendOutput = [string,string]
 
-export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,ConsoleBackendOutput>{     
+export type ConsoleBackendOutput = [string,any]      // 模块字符串
+
+export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,void>{     
     constructor(options?:ConsoleBackendOptions){
         super(Object.assign({
             format:"[{levelName}] - {datetime} : {message}{<,>module}{<,>tags}"    
         },options))
     }
-    async format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):Promise<ConsoleBackendOutput>{                
-        return [this.options.format as string,interpVars]
-    }
-    // 负责输出日志内容
-    async output(result:ConsoleBackendOutput,record:VoerkaLoggerRecord){
-        // 进行单元测试时不在 console 中输出
-        try{
-            if(process.env.NODE_ENV === "test") return 
-        }catch{
-            return
-        }
+    format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
+        const template = typeof(this.options.format) == 'function'  ? this.options.format.call(this, record, interpVars, this) as unknown as string : this.options.format
+        let vars          
+        // 如果只有位置插值，则代表插值只对message进行，否则就会出现插值不匹配的情况
+        if(Array.isArray(interpVars)){
+            vars ={
+                ...this.getInterpVars(record,{}),
+                message: record.message.params(interpVars)
+            }
+        }else{
+            vars = interpVars
+        }   
         try{ 
-            consoleMethods[record.level](result[0].params(result[1]))
-            //logsets.log(result[0],result[1] as any)
+            const output = template!.params(vars)
+            const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
+            return console.log(levelColorizer(logsets.getColorizedTemplate(output,vars)))
         }catch(e:any){   
             console.log(e.stack)
-        }         
-    } 
+        }        
+    }    
+    /**
+     * 清除所有存储的日志
+     */
+    async clear(){
+        console.clear()
+    }  
 }

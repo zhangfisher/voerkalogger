@@ -16,6 +16,7 @@ import { canIterable } from "flex-tools";
 */
 export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions,OutputRecord = VoerkaLoggerRecord >{
     #options:DeepRequired<Options>
+    #buffer:OutputRecord[]=[]
     #logger?:VoerkaLogger 
     constructor(options?:Options){
         this.#options=Object.assign({
@@ -35,7 +36,7 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
      */
     _bind(logger:VoerkaLogger){
         this.#logger = logger
-    }
+    } 
 
     /**
      *  格式化器支持字符串，或者函数
@@ -71,8 +72,9 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
             return vars
          }else {                // 命名字典插值
              return {
-                 ...record,
-                 levelName:VoerkaLoggerLevelNames[record.level<0 || record.level>5 ? 0 : record.level],
+                ...record,
+                ...vars,
+                levelName:VoerkaLoggerLevelNames[record.level<0 || record.level>5 ? 0 : record.level].padEnd(5),
                 datetime : now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
                 date: now.format('YYYY-MM-DD'),
                 time: now.format('HH:mm:ss'),
@@ -82,33 +84,33 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
     /**
      * 格式化为输出格式，一般会输出为字符串，但是也可以是任意格式，比如二进制等，取决于后端实现
      * 
-     * 各后端可以根据需要重载此方法，实现
-     * 
-     * 
+     * 各后端可以根据需要重载此方法 
      *
      * @param {*} record = {message: string, level: number, args:any[] | Record<string,any>,timestamp: string, error: *,tags:[],module:string}
      * @param context
      */
-    format(record:VoerkaLoggerRecord,interpVars:LogMethodVars):Promise<OutputRecord>{
-        return new Promise<OutputRecord>(resolve => { 
-            resolve(record as OutputRecord);
-        })           
+    format(record:VoerkaLoggerRecord,interpVars:LogMethodVars):OutputRecord{
+        if(Array.isArray(interpVars)){
+            record.message = record.message.params({
+                ...this.getInterpVars(record,{}),
+                message: record.message.params(interpVars)
+            })
+        }    
+        return record as OutputRecord
     }
 
     /**
      * 清除所有存储的日志
      */
-    async clear(){
-        console.clear()
-    } 
+    async clear(){    } 
     /**
      * 本方法由日志实例调用
      * @param {*} info =  {{message: string, level: number, timestamp: string, error: *,tags:[],module:string}}
      */
-    async _output(record:VoerkaLoggerRecord,inVars:LogMethodVars){
+    _output(record:VoerkaLoggerRecord,inVars:LogMethodVars){
         if(!this.options.enabled) return     
-        const output = await this.format(record,this.getInterpVars(record,inVars)    ) 
-        await this.output(output,record)
+        const output = this.format(record,this.getInterpVars(record,inVars)) 
+        if(output) this.#buffer.push(output) 
     }
 
     /**

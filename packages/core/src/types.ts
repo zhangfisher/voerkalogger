@@ -16,7 +16,6 @@ export interface VoerkaLoggerOptions{
     injectGlobal?:boolean                               // 注入一个全局的logger变量名称
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
     tags?:string[],                                     // 全局标签
-    // backends:Record<string,BackendBaseOptions | BackendBaseOptions>         
 }
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
     backends:Record<string,BackendConfiguration | BatchBackendConfiguration>         
@@ -27,7 +26,7 @@ export type LogMethodMessage =string | (()=> string)
 // 日志记录
 export interface VoerkaLoggerRecord{
     message: string                             // 日志信息
-    level: VoerkaLoggerLevel                             // 日志级别
+    level: VoerkaLoggerLevel                    // 日志级别
     timestamp?: number                          // 时间戳
     error?: string | Error                      // 错误信息
     tags?:string[]                              // 日志标签
@@ -40,7 +39,7 @@ export type LogMethodOptions =Partial<Omit<VoerkaLoggerRecord,'message' & 'times
 export type LogMethodVars = Record<string,any> | any[] | Error  | Function | any
 
 // 对日志记录进行格式化以便输出到后端
-export type VoerkaLoggerFormatter<Output=VoerkaLoggerRecord> = (record:VoerkaLoggerRecord,backend?:BackendBase<any,any>)=>Output
+export type VoerkaLoggerFormatter<Output=VoerkaLoggerRecord> = (record:VoerkaLoggerRecord,vars:LogMethodVars, backend?:BackendBase<any,any>)=>Output
 export type VoerkaLoggerFormatters = Record<string,VoerkaLoggerFormatter>
 
 

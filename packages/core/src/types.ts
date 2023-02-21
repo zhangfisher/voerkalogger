@@ -16,12 +16,13 @@ export interface VoerkaLoggerOptions{
     injectGlobal?:boolean                               // 注入一个全局的logger变量名称
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
     tags?:string[],                                     // 全局标签
-    backends:Record<string,BackendBaseOptions | BackendBaseOptions>         
+    // backends:Record<string,BackendBaseOptions | BackendBaseOptions>         
 }
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
     backends:Record<string,BackendConfiguration | BatchBackendConfiguration>         
 }
 
+export type LogMethodMessage =string | (()=> string)
 
 // 日志记录
 export interface VoerkaLoggerRecord{

@@ -12,7 +12,7 @@ import type { VoerkaLogger } from "./Logger";
  * 执行一个函数，如果出错则返回错误信息
  * @param {*} fn 
  */
-function callWithError(fn:Function):any{
+export function callWithError(fn:Function):any{
     try{
         return fn()
     }catch(e:any){
@@ -41,24 +41,31 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
             level:VoerkaLoggerLevel.WARN,					// 默认级别WARN
         }, options)
 
+        let now = dayjs()
         let { tags, module, ...extras } = opts
+        
         // 处理插值变量 
+        
         let interpVars = isFunction(vars) ? callWithError(vars) : (isError(vars) ? vars.stack : vars )
+
         // 执行变量中的函数，如果执行出错则会显示错误信息
         if (Array.isArray(interpVars)) {
-            interpVars = interpVars.map(v => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
+            interpVars = interpVars.map(v => (isFunction(v) ?callWithError(v) : (isError(v) ? {error:v.message,errorStack:v.stack} : v )))
         } else if (isPlainObject(interpVars)) {
             interpVars = mapValues(interpVars, (v: any) => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
+            interpVars["levelName"]= getLevelName(interpVars.level)
+            interpVars["datetime"] = now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23)
+            interpVars["date"]= now.format('YYYY-MM-DD')
+            interpVars["time"] =  now.format('HH:mm:ss')
         }else{
             interpVars = [String(interpVars)]
         }
-        interpVars["levelName"]= getLevelName(interpVars.level)
-
+        
         // 处理日志信息
         const msg = isError(message) ? (message as any).stack : (isFunction(message) ? callWithError((message as any)) : String(message))
 
         return {
-            ...extras,
+            ...extras,            
             message: Array.isArray(interpVars) ? msg.params(...interpVars) : msg.params(interpVars),
             tags,
             module,

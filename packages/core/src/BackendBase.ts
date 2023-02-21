@@ -1,7 +1,13 @@
 import type { DeepRequired } from "ts-essentials"
 import *  as formatters from "./formatters"
-import { BackendBaseOptions, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
-import { VoerkaLogger } from './Logger';
+import { BackendBaseOptions, LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
+import { VoerkaLogger, VoerkaLoggerLevelNames } from './Logger';
+import dayjs from "dayjs";
+import { callWithError } from "./utils";
+import isFunction from "lodash/isFunction";
+import isError from "lodash/isError";
+import { isPlainObject } from "lodash";
+import { canIterable } from "flex-tools";
 
  
 /** 
@@ -47,15 +53,44 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
 
     }  
     /**
+     * 处理输入的插值变量列表参数
+     * @param {string} inVars  log输入的插值变量参数 
+     * @return {Array | Record} 位置插值数组或字典
+     */
+    getInterpVars(record:VoerkaLoggerRecord,inVars:LogMethodVars){
+        const now = dayjs()
+         // 处理插值变量
+         let vars = inVars
+         try{
+             if(isFunction(vars)) vars = callWithError(vars) 
+             if(isError(vars)) vars = {error:vars.message,errorStack:vars.stack} 
+             if(!isPlainObject(vars) && !Array.isArray(vars)) vars=[vars]
+         }catch{}
+         
+         if(canIterable(vars)){ // 使用位置插值
+            return vars
+         }else {                // 命名字典插值
+             return {
+                 ...record,
+                 levelName:VoerkaLoggerLevelNames[record.level<0 || record.level>5 ? 0 : record.level],
+                datetime : now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
+                date: now.format('YYYY-MM-DD'),
+                time: now.format('HH:mm:ss'),
+             }
+        }    
+    }
+    /**
      * 格式化为输出格式，一般会输出为字符串，但是也可以是任意格式，比如二进制等，取决于后端实现
      * 
      * 各后端可以根据需要重载此方法，实现
+     * 
+     * 
      *
-     * @param {*} record = {message: string, level: number, timestamp: string, error: *,tags:[],module:string}
+     * @param {*} record = {message: string, level: number, args:any[] | Record<string,any>,timestamp: string, error: *,tags:[],module:string}
      * @param context
      */
-    format(record:VoerkaLoggerRecord):Promise<OutputRecord>{
-        return new Promise<OutputRecord>(resolve => {
+    format(record:VoerkaLoggerRecord,interpVars:LogMethodVars):Promise<OutputRecord>{
+        return new Promise<OutputRecord>(resolve => { 
             resolve(record as OutputRecord);
         })           
     }
@@ -70,11 +105,10 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
      * 本方法由日志实例调用
      * @param {*} info =  {{message: string, level: number, timestamp: string, error: *,tags:[],module:string}}
      */
-    async _output(record:VoerkaLoggerRecord){
-        if(!this.options.enabled) return        
-        // 进行格式化,然后再输出
-        const result = await this.format(record) 
-        await this.output(result,record)
+    async _output(record:VoerkaLoggerRecord,inVars:LogMethodVars){
+        if(!this.options.enabled) return     
+        const output = await this.format(record,this.getInterpVars(record,inVars)    ) 
+        await this.output(output,record)
     }
 
     /**
@@ -83,7 +117,7 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
      * @param {*} record  原始日志记录{}
      */
     async output(result:OutputRecord,record:VoerkaLoggerRecord){
-
+        
     }
 }
 

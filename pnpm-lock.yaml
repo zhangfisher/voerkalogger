@@ -75,7 +75,8 @@ importers:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
-      flex-tools: ^1.0.32
+      flex-tools: ^1.0.40
+      logsets: ^1.0.22
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
       tsup: ^6.5.0
@@ -83,7 +84,8 @@ importers:
       typescript: ^4.9.5
       vitest: ^0.28.3
     dependencies:
-      flex-tools: 1.0.32
+      flex-tools: 1.0.40
+      logsets: 1.0.22
     devDependencies:
       '@swc/core': 1.3.31
       '@types/node': 18.11.18
@@ -95,6 +97,14 @@ importers:
       vitest: 0.28.3
 
 packages:
+
+  /@babel/runtime-corejs3/7.21.0:
+    resolution: {integrity: sha512-TDD4UJzos3JJtM+tHX+w2Uc+KWj7GV+VKKFdMVd2Rx8sdA19hcc3P3AHFYd5LVOw+pYuSd5lICC3gm52B6Rwxw==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      core-js-pure: 3.28.0
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /@cspotcode/source-map-support/0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -568,6 +578,10 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /ansicolor/1.1.100:
+    resolution: {integrity: sha512-Jl0pxRfa9WaQVUX57AB8/V2my6FJxrOR1Pp2qqFbig20QB4HzUoQ48THTKAgHlUCJeQm/s2WoOPcoIDhyCL/kw==}
+    dev: false
+
   /any-promise/1.3.0:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
     dev: true
@@ -717,6 +731,16 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
+  /core-js-pure/3.28.0:
+    resolution: {integrity: sha512-DSOVleA9/v3LNj/vFxAPfUHttKTzrB2RXhAPvR5TPXn4vrra3Z2ssytvRyt8eruJwAfwAiFADEbrjcRdcvPLQQ==}
+    requiresBuild: true
+    dev: false
+
+  /core-js/3.28.0:
+    resolution: {integrity: sha512-GiZn9D4Z/rSYvTeg1ljAIsEqFm0LaN9gVtwDCrKL80zHtS31p9BAjmTxVqTQDMpwlMolJZOFntUG2uwyj7DAqw==}
+    requiresBuild: true
+    dev: false
+
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
@@ -752,6 +776,11 @@ packages:
     dependencies:
       type-detect: 4.0.8
     dev: true
+
+  /deepmerge/4.3.0:
+    resolution: {integrity: sha512-z2wJZXrmeHdvYJp/Ux55wIjqo81G5Bp4c+oELTW+7ar6SogWHajt5a9gO3s3IDaGSAXjDk0vlQKN3rms8ab3og==}
+    engines: {node: '>=0.10.0'}
+    dev: false
 
   /delayed-stream/1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
@@ -1062,8 +1091,8 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /flex-tools/1.0.32:
-    resolution: {integrity: sha512-00vtGuYpNYcT9FUCzDe0TmDcCu3aKUPug7rsAtSI+567EduhnTKW1ODczCYQoviA4xy3mTOYrksUUPLUfcHhOg==}
+  /flex-tools/1.0.40:
+    resolution: {integrity: sha512-8urK1rzuZnoWR2BDB7YG6h5tWSr7FrzpOf0njFkgZkVaIy3XozYVhy1nLonwwbY5IQFw/6ZwECzihiXW7vgvVA==}
     dependencies:
       lodash: 4.17.21
     dev: false
@@ -1310,6 +1339,15 @@ packages:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: false
 
+  /logsets/1.0.22:
+    resolution: {integrity: sha512-D6JVNnjfjpR3DSwUZNdB7cfe4vQmhcVx4+EM9BGd9PDWgTKvFP+L+XvHmX9R7vnshSgaO0V9SuIt8YI8qpkcTg==}
+    dependencies:
+      '@babel/runtime-corejs3': 7.21.0
+      ansicolor: 1.1.100
+      core-js: 3.28.0
+      deepmerge: 4.3.0
+    dev: false
+
   /loupe/2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
     dependencies:
@@ -1490,7 +1528,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.0.6
-      ts-node: 10.9.1_@types+node@18.11.18
+      ts-node: 10.9.1_bpfwsfxxgijww2ammkaiheoe7m
       yaml: 1.10.2
     dev: true
 
@@ -1535,6 +1573,10 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: false
 
   /resolve-from/5.0.0:
     resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}

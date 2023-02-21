@@ -4,44 +4,65 @@
  * 
  */
 import { BackendBase } from '../../BackendBase';
-import { BackendBaseOptions, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "../../types"
+import { BackendBaseOptions,  LogMethodVars,  VoerkaLoggerRecord } from "../../types"
+import logsets from "logsets"
+import { VoerkaLoggerLevel } from '../../consts';
+
+
+const logLevelColors = [
+    "lightGray",                            // NOSET
+    "lightGray",                            // DEBUG
+    "dim",                                  // INFO
+    "yellow",                               // WARN
+    "red",                                  // ERROR
+    "red,dim"                               // FA
+]
+
+
+function colorizeLog(level:VoerkaLoggerLevel,template: string,vars:any){
+    // 先做插值处理
+    let result = template.params(vars,{
+        
+    })
+
+    
+}
 
 const consoleMethods=[
-    console.log,
-	console.debug,
-	console.info,
-	console.warn,
-	console.error,
-    console.error
+    logsets.log,
+	logsets.debug,
+	logsets.info,
+	logsets.warn,
+	logsets.error,
+    logsets.error
 ]
 
 export interface ConsoleBackendOptions extends BackendBaseOptions{
     
 }
 
- 
-export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,string>{     
+export type ConsoleBackendOutput = [string,string]
+
+export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,ConsoleBackendOutput>{     
     constructor(options?:ConsoleBackendOptions){
         super(Object.assign({
-            format:"[{level}] - {datetime} : {message}{,module}{,tags}"    
+            format:"[{levelName}] - {datetime} : {message}{<,>module}{<,>tags}"    
         },options))
     }
-    async format(record: VoerkaLoggerRecord):Promise<string>{                
-        const formatter = this.options.format 
-        const template:string | null = typeof formatter === "function" ? (formatter(record, this) as unknown as string) : formatter
-        return template ? template.params(record) : String(record)
+    async format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):Promise<ConsoleBackendOutput>{                
+        return [this.options.format as string,interpVars]
     }
     // 负责输出日志内容
-    async output(result:string,record:VoerkaLoggerRecord){
+    async output(result:ConsoleBackendOutput,record:VoerkaLoggerRecord){
         // 进行单元测试时不在 console 中输出
         try{
             if(process.env.NODE_ENV === "test") return 
         }catch{
             return
         }
-        try{
-            let consoleOutput = consoleMethods[record.level]
-            consoleOutput(result)
+        try{ 
+            consoleMethods[record.level](result[0].params(result[1]))
+            //logsets.log(result[0],result[1] as any)
         }catch(e:any){   
             console.log(e.stack)
         }         

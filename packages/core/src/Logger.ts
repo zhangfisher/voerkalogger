@@ -23,7 +23,7 @@
 import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
 import { handleLogArgs, safeCall } from "./utils";
 import {BackendBase} from "./BackendBase";
-import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
+import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from "./types";
 import ConsoleBackend from "./backends/console";
 import { BatchBackendBase } from "./BatchBackendBase";
 import { DeepRequired } from "ts-essentials"  
@@ -110,36 +110,45 @@ export class VoerkaLogger{
      * 输出日志
      * @param {*}  
      */
-    private _log(message:string | Function,vars:LogMethodVars={},options:LogMethodOptions={}) {  
+    private _log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}) {  
         if (!this.options.enabled) return
-        let record:VoerkaLoggerRecord =Object.assign({},this.options.context, handleLogArgs(message,vars,options))    
+        const msg = typeof(message)=='function' ? message() : message
+        let record:VoerkaLoggerRecord =Object.assign({},this.options.context, {
+            level:options.level,
+            message:msg,
+            ...options
+        })    
+        if(record.error instanceof Error){
+            record.error = record.error.message
+            record.errorStack = (record.error as unknown as Error).stack
+        }
         Promise.allSettled(Object.values(this.#backendInstances).map((backendInst) => {
             const limitLevel = backendInst.level || this.options.level
             if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
-                backendInst._output(record);
+                backendInst._output(record,vars);
             }
         }))
     }
     /**
      *  
-     *  logger.debug(message,{插值变量},{tags,module})
-     *  logger.debug(message,[位置变量,位置变量,位置变量,...],{tags,module,...}) 
+     *  logger.debug(message,{插值变量},{tags,module,error})
+     *  logger.debug(message,[位置变量,位置变量,位置变量,...],{tags,module,error,...}) 
      *  如果变量或message是函数会自动调用
      */
-    debug(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.DEBUG}));
+    debug(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
+        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.DEBUG}));
     }
-    info(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions){
-        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.INFO}));
+    info(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
+        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.INFO}));
     }
-    warn(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions){
-        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.WARN}));
+    warn(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
+        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.WARN}));
     }
-    error(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.ERROR}));
+    error(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
+        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.ERROR}));
     }
-    fatal(message:string | Function,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign(options || {}, {level:VoerkaLoggerLevel.FATAL}));
+    fatal(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
+        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.FATAL}));
     }  
 }
  

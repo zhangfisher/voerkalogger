@@ -4,17 +4,9 @@
  *   
  */
 import path from "path-browserify"
-import { BatchBackendBase,BatchBackendBaseOptions} from "voerkalogger" 
+import { BatchBackendBase } from "@voerkalogger/core" 
 
-export interface FileSystem{
-    exists(filename: string):Promise<boolean>;
-    mkdir(filename: string): Promise<void>;
-    delete(filename: string): Promise<void>;
-    rename(filename: string,newFilename: string): Promise<void>;
-    stat(filename: string): Promise<{size:number}>;
-    [key: string]: any
-}
-
+ 
 
 export interface FileBackendOptions extends BatchBackendBaseOptions{
     location : string               // 日志保存位置
@@ -34,16 +26,9 @@ export default class FileBackend extends BatchBackendBase<FileBackendOptions> {
                 maxFiles: 5,                    // 保存的文件个数
             }, options )
         );
-        this.initOutputFolder().then(()=>{}).catch((e)=>{
-            console.log("初始化日志输出文件夹出错：",e.message)
-        })
-    }   
  
-    private async initOutputFolder(){
-        if(!await fs.exists(this.options.location)){
-            await fs.mkdir(this.options.location)
-        }
-    }
+    }   
+  
 
     /**
      *  文件名从新至旧为 1.log,2.log,...n.log，

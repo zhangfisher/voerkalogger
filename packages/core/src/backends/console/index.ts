@@ -11,12 +11,12 @@ import { getInterpolatedVars } from '../../utils';
 
 
 const logLevelColors = [
-    "darkGray",                            // NOSET
-    "dim",                                  // DEBUG
+    "darkGray",                             // NOSET
+    "darkGray",                             // DEBUG
     "lightGray",                            // INFO
     "yellow",                               // WARN
     "red",                                  // ERROR
-    "red,bright"                               // FA
+    "red,bright"                            // FATAL
 ]
 
  
@@ -33,8 +33,6 @@ export interface ConsoleBackendOptions extends BackendBaseOptions{
     
 }
 
-
-export type ConsoleBackendOutput = [string,any]      // 模块字符串
 
 export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,void>{     
     constructor(options?:ConsoleBackendOptions){

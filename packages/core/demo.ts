@@ -1,4 +1,4 @@
-import { VoerkaLogger, VoerkaLoggerLevel } from "./src";
+import { BackendBase, VoerkaLogger, VoerkaLoggerLevel } from "./src";
 import { timer } from "flex-tools"
 
 let logger = new VoerkaLogger()
@@ -13,3 +13,5 @@ logger.debug("打开程序{a}{b}",{a:1,b:2},{module:"switch"})
 logger.warn("中华人民共和国{<*><*>}{<,&><&>}{,}",[1,2,3])
 logger.fatal("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
 timer.end()
+
+ 

@@ -1,9 +1,7 @@
 import { VoerkaLoggerLevel } from "./consts"
 import type { BackendBase } from './BackendBase';
 import type { BatchBackendBase } from './BatchBackendBase';
-import type { VoerkaLogger } from './Logger';
-import * as formatters from './formatters';
-import "flex-tools"
+import "flex-tools/string"
 
 // 日志配置
 export interface VoerkaLoggerOptions{
@@ -16,6 +14,11 @@ export interface VoerkaLoggerOptions{
     injectGlobal?:boolean                               // 注入一个全局的logger变量名称
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
     tags?:string[],                                     // 全局标签
+    formats?:{
+        datetime?:string | [string,number]              // 
+        date?:string | [string,number]
+        time?:string | [string,number]
+    }
 }
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
     backends:Record<string,BackendConfiguration | BatchBackendConfiguration>         
@@ -43,11 +46,16 @@ export type VoerkaLoggerFormatter<Output=VoerkaLoggerRecord> = (record:VoerkaLog
 export type VoerkaLoggerFormatters = Record<string,VoerkaLoggerFormatter>
 
 
-export interface BackendBaseOptions<Output=VoerkaLoggerRecord>{
-    enabled?   : boolean                                            // 可以单独关闭指定的日志后端
-    level?    : VoerkaLoggerLevel
-    format?   : VoerkaLoggerFormatter<Output> | string | null
-    [key: string]: any
+export interface BackendBaseOptions<Output=string>{
+    enabled?      : boolean                                             // 可以单独关闭指定的日志后端
+    level?        : VoerkaLoggerLevel
+    format?       : VoerkaLoggerFormatter<Output> | string | null
+    // 缓冲区满或达到间隔时间时进行日志输出
+    // 如果bufferSize=0则禁用输出，比如ConsoleBackend就禁用输出
+    bufferSize?   : number                                              // 输出缓冲区大小
+    flushInterval?: number                                              // 延迟输出时间间隔，当大于间隔时间j时进行输出
+    // 
+
 }
 
 

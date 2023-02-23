@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "flex-tools": "^1.0.47",
-    "logsets": "^1.0.22"
+    "flex-tools": "^1.0.48",
+    "logsets": "^1.0.26"
   },
   "devDependencies": {
     "@swc/core": "^1.3.31",

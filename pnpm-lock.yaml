@@ -27,11 +27,22 @@ importers:
       ts-node: 10.9.1_@types+node@18.11.18
       tsup: 6.5.0_ts-node@10.9.1
 
+  examples:
+    specifiers:
+      '@voerkalogger/core': workspace:^1.0.0
+      '@voerkalogger/file': workspace:^1.0.0
+      flex-tools: ^1.0.48
+    dependencies:
+      '@voerkalogger/core': link:../packages/core
+      '@voerkalogger/file': link:../packages/backends/file
+      flex-tools: 1.0.48
+
   packages/backends/file:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
       '@voerkalogger/core': workspace:^1.0.0
+      flex-tools: ^1.0.48
       rotating-file-stream: ^3.0.4
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
@@ -40,6 +51,7 @@ importers:
       typescript: ^4.9.5
     dependencies:
       '@voerkalogger/core': link:../../core
+      flex-tools: 1.0.48
       rotating-file-stream: 3.0.4
     devDependencies:
       '@swc/core': 1.3.31
@@ -75,8 +87,8 @@ importers:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
-      flex-tools: ^1.0.47
-      logsets: ^1.0.22
+      flex-tools: ^1.0.48
+      logsets: ^1.0.26
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
       tsup: ^6.5.0
@@ -84,8 +96,8 @@ importers:
       typescript: ^4.9.5
       vitest: ^0.28.3
     dependencies:
-      flex-tools: 1.0.47
-      logsets: 1.0.22
+      flex-tools: 1.0.48
+      logsets: 1.0.26
     devDependencies:
       '@swc/core': 1.3.31
       '@types/node': 18.11.18
@@ -1091,8 +1103,8 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /flex-tools/1.0.47:
-    resolution: {integrity: sha512-v/oqj5Kotg0CBzMRisBe5R1An+0pLInP/+JCDAjfKzYpgmR64ihYQXkK4G4y8opH3qmSPrNV3sNtauASZPY17w==}
+  /flex-tools/1.0.48:
+    resolution: {integrity: sha512-72c6dMIRg31RrIaZdjpt/Qf+JDfaioT597aoxYVMv4A7ezQ6FvKA+XCxaDh9T3e+iJUR5216L4Dplawmz6eI5Q==}
     dependencies:
       lodash: 4.17.21
     dev: false
@@ -1339,13 +1351,14 @@ packages:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: false
 
-  /logsets/1.0.22:
-    resolution: {integrity: sha512-D6JVNnjfjpR3DSwUZNdB7cfe4vQmhcVx4+EM9BGd9PDWgTKvFP+L+XvHmX9R7vnshSgaO0V9SuIt8YI8qpkcTg==}
+  /logsets/1.0.26:
+    resolution: {integrity: sha512-Z4eVRVWHpHTmZscLWzxL/iiLeW9hNoVx0u3HT1WjFAWZCR9aLu0yyoBI0AmiCWwVpptOTS7XhtPfVrSEMP1sGQ==}
     dependencies:
       '@babel/runtime-corejs3': 7.21.0
       ansicolor: 1.1.100
       core-js: 3.28.0
       deepmerge: 4.3.0
+      flex-tools: 1.0.48
     dev: false
 
   /loupe/2.3.6:

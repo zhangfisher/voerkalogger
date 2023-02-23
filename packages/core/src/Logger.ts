@@ -21,11 +21,10 @@
  * 
  */
 import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
-import { handleLogArgs, safeCall } from "./utils";
+import { safeCall } from "./utils";
 import {BackendBase} from "./BackendBase";
 import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from "./types";
 import ConsoleBackend from "./backends/console";
-import { BatchBackendBase } from "./BatchBackendBase";
 import { DeepRequired } from "ts-essentials"  
 
 
@@ -40,7 +39,6 @@ export class VoerkaLogger{
             return VoerkaLogger.LoggerInstance
         } 
         this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
-
         // 注册默认的控制台日志输出
         this.use("console",(new ConsoleBackend()) as unknown as BackendBase)
         // 捕获全局错误,自动添加到日志中
@@ -73,9 +71,7 @@ export class VoerkaLogger{
      */
     async flush(){ 
         await Promise.allSettled(Object.values(this.#backendInstances).map(backend=>{
-            if(backend instanceof BatchBackendBase){
-                backend.flush() 
-            } 
+            backend.flush() 
         }))
     }    
     /**
@@ -117,7 +113,7 @@ export class VoerkaLogger{
             level:options.level,
             message:msg,
             ...options
-        })    
+        })            
         if(record.error instanceof Error){
             record.error = record.error.message
             record.errorStack = (record.error as unknown as Error).stack
@@ -125,7 +121,11 @@ export class VoerkaLogger{
         Object.values(this.#backendInstances).forEach((backendInst) => {
             const limitLevel = backendInst.level || this.options.level
             if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
-                try{backendInst._output(record,vars)}catch{}
+                try{
+                    backendInst._output(record,vars)
+                }catch{
+
+                }
             }
         })
     }
@@ -150,6 +150,12 @@ export class VoerkaLogger{
     fatal(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
         this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.FATAL}));
     }  
+
+    async destory(){
+        Object.values(this.#backendInstances).forEach(instance=>{
+            instance.destroy()
+        })
+    }
 }
  
  

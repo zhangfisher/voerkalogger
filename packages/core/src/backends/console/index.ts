@@ -3,12 +3,10 @@
  
  * 
  */
-import { BackendBase } from '../../BackendBase';
-import { BackendBaseOptions,  LogMethodVars,  VoerkaLoggerRecord } from "../../types"
-import logsets from "logsets"
-import { VoerkaLoggerLevel } from '../../consts';
-import { getInterpolatedVars } from '../../utils';
-
+import { BackendBaseOptions,BackendBase } from '../../BackendBase';
+import {  LogMethodVars,  VoerkaLoggerRecord } from "../../types"
+import logsets from "logsets" 
+import { assignObject } from 'flex-tools';
 
 const logLevelColors = [
     "darkGray",                             // NOSET
@@ -36,25 +34,26 @@ export interface ConsoleBackendOptions extends BackendBaseOptions{
 
 export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions,void>{     
     constructor(options?:ConsoleBackendOptions){
-        super(Object.assign({
-            format:"[{levelName}] - {datetime} : {message}{<,>module}{<,>tags}"    
+        super(assignObject({
+            // 关闭缓冲区，控制台输出不需要启用异步输出
+            bufferSize:0,               
+            // format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
         },options))
+        logsets.config({
+            String:"lightGreen"
+        })
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
-        const template = typeof(this.options.format) == 'function'  ? this.options.format.call(this, record, interpVars, this) as unknown as string : this.options.format
-        let vars          
-        // 如果只有位置插值，则代表插值只对message进行，否则就会出现插值不匹配的情况
-        if(Array.isArray(interpVars)){
-            vars ={
-                ...this.getInterpVars(record,{}),
-                message: record.message.params(interpVars)
+        try{         
+            const colorizedRecord = Object.assign({},record)
+            const template = typeof(this.options.format) == 'function'  ? this.options.format.call(this, colorizedRecord, interpVars, this) as unknown as string : this.options.format
+            const levelColorizer = logsets.getColorizer(logLevelColors[colorizedRecord.level])
+            colorizedRecord.message = logsets.getColorizedTemplate(colorizedRecord.message,interpVars)
+            const vars ={
+                ...this.getInterpVars(colorizedRecord),
+                ...colorizedRecord,
             }
-        }else{
-            vars = interpVars
-        }   
-        try{ 
             const output = template!.params(vars)
-            const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
             return console.log(levelColorizer(logsets.getColorizedTemplate(output,vars)))
         }catch(e:any){   
             console.log(e.stack)

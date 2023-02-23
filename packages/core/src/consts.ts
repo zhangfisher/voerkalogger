@@ -1,5 +1,3 @@
-import { Class } from "flex-tools";
-import { DeepRequired } from "ts-essentials";
 import { VoerkaLoggerOptions } from "./types";
 
 

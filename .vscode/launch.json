@@ -5,17 +5,32 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Demo",
+            "name": "ConsoleBackendDemo",
             "type": "node",
             "request": "launch",
             "args": [
-                "demo.ts"
+                "console.ts"
             ],
             "runtimeArgs": [
                 "-r",
                 "ts-node/register"
             ],
-            "cwd": "${workspaceRoot}/packages/core",
+            "cwd": "${workspaceRoot}/examples",
+            "protocol": "inspector",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "FileBackendDemo",
+            "type": "node",
+            "request": "launch",
+            "args": [
+                "file.ts"
+            ],
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "cwd": "${workspaceRoot}/examples",
             "protocol": "inspector",
             "internalConsoleOptions": "openOnSessionStart"
         }

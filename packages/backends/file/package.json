@@ -2,13 +2,14 @@
   "name": "@voerkalogger/file",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "rotating-file-stream": "^3.0.4",
-    "@voerkalogger/core": "workspace:^1.0.0"
+    "@voerkalogger/core": "workspace:^1.0.0",
+    "flex-tools": "^1.0.48",
+    "rotating-file-stream": "^3.0.4"
   },
   "keywords": [],
   "author": "",

@@ -31,18 +31,18 @@ importers:
     specifiers:
       '@voerkalogger/core': workspace:^1.0.0
       '@voerkalogger/file': workspace:^1.0.0
-      flex-tools: ^1.0.48
+      flex-tools: ^1.0.54
     dependencies:
       '@voerkalogger/core': link:../packages/core
       '@voerkalogger/file': link:../packages/backends/file
-      flex-tools: 1.0.48
+      flex-tools: 1.0.54
 
   packages/backends/file:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
       '@voerkalogger/core': workspace:^1.0.0
-      flex-tools: ^1.0.48
+      flex-tools: ^1.0.54
       rotating-file-stream: ^3.0.4
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
@@ -51,7 +51,7 @@ importers:
       typescript: ^4.9.5
     dependencies:
       '@voerkalogger/core': link:../../core
-      flex-tools: 1.0.48
+      flex-tools: 1.0.54
       rotating-file-stream: 3.0.4
     devDependencies:
       '@swc/core': 1.3.31
@@ -87,7 +87,7 @@ importers:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
-      flex-tools: ^1.0.48
+      flex-tools: ^1.0.53
       logsets: ^1.0.26
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
@@ -96,7 +96,7 @@ importers:
       typescript: ^4.9.5
       vitest: ^0.28.3
     dependencies:
-      flex-tools: 1.0.48
+      flex-tools: 1.0.53
       logsets: 1.0.26
     devDependencies:
       '@swc/core': 1.3.31
@@ -1103,8 +1103,14 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /flex-tools/1.0.48:
-    resolution: {integrity: sha512-72c6dMIRg31RrIaZdjpt/Qf+JDfaioT597aoxYVMv4A7ezQ6FvKA+XCxaDh9T3e+iJUR5216L4Dplawmz6eI5Q==}
+  /flex-tools/1.0.53:
+    resolution: {integrity: sha512-Mhc5JIXTflLg+b2yQmTqOD7D75h1fqAt7glZmMJ7NQ0AOrKrRpfdHuLIQKKLlvMlI1XegJUdNbgYGv5P5sNA4w==}
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+
+  /flex-tools/1.0.54:
+    resolution: {integrity: sha512-I0riOGDov+faM0kfwaqceV9uF3K3jm3fnbtjA3auvqURFO+vV6fwJzO0/2SDNL666fHQ+lEKkagifO9ufB2Rbw==}
     dependencies:
       lodash: 4.17.21
     dev: false
@@ -1358,7 +1364,7 @@ packages:
       ansicolor: 1.1.100
       core-js: 3.28.0
       deepmerge: 4.3.0
-      flex-tools: 1.0.48
+      flex-tools: 1.0.53
     dev: false
 
   /loupe/2.3.6:

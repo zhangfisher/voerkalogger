@@ -14,7 +14,6 @@ export interface VoerkaLoggerOptions{
     tags?:string[],                                     // 全局标签
 }
 
-
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
      
 }
@@ -39,3 +38,5 @@ export type LogMethodVars = Record<string,any> | any[] | Error  | Function | any
 // 对日志记录进行格式化以便输出到后端
 export type VoerkaLoggerFormatter<Output=VoerkaLoggerRecord> = (record:VoerkaLoggerRecord,vars:LogMethodVars, backend?:BackendBase<any,any>)=>Output
 export type VoerkaLoggerFormatters = Record<string,VoerkaLoggerFormatter>
+
+ 

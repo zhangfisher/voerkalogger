@@ -7,6 +7,7 @@ import type { LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./type
 import { VoerkaLoggerLevelNames, VoerkaLoggerLevel } from './consts';
 import  isPlainObject from "lodash/isPlainObject";
 import type { VoerkaLogger } from "./Logger";
+import logsets from "logsets"
 
 /**
  * 执行一个函数，如果出错则返回错误信息
@@ -104,4 +105,14 @@ export function safeCall(fn:Function){
     try{
         return fn()
     }catch{}
+}
+
+
+/**
+ * 输出默认的错误，用在当logger自身出错时在控制台输出错误信息
+ * @param e 
+ */
+export function outputError(e:Error,now?:number){
+    const datetime = dayjs(now || new Date()).format("YYYY-MM-DD HH:mm:ss SSS")
+    logsets.error(`[ERROR] - ${datetime} : ${e.stack}`)
 }

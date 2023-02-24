@@ -115,8 +115,10 @@ export class VoerkaLogger{
             ...options
         })            
         if(record.error instanceof Error){
-            record.error = record.error.message
-            record.errorStack = (record.error as unknown as Error).stack
+            const err = record.error as Error
+            record.error = err.message
+            record.errorStack = err.stack
+            record.errorLine = err.stack
         }
         Object.values(this.#backendInstances).forEach((backendInst) => {
             const limitLevel = backendInst.level || this.options.level

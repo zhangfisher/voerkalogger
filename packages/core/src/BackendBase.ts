@@ -1,12 +1,8 @@
 import type { DeepRequired } from "ts-essentials"
-import *  as formatters from "./formatters"
 import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
 import type { VoerkaLogger, VoerkaLoggerLevel  } from './Logger';
 import dayjs from "dayjs";
-import { callWithError } from "./utils";
-import isFunction from "lodash/isFunction";
-import isError from "lodash/isError";
-import { isPlainObject } from "lodash";
+import { outputError } from "./utils";
 import { assignObject,asyncSignal,IAsyncSignal,canIterable, AsyncSignalAbort } from "flex-tools";
 import { VoerkaLoggerLevelNames  } from "./consts"
 
@@ -64,21 +60,8 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
     _bind(logger: VoerkaLogger) {
         this.#logger = logger
     }
-
-    /**
-     *  格式化器支持字符串，或者函数
-     * 
-     */
-    getFormatter(): VoerkaLoggerFormatter<OutputRecord> {
-        const formatter = this.options.format
-        if (typeof (formatter) === "function") {   // 函数：输入参数时info
-            return formatter as VoerkaLoggerFormatter<OutputRecord>
-        } else if (typeof (formatter) === "string") {
-            return formatter in formatters ? (formatters as any)[formatter] : formatters.default
-        } else {
-            return formatters.default
-        }
-
+    protected outputError(e:Error){
+        outputError(e)
     }
     /**
      * 处理输入的插值变量列表参数
@@ -143,7 +126,7 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
         const output = this.format(record, inVars)
         if (output && this.options.bufferSize>0){
             this.#buffer.push(output)
-            this.#outputSingal?.resolve() // 有数据进来
+            if(this.#buffer.length>=this.options.bufferSize) this.#outputSingal?.resolve() // 有数据进来
         }
     }
  

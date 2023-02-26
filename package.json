@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "commit": "git add . && git cz"
-
+    "commit": "git add . && git cz",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",

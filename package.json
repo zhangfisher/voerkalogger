@@ -4,7 +4,9 @@
   "description": "日志输出",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "git add . && git cz"
+
   },
   "keywords": [],
   "author": "",
@@ -17,10 +19,21 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@commitlint/cz-commitlint": "^17.4.4",
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.11.18",
     "@types/path-browserify": "^1.0.0",
+    "commitizen": "^4.3.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "husky": "^8.0.3",
     "ts-node": "^10.9.1",
     "tsup": "^6.5.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   }
 }

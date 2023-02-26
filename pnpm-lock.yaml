@@ -27,23 +27,12 @@ importers:
       ts-node: 10.9.1_@types+node@18.11.18
       tsup: 6.5.0_ts-node@10.9.1
 
-  examples:
-    specifiers:
-      '@voerkalogger/core': workspace:^1.0.0
-      '@voerkalogger/file': workspace:^1.0.0
-      flex-tools: ^1.0.54
-    dependencies:
-      '@voerkalogger/core': link:../packages/core
-      '@voerkalogger/file': link:../packages/backends/file
-      flex-tools: 1.0.54
-
   packages/backends/file:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
       '@voerkalogger/core': workspace:^1.0.0
-      flex-tools: ^1.0.54
-      rotating-file-stream: ^3.0.4
+      flex-tools: ^1.0.56
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
       tsup: ^6.5.0
@@ -51,8 +40,7 @@ importers:
       typescript: ^4.9.5
     dependencies:
       '@voerkalogger/core': link:../../core
-      flex-tools: 1.0.54
-      rotating-file-stream: 3.0.4
+      flex-tools: 1.0.56
     devDependencies:
       '@swc/core': 1.3.31
       '@types/node': 18.11.18
@@ -67,6 +55,7 @@ importers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
       '@voerkalogger/core': workspace:^1.0.0
+      flex-tools: ^1.0.56
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
       tsup: ^6.5.0
@@ -74,6 +63,7 @@ importers:
       typescript: ^4.9.5
     dependencies:
       '@voerkalogger/core': link:../../core
+      flex-tools: 1.0.56
     devDependencies:
       '@swc/core': 1.3.31
       '@types/node': 18.11.18
@@ -83,11 +73,17 @@ importers:
       type-fest: 3.5.4
       typescript: 4.9.5
 
+  packages/backends/syslog:
+    specifiers:
+      flex-tools: ^1.0.56
+    dependencies:
+      flex-tools: 1.0.56
+
   packages/core:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
-      flex-tools: ^1.0.53
+      flex-tools: ^1.0.56
       logsets: ^1.0.26
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
@@ -96,7 +92,7 @@ importers:
       typescript: ^4.9.5
       vitest: ^0.28.3
     dependencies:
-      flex-tools: 1.0.53
+      flex-tools: 1.0.56
       logsets: 1.0.26
     devDependencies:
       '@swc/core': 1.3.31
@@ -1103,14 +1099,8 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /flex-tools/1.0.53:
-    resolution: {integrity: sha512-Mhc5JIXTflLg+b2yQmTqOD7D75h1fqAt7glZmMJ7NQ0AOrKrRpfdHuLIQKKLlvMlI1XegJUdNbgYGv5P5sNA4w==}
-    dependencies:
-      lodash: 4.17.21
-    dev: false
-
-  /flex-tools/1.0.54:
-    resolution: {integrity: sha512-I0riOGDov+faM0kfwaqceV9uF3K3jm3fnbtjA3auvqURFO+vV6fwJzO0/2SDNL666fHQ+lEKkagifO9ufB2Rbw==}
+  /flex-tools/1.0.56:
+    resolution: {integrity: sha512-5p5RA8wCgk3KY4IKPN39eAC5/JfOpLzM0YebIWIgEJo3AK745E4ijMuYl0wlhbEvV90oJfeygQIyNrn97u8HCQ==}
     dependencies:
       lodash: 4.17.21
     dev: false
@@ -1364,7 +1354,7 @@ packages:
       ansicolor: 1.1.100
       core-js: 3.28.0
       deepmerge: 4.3.0
-      flex-tools: 1.0.53
+      flex-tools: 1.0.56
     dev: false
 
   /loupe/2.3.6:
@@ -1623,11 +1613,6 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
-
-  /rotating-file-stream/3.0.4:
-    resolution: {integrity: sha512-Zd+IA5soqBUKtCa7KfMRnF7GKEaRav/dJFU7UHc+r1FMd8VvMLUFE0q1HX5s6XJO1cZ6jAqtTa/ZFnjc7IqlJA==}
-    engines: {node: '>=14.0'}
-    dev: false
 
   /run-parallel/1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}

@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
-    "flex-tools": "^1.0.54",
-    "rotating-file-stream": "^3.0.4"
+    "flex-tools": "^1.0.56"
   },
   "keywords": [],
   "author": "",

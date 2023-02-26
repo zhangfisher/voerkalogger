@@ -6,7 +6,7 @@
 import { BackendBase, BackendBaseOptions } from "@voerkalogger/core"
 import { RotatingFileStream,createStream, Options  as RotatingFileOptions } from "rotating-file-stream"
 import { assignObject,pick } from "flex-tools/object"
-import type { FileSize } from "flex-tools/types"
+import type { FileSize,TimeDru } from "flex-tools/types"
  
 
 const defaultRotatingFileOptions = {
@@ -42,7 +42,7 @@ export type FileBackendOptions =  BackendBaseOptions & RotatingFileOptions  & {
     location?: string                               // 保存日志文件的位置
     compress?: boolean                              // 是否进行压缩
     encoding?: string                               // 编码，默认为utf8
-    rotate?: 'day' | 'week' | 'month' | 'year'      // 按日期进行分割
+    rotate?:  TimeDuration     // 按日期进行分割
     maxSize?: FileSize                              // 单个日志文件最大尺寸
     // 日志文件数量限制,采用定时审查策略，即在指定的时间进行检查
     // 如

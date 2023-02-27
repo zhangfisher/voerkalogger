@@ -2962,7 +2962,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.0.6
-      ts-node: 10.9.1_@types+node@18.11.18
+      ts-node: 10.9.1_bpfwsfxxgijww2ammkaiheoe7m
       yaml: 1.10.2
     dev: true
 

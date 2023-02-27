@@ -1,7 +1,9 @@
 module.exports = {
 	extends: ["@commitlint/config-conventional"],
 	defaultIgnores: false,
-	rules: {},
+	rules: { 
+        "scope-enum":[1,"always",["core","file-backend","http-backend","console-backend","syslog-backend"]]
+    },
 	prompt: {
         settings:{
             enableMultipleScopes:true,
@@ -36,12 +38,12 @@ module.exports = {
 					},
 					style: {
 						title: "格式",
-						description:"   🎨  代码格式（不影响功能，例如空格、分号等格式修正）",
+						description:"   🎨  代码格式(不影响功能，例如空格、分号等格式修正)",
 						emoji: "🎨",
 					},
 					refactor: {
 						title: "重构",
-						description:"   🛠   代码重构（不包括 bug 修复、功能新增）",
+						description:"   🛠   代码重构(不包括 bug 修复、功能新增)",
 						emoji: "🛠",
 					},
 					perf: {
@@ -57,7 +59,7 @@ module.exports = {
 					build: {
 						title: "构建",
 						description:
-							"   📦  构建流程、外部依赖变更（如升级 npm 包、修改 webpack 配置等）",
+							"   📦  构建流程、外部依赖变更(如升级 npm 包、修改 webpack 配置等)",
 						emoji: "📦",
 					},
 					ci: {
@@ -77,35 +79,24 @@ module.exports = {
 					},
 					other: {
 						title: "其他",
-						description:"   🔨  对构建过程或辅助工具和库的更改（不影响源文件、测试用例）",
+						description:"   🔨  对构建过程或辅助工具和库的更改(不影响源文件、测试用例)",
 						emoji: "🔨",
 					},
 				},
 			},
 			scope: {
-				description: "选择提交范围(可选):",
-				enum: {
-					string: { title: "字符串工具"},
-					object: { title: "对象工具" },
-					func: { title: "函数工具" },
-					events: { title: "事件工具" },
-					collection: { title: "数据容器" },
-					classs: { title: "类工具" },
-					tree: { title: "树工具" },
-					typecheck: { title: "类型判断" },
-					misc: { title: "杂项" },
-				},
+				description: "本次提交涉及的模块或范围(可选):", 
 			},
 			subject: {
 				description: "填写简短精炼的变更描述 :\n",
 			},
 			body: {
 				description:
-					'填写更加详细的变更描述（可选）。使用 "|" 换行 :\n',
+					'填写更加详细的变更描述(可选)。使用 "|" 换行 :\n',
 			},
 			breaking: {
 				description:
-					'列举非兼容性重大的变更（可选）。使用 "|" 换行 :\n',
+					'列举非兼容性重大的变更(可选)。使用 "|" 换行 :\n',
 			},
             isBreaking: {
                 description: '本次提交是一个不兼容的变更?',             // Are there any breaking changes?

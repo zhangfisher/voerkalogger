@@ -3,6 +3,10 @@ module.exports = {
 	defaultIgnores: false,
 	rules: {},
 	prompt: {
+        settings:{
+            enableMultipleScopes:true,
+            scopeEnumSeparator:","
+        },
 		messages: {
 			skip: "跳过",
 			max: "最大支持%d个字符",

@@ -14,8 +14,8 @@ module.exports = {
 			max: "最大支持%d个字符",
 			min: "不能少于%d个字符",
 			emptyWarning: "不能为空",
-			upperLimitWarning: "over limit",
-			lowerLimitWarning: "below limit",
+			upperLimitWarning: "限制大写",
+			lowerLimitWarning: "限制小写",
 		},
 		questions: {
 			type: {
@@ -112,4 +112,4 @@ module.exports = {
 			},
 		},
 	},
-};
+}

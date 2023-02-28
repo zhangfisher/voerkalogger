@@ -96,7 +96,7 @@ importers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
       flex-tools: ^1.0.56
-      logsets: ^1.0.26
+      logsets: ^1.0.33
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
       tsup: ^6.5.0
@@ -105,7 +105,7 @@ importers:
       vitest: ^0.28.3
     dependencies:
       flex-tools: 1.0.56
-      logsets: 1.0.26
+      logsets: 1.0.33
     devDependencies:
       '@swc/core': 1.3.31
       '@types/node': 18.11.18
@@ -1910,6 +1910,12 @@ packages:
       lodash: 4.17.21
     dev: false
 
+  /flex-tools/1.0.58:
+    resolution: {integrity: sha512-mn/LpPSDS0QcD62Yb0NpYTYWbtxsUA4FdPQOLDTG2GIAEorCHzJ4MkmZvIun/saVSnqju3h3JR0YwOqH/eV2aA==}
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
@@ -2546,14 +2552,14 @@ packages:
       is-unicode-supported: 0.1.0
     dev: true
 
-  /logsets/1.0.26:
-    resolution: {integrity: sha512-Z4eVRVWHpHTmZscLWzxL/iiLeW9hNoVx0u3HT1WjFAWZCR9aLu0yyoBI0AmiCWwVpptOTS7XhtPfVrSEMP1sGQ==}
+  /logsets/1.0.33:
+    resolution: {integrity: sha512-70c5ZmakwQ1gNKiyJCDCkloetg4KUANrsKfeqRI1x2wSo54RA3CMEDKMy9eVLWZGo27vRBy/LbeqpT8GJdwj0g==}
     dependencies:
       '@babel/runtime-corejs3': 7.21.0
       ansicolor: 1.1.100
       core-js: 3.28.0
       deepmerge: 4.3.0
-      flex-tools: 1.0.56
+      flex-tools: 1.0.58
     dev: false
 
   /longest/2.0.1:

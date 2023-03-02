@@ -8,13 +8,15 @@
   },
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
-    "flex-tools": "^1.0.56"
+    "flex-tools": "^1.0.58",
+    "fs-extra": "^11.1.0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@swc/core": "^1.3.31",
+    "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.11.18",
     "ts-essentials": "^9.3.0",
     "ts-node": "^10.9.1",

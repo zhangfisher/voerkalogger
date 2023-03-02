@@ -11,7 +11,6 @@ export default defineConfig({
     clean: true,
     treeshake:true,  
     minify: true,
-    noExternal:["lodash"],
     banner: {
         js: `/**
 *        

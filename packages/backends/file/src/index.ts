@@ -21,25 +21,25 @@ export type FileBackendOptions =  BackendBaseOptions & {
     maxFileCount?: number                           // 日志文件数量限制   
 }
 
-export default class FileBackend extends BackendBase<FileBackendOptions,string> {
+export default class FileBackend<OutputRecord = string> extends BackendBase<OutputRecord,FileBackendOptions> {
     #outputPath:string = ""                                     // 日志完整输出路径
     #logFileSize:number = 0                                     // 当前输出日志文件的大小
     #logFilename?:string                                        // 当前输出文件名称
     #maxSize:number = 0                                         // 单个文件的最大尺寸限制
-    constructor(options:FileBackendOptions) {
+    constructor(options?:FileBackendOptions) {
         super(
             assignObject({
                 location: "./logs",                             // 保存日志文件的位置         
                 compress: false,                                // 是否进行压缩
                 encoding: "utf8",                               // 编码，默认为utf8
                 maxSize:'50MB',                                 // 单个日志文件最大尺寸,如`5MB`
-                maxFileCount: 10                               // 日志文件数量限制                         
-            }, options ) //as FileBackendOptions
+                maxFileCount: 10                                // 日志文件数量限制                         
+            }, options ) 
         );         
         this.#outputPath = path.isAbsolute(this.options.location) ? this.options.location : path.join( process.cwd(),this.options.location)
         this.#maxSize = parseFileSize(this.options.maxSize)
     }   
-    async output(result: string[]) {        
+    async output(result: OutputRecord[]) {        
         // 1. 取得当前文件
         if(!this.#logFilename){
             this.#logFilename = await this.getLogFilename()  

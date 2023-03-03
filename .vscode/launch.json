@@ -33,6 +33,21 @@
             "cwd": "${workspaceRoot}/examples",
             "protocol": "inspector",
             "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "HttpBackendDemo",
+            "type": "node",
+            "request": "launch",
+            "args": [
+                "http.ts"
+            ],
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "cwd": "${workspaceRoot}/examples",
+            "protocol": "inspector",
+            "internalConsoleOptions": "openOnSessionStart"
         }
     ]
 }

@@ -22,7 +22,7 @@ export interface BackendBaseOptions<Output=string>{
  * 
  * <OutputRecord> 是日志经过Formatter后的输出结果类型 
 */
-export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions, OutputRecord = string>{
+export class BackendBase<OutputRecord = any,Options extends BackendBaseOptions = BackendBaseOptions>{
     #options: DeepRequired<Options>
     #buffer: OutputRecord[] = []
     #logger?: VoerkaLogger

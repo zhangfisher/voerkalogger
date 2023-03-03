@@ -12,8 +12,8 @@ export interface HttpBackendOptions extends BackendBaseOptions,AxiosRequestConfi
 
 
 
-export default class HttpBackend<T=VoerkaLoggerRecord> extends BackendBase<HttpBackendOptions,T> {
-    #http: AxiosInstance
+export default class HttpBackend<OutputRecord = string> extends BackendBase<OutputRecord,HttpBackendOptions> {
+    #http?: AxiosInstance
     constructor(options:HttpBackendOptions) {
         super(assignObject({ 
                 url      : '',
@@ -23,14 +23,16 @@ export default class HttpBackend<T=VoerkaLoggerRecord> extends BackendBase<HttpB
         );
         this.#http = axios.create(this.options)
     } 
-    async outoput(results:T[]) {
-        const response = await this.#http.request({
+    get http(){ return this.#http as AxiosInstance }
+    set http(value:AxiosInstance){ this.#http = value }
+    async outoput(results:OutputRecord[]) {        
+        await this.#http?.request({
             ...this.options,
             data: results
         })  
     }
 
     async destroy(){
-
+        this.#http = undefined
     }
 }

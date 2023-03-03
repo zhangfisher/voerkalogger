@@ -82,22 +82,30 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
      * 格式化为输出格式，一般会输出为字符串，但是也可以是任意格式，比如二进制等，取决于后端实现
      * 
      * 各后端可以根据需要重载此方法 
+     * 
+     * 默认输出全本
      *
      * @param {*} record = {message: string, level: number, args:any[] | Record<string,any>,timestamp: string, error: *,tags:[],module:string}
      * @param context
      */
-    format(record: VoerkaLoggerRecord, interpVars: LogMethodVars): OutputRecord {
-        const template = typeof (this.options.format) == 'function' ? this.options.format.call(this, record, interpVars, this) as unknown as string : this.options.format
-        record.message = record.message.params(interpVars)
-        const vars ={
-            ...this.getInterpVars(record),
-            ...record,
-        }
-        try {
-            return template!.params(vars) as OutputRecord
-        } catch (e: any) {
-            return `[ERROR] - ${vars.datetime} : ${e.stack}` as OutputRecord
-        } 
+    format(record: VoerkaLoggerRecord, interpVars: LogMethodVars): OutputRecord {        
+        record.message = record.message.params(interpVars)        
+        const formatter = this.options.format
+        if(typeof (formatter) == 'function'){
+            return formatter.call(this, record, interpVars, this) as OutputRecord
+        }else if(typeof formatter == 'string'){
+            const vars ={
+                ...this.getInterpVars(record),
+                ...record,
+            }
+            try {
+                return formatter!.params(vars) as OutputRecord
+            } catch (e: any) {
+                return `[ERROR] - ${vars.datetime} : ${e.stack}` as OutputRecord
+            } 
+        }else{
+            return record as OutputRecord
+        }  
     }
     // *************** 操作日志***************
 

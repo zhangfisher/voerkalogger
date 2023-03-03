@@ -10,27 +10,24 @@ export interface HttpBackendOptions extends BackendBaseOptions,AxiosRequestConfi
     url      : string 
 } 
 
+
+
 export default class HttpBackend<T=VoerkaLoggerRecord> extends BackendBase<HttpBackendOptions,T> {
     #http: AxiosInstance
     constructor(options:HttpBackendOptions) {
-        super(assignObject({
+        super(assignObject({ 
                 url      : '',
-                method   : 'post',                      // 访问头
-                contentType : 'application/json',
-                headers   : {},                         // 认证信息
+                method   : 'post',                      // 访问方法
+                contentType : 'application/json'
             },options)
         );
         this.#http = axios.create(this.options)
-    }
-    format(record: VoerkaLoggerRecord, interpVars: LogMethodVars) {
-        return record as T
-    }    
+    } 
     async outoput(results:T[]) {
         const response = await this.#http.request({
             ...this.options,
             data: results
         })  
-
     }
 
     async destroy(){

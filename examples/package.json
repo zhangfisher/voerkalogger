@@ -12,6 +12,6 @@
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
     "@voerkalogger/file": "workspace:^1.0.0",
-    "flex-tools": "^1.0.54"
+    "flex-tools": "^1.0.58"
   }
 }

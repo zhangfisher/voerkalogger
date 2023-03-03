@@ -1,37 +1,39 @@
-import BatchBackend from 'voerkalogger/BatchBackendBase';
-import axios,{AxiosInstance} from 'axios';
-import { BatchBackendBaseOptions } from 'voerkalogger';
+import axios from 'axios';
+import { BackendBase, BackendBaseOptions, LogMethodVars, VoerkaLoggerRecord } from '@voerkalogger/core';
+import type { AxiosInstance,AxiosRequestConfig} from 'axios';
+import { assignObject } from 'flex-tools';
+
+ 
 
 
+export interface HttpBackendOptions extends BackendBaseOptions,AxiosRequestConfig{
+    url      : string 
+} 
 
-export interface HttpBackendOptions extends BatchBackendBaseOptions{
-    url      : string
-    format   : boolean   
-    method   : 'post' 
-    headers   : Record<string, any>      // 认证信息
-}
-
-
-
-export default class HttpBackend extends BatchBackend<HttpBackendOptions> {
+export default class HttpBackend<T=VoerkaLoggerRecord> extends BackendBase<HttpBackendOptions,T> {
+    #http: AxiosInstance
     constructor(options:HttpBackendOptions) {
-        super(Object.assign({
+        super(assignObject({
                 url      : '',
-                format   : false,                       // 输出JSON日志
                 method   : 'post',                      // 访问头
+                contentType : 'application/json',
                 headers   : {},                         // 认证信息
             },options)
         );
+        this.#http = axios.create(this.options)
     }
-    async batchOutput(results:any[]) {
-        try {
-            await axios.post(this.options.url,{
-                data: results,
-                auth:this.options.auth,
-                headers:this.options.headers
-            }) 
-        } catch (e) {
-            console.error(e);
-        }
+    format(record: VoerkaLoggerRecord, interpVars: LogMethodVars) {
+        return record as T
+    }    
+    async outoput(results:T[]) {
+        const response = await this.#http.request({
+            ...this.options,
+            data: results
+        })  
+
+    }
+
+    async destroy(){
+
     }
 }

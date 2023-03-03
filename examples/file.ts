@@ -5,7 +5,9 @@ import FileBackend from "@voerkalogger/file"
 let logger = new VoerkaLogger()
 
 logger.use("file",new FileBackend({
-    filename:"log.txt"
+    compress:true,
+    maxSize:"8k",
+    maxFileCount:5
 }))
 
 logger.backends.console.enabled = false
@@ -25,9 +27,10 @@ logger.level = VoerkaLoggerLevel.NOTSET
 
 
 setTimeout(async () => {
-    for(let i = 0; i <1000;i++){
-        await delay(200)
-        logger.info("运行模块时：{}",new Array(500).fill(i).join(""))
+    await logger.backends.file.clear()
+    for(let i = 1; i <=1000;i++){
+        await delay(10)
+        logger.info("运行模块：{}",i)
     }   
     await delay(100)
     await logger.flush()

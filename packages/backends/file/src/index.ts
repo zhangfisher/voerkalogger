@@ -6,96 +6,115 @@
 import "flex-tools/string"
 import { BackendBase, BackendBaseOptions } from "@voerkalogger/core"
 import { assignObject } from "flex-tools/object"
-import type { FileSize,TimeDuration } from "flex-tools/types"
-import { parseFileSize,parseTimeDuration } from "flex-tools"
+import type { FileSize } from "flex-tools/types"
+import { parseFileSize } from "flex-tools"
 import path from "path"
-import fs  from "fs-extra"
-import dayjs from 'dayjs';
+import fs  from "fs-extra" 
+import { zip } from "./zip"
 
 export type LogRotatePeriod= 'DAY' | 'MONTH' | 'WEEK' |'YEAR'
 
 export type FileBackendOptions =  BackendBaseOptions & { 
-    // 日志文件名,默认格式是:  <轮换日期>-<文件序号>.log
-    // 例： rotate='DAY'  每天生成日志文件，超过maxSize则拆分为1-2-3....    
-    //     第1天: 20220801-1.log,20220801-2.log  
-    //     第2天: 20220802-1.log,20220802-2.log,20220802-3.log
-    //     第N天：......
-    // 例： rotate='MONTH'  每月生成日志文件，超过maxSize则拆分为1-2-3....    
-    //     第1天: 202208-1.log,202208-2.log  
-    //     第2天: 202208-1.log,202208-2.log,202208-3.log
-    //     第N天：......
-    filename?: string | (()=>string)                // 日志文件格式定义
     location?: string                               // 保存日志文件的位置
     compress?: boolean                              // 是否进行压缩
-    encoding?: string                               // 编码，默认为utf8
-    rotate?:  LogRotatePeriod                          
-    maxSize?: FileSize                              // 单个日志文件最大尺寸,如`5MB`
-    // 日志文件数量限制,采用定时审查策略，即在指定的时间进行检查
-    // 注意：不是实时生效的，而是按auditInterval指定的时间进行检查，然后删除多余的文件
-    maxFileCount?: number                           
-    // 所有日志文件的总容量大小，超过也删除旧的文件
-    // 日志总容量不是实时计算的,采用定时审查策略
-    // 例：auditInterval = 1h, 则每隔一小时检查一下日志总空量是否超出
-    maxTotalSize?:FileSize                          
-    // 定时审查策略的时间间隔,取值  
-    auditInterval?:TimeDuration
-    access?:number                                  // 文件权限,默认是0o666
+    maxSize?: FileSize                              // 单个日志文件最大尺寸,如`5MB`    
+    maxFileCount?: number                           // 日志文件数量限制   
 }
 
 export default class FileBackend extends BackendBase<FileBackendOptions,string> {
-    #filename:string = "1.log"
-    #auditTimer:any = 0
-    #outputPath:string = ""                     // 日志完整输出路径
+    #outputPath:string = ""                                     // 日志完整输出路径
+    #logFileSize:number = 0                                     // 当前输出日志文件的大小
+    #logFilename?:string                                        // 当前输出文件名称
+    #maxSize:number = 0                                         // 单个文件的最大尺寸限制
     constructor(options:FileBackendOptions) {
         super(
             assignObject({
-                filename: "{date}_{seq}.log",                               
-                location: "logs",                               // 保存日志文件的位置
+                location: "./logs",                             // 保存日志文件的位置         
                 compress: false,                                // 是否进行压缩
                 encoding: "utf8",                               // 编码，默认为utf8
                 maxSize:'50MB',                                 // 单个日志文件最大尺寸,如`5MB`
-                maxFileCount: 10,                               // 日志文件数量限制                         
-                maxTotalSize:"500M",                            // 所有日志文件的总容量大小，超过也删除旧的文件                
-                auditInterval:"5m",                             // 定时审查策略的时间间隔,取值  
-                access:  0o666                                  // 文件权限,默认是
+                maxFileCount: 10                               // 日志文件数量限制                         
             }, options ) //as FileBackendOptions
         );         
-        // 输出保存路径
-        this.#outputPath =path.isAbsolute(this.options.location) ? this.options.location : path.join(process.cwd(), this.options.location)
-        // 启动定时审查日志文件
-        this.startPollingAudit()
+        this.#outputPath = path.isAbsolute(this.options.location) ? this.options.location : path.join( process.cwd(),this.options.location)
+        this.#maxSize = parseFileSize(this.options.maxSize)
     }   
-
-    /**
-     * 定时审查日志总容量和大小是否超过
-     */
-    private startPollingAudit(){
-        const auditInterval = parseTimeDuration(this.options.auditInterval)
-        if(this.enabled && auditInterval>0){
-            this.#auditTimer = setTimeout(async () => {
-                this.#auditTimer = 0
-            }, auditInterval)
-        }
-    } 
-
-   
-
-    async output(result: string[]) {
+    async output(result: string[]) {        
         // 1. 取得当前文件
-        //const filename =  this.getFilename()         
-
-       // await fs.writeFile(filename, result.join(this.options.))
+        if(!this.#logFilename){
+            this.#logFilename = await this.getLogFilename()  
+        }          
+        const logBuffer = Buffer.from(result.join("\n") + "\n")
+        // 超出文件尺寸时，需要重新生成一个文件名称
+        if(this.#logFileSize+logBuffer.length>this.#maxSize){
+            this.#logFilename = await this.getLogFilename()  
+        }
+        await fs.appendFile(this.#logFilename, logBuffer,{encoding:"utf8"})
+        this.#logFileSize = this.#logFileSize + logBuffer.length          
     }
 
+     /**
+     *  文件名从新至旧为 1.log,2.log,...n.log，
+     *  当超过备份文件数时，将删除最旧的文件，
+     *  1.log总是最新日志数据
+     * @returns 
+     */
+    private async getLogFilename() {        
+        let curFilename =  path.join(this.#outputPath,"1.log")        
+        const backupFileCount = this.options.maxFileCount - 1    // 备份数量
+        const logPath = path.dirname(curFilename)                // 输出文件夹
+        await fs.mkdirp(logPath)
+        // 判定文件是否超出大小
+        if (await fs.exists(curFilename)) {
+            let stat = await fs.stat(curFilename)
+            if(stat.size > this.#maxSize){                
+                // 已经达到最大的文件数量时，需要删除最旧的文件，并且将旧日记文件依次更名
+                for(let i=backupFileCount;i>0;i--){
+                    let logFile = path.join(logPath,`${i}.log`)
+                    if(await fs.exists(logFile)){
+                        const newFile = path.join(logPath,`${i+1}.log`)
+                        await fs.rename(logFile,newFile)
+                        try{
+                            await this.compressLogFile(newFile)
+                            await fs.rm(newFile)
+                        }catch{ }                        
+                    }else if(await fs.exists(`${logFile}.zip`)){                        
+                        await fs.rename(`${logFile}.zip`,path.join(logPath,`${i+1}.log.zip`))
+                    }
+                }
+                this.#logFileSize = 0
+            }else{
+                this.#logFileSize = stat.size
+            }
+        }else{
+            this.#logFileSize = 0
+        }
+        return curFilename
+    }
+    private async compressLogFile(logFile:string){
+        if(!this.options.compress) return
+        zip(logFile,`${logFile}.zip`)
+    }
     /**
      * 清空日志 
      */
     async clear(){
-       
+        const counts =  new Array(this.options.maxFileCount).fill(0)
+        const logs = counts.map((v,i) =>{
+            return path.join(this.#outputPath,`${i+1}.log`)
+        })
+        logs.push(...counts.map((v,i) =>{
+            return path.join(this.#outputPath,`${i+1}.log.zip`)
+        }))
+        await Promise.all(logs.map(async file=>{
+            try{fs.rm(file)}catch{}
+        }))
     }
 
     async destroy() {
-        clearTimeout(this.#auditTimer)        
+        
     }
 }
  
+
+

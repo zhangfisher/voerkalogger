@@ -97,7 +97,7 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
             return template!.params(vars) as OutputRecord
         } catch (e: any) {
             return `[ERROR] - ${vars.datetime} : ${e.stack}` as OutputRecord
-        }
+        } 
     }
     // *************** 操作日志***************
 
@@ -129,7 +129,6 @@ export class BackendBase<Options extends BackendBaseOptions = BackendBaseOptions
             if(this.#buffer.length>=this.options.bufferSize) this.#outputSingal?.resolve() // 有数据进来
         }
     }
- 
     /**
      * 此方法由子类重载执行输出操作，如写入文件、提交http
      * @param {*} result   经过格式化处理后的日志记录，取决于配置，可能是字符串，也可能是{}

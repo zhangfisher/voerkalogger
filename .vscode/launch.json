@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ConsoleBackendDemo",
+            "name": "ConsoleTransportDemo",
             "type": "node",
             "request": "launch",
             "args": [
@@ -20,7 +20,7 @@
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
-            "name": "FileBackendDemo",
+            "name": "FileTransportDemo",
             "type": "node",
             "request": "launch",
             "args": [
@@ -35,7 +35,7 @@
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
-            "name": "HttpBackendDemo",
+            "name": "HttpTransportDemo",
             "type": "node",
             "request": "launch",
             "args": [

@@ -1,6 +1,6 @@
 import { LogMethodVars, VoerkaLogger, VoerkaLoggerLevel, VoerkaLoggerRecord } from "@voerkalogger/core";
 import { timer,delay } from "flex-tools"
-import HttpBackend from "@voerkalogger/http"
+import HttpTransport from "@voerkalogger/http"
 import axios from "axios"
 import mockAdapter from "axios-mock-adapter"
 import type { AxiosRequestConfig } from 'axios';
@@ -10,7 +10,7 @@ const logger = new VoerkaLogger()
 type HttpOutputType = VoerkaLoggerRecord & {
     scope:"888888"
 }
-const httpBackend = new HttpBackend<HttpOutputType>({
+const httpTransport = new HttpTransport<HttpOutputType>({
     url:"/log",
     format:function(record:VoerkaLoggerRecord,vars: LogMethodVars){
         return {
@@ -19,11 +19,11 @@ const httpBackend = new HttpBackend<HttpOutputType>({
         }
     }
 })
-const axiosInstance = axios.create(httpBackend.options)
+const axiosInstance = axios.create(httpTransport.options)
 const mock = new mockAdapter(axiosInstance, { delayResponse: 1000 });
-httpBackend.http = axiosInstance
+httpTransport.http = axiosInstance
 
-logger.use("http",httpBackend)
+logger.use("http",httpTransport)
 
 mock.onPost("/log").reply((config:AxiosRequestConfig)=>{
     let logs = JSON.parse(config.data)
@@ -33,7 +33,7 @@ mock.onPost("/log").reply((config:AxiosRequestConfig)=>{
     return [200]
 })
 
-logger.backends.console.enabled = false
+logger.transports.console.enabled = false
 logger.level = VoerkaLoggerLevel.NOTSET
 timer.begin()
 logger.error("程序出错{}",new TypeError("数据类型出错"))

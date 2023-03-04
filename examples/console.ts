@@ -1,5 +1,5 @@
 import { VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
-import ConsoleBackend from "@voerkalogger/core/src/backends/console";
+import ConsoleTransport from "@voerkalogger/core/src/console";
 import { timer } from "flex-tools"
 
 let logger = new VoerkaLogger()
@@ -27,7 +27,7 @@ messageLogger.warn("中华人民共和国{a}{b}{c}",{a:'繁荣',b:'富强',c:'�
 messageLogger.error("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
 messageLogger.fatal("程序{}出现致命错误:{}",["MyApp","无法加载应用"]);
 
-(logger.backends.console as ConsoleBackend).options.colorize = false
+(logger.transports.console as ConsoleTransport).options.colorize = false
 
 console.log("------- scope:messager/device ----------------")
 let deviceLogger = messageLogger.createScope({scope:"device"})

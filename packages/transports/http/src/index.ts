@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { BackendBase, BackendBaseOptions, BackendOptions, LogMethodVars, VoerkaLoggerRecord } from '@voerkalogger/core';
+import { TransportBase, TransportBaseOptions, TransportOptions, LogMethodVars, VoerkaLoggerRecord } from '@voerkalogger/core';
 import type { AxiosInstance,AxiosRequestConfig} from 'axios';
 import { assignObject } from 'flex-tools';
 
-export type HttpBackendOptions<Output> = BackendBaseOptions<Output>  & AxiosRequestConfig & { url: string } 
+export type HttpTransportOptions<Output> = TransportBaseOptions<Output>  & AxiosRequestConfig & { url: string } 
 
-export default class HttpBackend<Output=VoerkaLoggerRecord> extends BackendBase<HttpBackendOptions<Output>> {
+export default class HttpTransport<Output=VoerkaLoggerRecord> extends TransportBase<HttpTransportOptions<Output>> {
     #http: AxiosInstance
-    constructor(options?: BackendOptions<HttpBackendOptions<Output>>) {
+    constructor(options?: TransportOptions<HttpTransportOptions<Output>>) {
         super(assignObject({ 
                 url      : '',
                 method   : 'post',                      // 访问方法

@@ -11,11 +11,10 @@ export default defineConfig({
     clean: true,
     treeshake:true,  
     minify: true,
-    noExternal:["lodash"],
     banner: {
         js: `/**
 *        
-*   ---=== VoerkaLogger Http Backend===---
+*   ---=== VoerkaLogger File Transport ===---
 *   https://zhangfisher.github.com/voerka-logger
 * 
 *   日志输出库

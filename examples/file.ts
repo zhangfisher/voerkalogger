@@ -1,16 +1,16 @@
 import { VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
 import { timer,delay } from "flex-tools"
-import FileBackend from "@voerkalogger/file"
+import FileTransport from "@voerkalogger/file"
 
 let logger = new VoerkaLogger()
 
-logger.use("file",new FileBackend({
+logger.use("file",new FileTransport({
     compress:true,
     maxSize:"8k",
     maxFileCount:5
 }))
 
-logger.backends.console.enabled = false
+logger.transports.console.enabled = false
 logger.level = VoerkaLoggerLevel.NOTSET
 // timer.begin()
 // logger.error("程序出错{}",new TypeError("数据类型出错"))
@@ -27,7 +27,7 @@ logger.level = VoerkaLoggerLevel.NOTSET
 
 
 setTimeout(async () => {
-    await logger.backends.file.clear()
+    await logger.transports.file.clear()
     for(let i = 1; i <=1000;i++){
         await delay(10)
         logger.info("运行模块：{}",i)

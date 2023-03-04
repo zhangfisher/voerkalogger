@@ -14,7 +14,7 @@ export default defineConfig({
     banner: {
         js: `/**
 *        
-*   ---=== VoerkaLogger File Backend ===---
+*   ---=== VoerkaLogger File Transport ===---
 *   https://zhangfisher.github.com/voerka-logger
 * 
 *   日志输出库

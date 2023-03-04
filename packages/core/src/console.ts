@@ -3,8 +3,8 @@
  
  * 
  */
-import { BackendBaseOptions,BackendBase, BackendOptions } from '../../BackendBase';
-import {  LogMethodVars,  VoerkaLoggerRecord } from "../../types"
+import { TransportBaseOptions,TransportBase, TransportOptions } from './transport';
+import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
 import logsets from "logsets" 
 import { assignObject } from 'flex-tools';
 
@@ -27,13 +27,13 @@ const consoleMethods=[
     logsets.error
 ]
 
-export interface ConsoleBackendOptions extends BackendBaseOptions<void>{
+export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
     colorize?: boolean                  // 是否着色输出
 }
 
 
-export default class ConsoleBackend extends BackendBase<ConsoleBackendOptions>{     
-    constructor(options?:BackendOptions<ConsoleBackendOptions>){
+export default class ConsoleTransport extends TransportBase<ConsoleTransportOptions>{     
+    constructor(options?:TransportOptions<ConsoleTransportOptions>){
         super(assignObject({
             // 关闭缓冲区，控制台输出不需要启用异步输出
             bufferSize:0,     

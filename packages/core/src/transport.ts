@@ -3,40 +3,39 @@ import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./type
 import type { VoerkaLogger, VoerkaLoggerLevel  } from './Logger';
 import dayjs from "dayjs";
 import { outputError } from "./utils";
-import { assignObject,asyncSignal,IAsyncSignal,canIterable, AsyncSignalAbort } from "flex-tools";
+import { assignObject,asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools";
 import { VoerkaLoggerLevelNames  } from "./consts"
-import { VoerkaLoggerScope } from "./scope";
 
 
-export interface BackendBaseOptions<Output>{
+export interface TransportBaseOptions<Output>{
     enabled?      : boolean                                             // 可以单独关闭指定的日志后端
     level?        : VoerkaLoggerLevel
     format?       : VoerkaLoggerFormatter<Output> | string | null       // 格式化日志
     // 缓冲区满或达到间隔时间时进行日志输出
-    // 如果bufferSize=0则禁用输出，比如ConsoleBackend就禁用输出
+    // 如果bufferSize=0则禁用输出，比如ConsoleTransport就禁用输出
     bufferSize?   : number                                              // 输出缓冲区大小
     flushInterval?: number                                              // 延迟输出时间间隔，当大于间隔时间j时进行输出
 }
 
 // 注入format泛型
-export type BackendOptions<T extends BackendBaseOptions<any>> = T & {
+export type TransportOptions<T extends TransportBaseOptions<any>> = T & {
     format?:((...args:Parameters<Exclude<T['format'],string | null | undefined>>)=>ReturnType<Exclude<T['format'],string | null | undefined>>) | string | null
 }
 
 // 输出类型
-export type BackendOutputType<T extends BackendBaseOptions<any>> =  T['format'] extends string | null | undefined ? T['format'] :ReturnType<Exclude<T['format'],string | null | undefined>>
+export type TransportOutputType<T extends TransportBaseOptions<any>> =  T['format'] extends string | null | undefined ? T['format'] :ReturnType<Exclude<T['format'],string | null | undefined>>
 
 /** 
  * 
  * <Output> 是日志经过Formatter后的输出结果类型 
 */
-export class BackendBase<Options extends BackendBaseOptions<any> = BackendBaseOptions<any>>{
+export class TransportBase<Options extends TransportBaseOptions<any> = TransportBaseOptions<any>>{
     #options: DeepRequired<Options>
-    #buffer: BackendOutputType<Options>[] = []
+    #buffer: TransportOutputType<Options>[] = []
     #logger?: VoerkaLogger
     #timerId: any = 0
     #outputSingal?:IAsyncSignal 
-    constructor(options?: BackendOptions<Options>) {
+    constructor(options?: TransportOptions<Options>) {
         this.#options = assignObject({
             enabled: true,
             bufferSize:10,
@@ -96,23 +95,23 @@ export class BackendBase<Options extends BackendBaseOptions<any> = BackendBaseOp
      * @param {*} record = {message: string, level: number, args:any[] | Record<string,any>,timestamp: string, error: *,tags:[],module:string}
      * @param context
      */
-    format(record: VoerkaLoggerRecord, interpVars: LogMethodVars): BackendOutputType<Options> {        
+    format(record: VoerkaLoggerRecord, interpVars: LogMethodVars): TransportOutputType<Options> {        
         record.message = record.message.params(interpVars)        
         const formatter = this.options.format
         if(typeof (formatter) == 'function'){
-            return formatter.call(this, record, interpVars) as BackendOutputType<Options>
+            return formatter.call(this, record, interpVars) as TransportOutputType<Options>
         }else if(typeof formatter == 'string'){
             const vars ={
                 ...this.getInterpVars(record),
                 ...record,
             }
             try {
-                return formatter!.params(vars) as BackendOutputType<Options>
+                return formatter!.params(vars) as TransportOutputType<Options>
             } catch (e: any) {
-                return `[ERROR] - ${vars.datetime} : ${e.stack}` as BackendOutputType<Options>
+                return `[ERROR] - ${vars.datetime} : ${e.stack}` as TransportOutputType<Options>
             } 
         }else{
-            return record as BackendOutputType<Options>
+            return record as TransportOutputType<Options>
         }  
     }
     // *************** 操作日志***************
@@ -150,7 +149,7 @@ export class BackendBase<Options extends BackendBaseOptions<any> = BackendBaseOp
      * @param {*} result   经过格式化处理后的日志记录，取决于配置，可能是字符串，也可能是{}
      * @param {*} record  原始日志记录{}
      */
-    async output(result: BackendOutputType<Options>[]) {
+    async output(result: TransportOutputType<Options>[]) {
 
     }
     /**

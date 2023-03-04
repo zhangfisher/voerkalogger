@@ -4,7 +4,7 @@
  *   
  */
 import "flex-tools/string"
-import { BackendBase, BackendBaseOptions, BackendOptions } from "@voerkalogger/core"
+import { TransportBase, TransportBaseOptions, TransportOptions } from "@voerkalogger/core"
 import { assignObject } from "flex-tools/object"
 import type { FileSize } from "flex-tools/types"
 import { parseFileSize } from "flex-tools"
@@ -13,19 +13,19 @@ import fs  from "fs-extra"
 import { zip } from "./zip"
 
 
-export type FileBackendOptions<Output> =  BackendBaseOptions<Output> & { 
+export type FileTransportOptions<Output> =  TransportBaseOptions<Output> & { 
     location?: string                               // 保存日志文件的位置
     compress?: boolean                              // 是否进行压缩
     maxSize?: FileSize                              // 单个日志文件最大尺寸,如`5MB`    
     maxFileCount?: number                           // 日志文件数量限制   
 }
 
-export default class FileBackend<Output = string> extends BackendBase<FileBackendOptions<Output>> {
+export default class FileTransport<Output = string> extends TransportBase<FileTransportOptions<Output>> {
     #outputPath:string = ""                                     // 日志完整输出路径
     #logFileSize:number = 0                                     // 当前输出日志文件的大小
     #logFilename?:string                                        // 当前输出文件名称
     #maxSize:number = 0                                         // 单个文件的最大尺寸限制
-    constructor(options?:BackendOptions<FileBackendOptions<Output>>) {
+    constructor(options?:TransportOptions<FileTransportOptions<Output>>) {
         super(
             assignObject({
                 location: "./logs",                             // 保存日志文件的位置         

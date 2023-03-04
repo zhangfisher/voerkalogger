@@ -22,9 +22,9 @@
  */
 import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
 import { safeCall } from "./utils";
-import {BackendBase} from "./BackendBase";
+import {TransportBase} from "./transport";
 import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from "./types";
-import ConsoleBackend from "./backends/console";
+import ConsoleTransport from "./console";
 import { DeepRequired } from "ts-essentials"  
 import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
 
@@ -33,7 +33,7 @@ import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
 
 export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
-    #backendInstances:Record<string,BackendBase>={}                     // 后端实例
+    #transportInstances:Record<string,TransportBase>={}                     // 后端实例
     #options?:DeepRequired<VoerkaLoggerOptions> 
     #rootScope?:VoerkaLoggerScope
     constructor(options?:VoerkaLoggerOptions) {
@@ -42,7 +42,7 @@ export class VoerkaLogger{
         } 
         this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
         // 注册默认的控制台日志输出
-        this.use("console",(new ConsoleBackend()) as unknown as BackendBase)
+        this.use("console",(new ConsoleTransport()) as unknown as TransportBase)
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
         VoerkaLogger.LoggerInstance = this              
@@ -57,23 +57,23 @@ export class VoerkaLogger{
     set output(value:string[]){
         this.options.output = value
         // 如果不在输出列表中，则需要禁用
-        for(const [name,backend] of Object.entries(this.backends)){
-            backend.enabled = this.options.output.includes(name)
+        for(const [name,transport] of Object.entries(this.transports)){
+            transport.enabled = this.options.output.includes(name)
         }
     }
-    get backends() { return this.#backendInstances; }
+    get transports() { return this.#transportInstances; }
     /**
     * 部署安装后端实例
     */
-    use(name:string,backendInstance:BackendBase){
-        backendInstance._bind(this)
-        this.#backendInstances[name] =  backendInstance
+    use(name:string,transportInstance:TransportBase){
+        transportInstance._bind(this)
+        this.#transportInstances[name] =  transportInstance
     }      
     /**
      * 将缓冲区的日志输出到存储
      */
     async flush(){ 
-        await Promise.allSettled(Object.values(this.#backendInstances).map(backend=>backend.flush() ))
+        await Promise.allSettled(Object.values(this.#transportInstances).map(transport=>transport.flush() ))
     }    
     /**
      * 捕获全局错误,自动添加到日志中
@@ -123,11 +123,11 @@ export class VoerkaLogger{
             record.errorStack = err.stack
             record.errorLine = err.stack
         }
-        Object.values(this.#backendInstances).forEach((backendInst) => {
-            const limitLevel = backendInst.level || this.options.level
-            if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
+        Object.values(this.#transportInstances).forEach((transportInst) => {
+            const limitLevel = transportInst.level || this.options.level
+            if (transportInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
                 try{
-                    backendInst._output(Object.assign({},record),vars)
+                    transportInst._output(Object.assign({},record),vars)
                 }catch{
 
                 }
@@ -157,7 +157,7 @@ export class VoerkaLogger{
     }  
 
     async destory(){
-        Object.values(this.#backendInstances).forEach(instance=>{
+        Object.values(this.#transportInstances).forEach(instance=>{
             instance.destroy()
         })
     }

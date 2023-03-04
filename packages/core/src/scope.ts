@@ -34,11 +34,11 @@ export class VoerkaLoggerScope{
             record.errorStack = err.stack
             record.errorLine = err.stack
         }
-        Object.values(logger.backends).forEach((backendInst) => {
-            const limitLevel = backendInst.level || logger.options.level
-            if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || logger.options.debug)) {                        
+        Object.values(logger.transports).forEach((transportInst) => {
+            const limitLevel = transportInst.level || logger.options.level
+            if (transportInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || logger.options.debug)) {                        
                 try{
-                    backendInst._output(record,vars)
+                    transportInst._output(record,vars)
                 }catch{
 
                 }

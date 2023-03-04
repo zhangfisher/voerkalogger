@@ -15,8 +15,8 @@
 ```typescript
 
 import { Logger } from 'voerkaLogger';
-import FileBackend from 'voerkaLogger/backends/file';
-import HttpBackend from 'voerkaLogger/backends/http';
+import FileTransport from 'voerkaLogger/transports/file';
+import HttpTransport from 'voerkaLogger/transports/http';
 
 
 let logger = new Logger({
@@ -25,8 +25,8 @@ let logger = new Logger({
     injectGlobal:true                  // 在globalThis注入一个logger全局变量
 });
 
-logger.use("http",new HttpBackend({}))
-logger.use("file", new FileBackend({}))
+logger.use("http",new HttpTransport({}))
+logger.use("file", new FileTransport({}))
 
  
 

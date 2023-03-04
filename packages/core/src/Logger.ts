@@ -26,6 +26,7 @@ import {BackendBase} from "./BackendBase";
 import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from "./types";
 import ConsoleBackend from "./backends/console";
 import { DeepRequired } from "ts-essentials"  
+import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
 
 
 
@@ -34,6 +35,7 @@ export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
     #backendInstances:Record<string,BackendBase>={}                     // 后端实例
     #options?:DeepRequired<VoerkaLoggerOptions> 
+    #rootScope?:VoerkaLoggerScope
     constructor(options?:VoerkaLoggerOptions) {
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
@@ -43,7 +45,8 @@ export class VoerkaLogger{
         this.use("console",(new ConsoleBackend()) as unknown as BackendBase)
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
-        VoerkaLogger.LoggerInstance = this        
+        VoerkaLogger.LoggerInstance = this              
+        this.#rootScope = new VoerkaLoggerScope(this,{scope:this.options.scope})  
     }    
     get options() {return this.#options!}
     get enabled() { return this.options.enabled; }
@@ -70,9 +73,7 @@ export class VoerkaLogger{
      * 将缓冲区的日志输出到存储
      */
     async flush(){ 
-        await Promise.allSettled(Object.values(this.#backendInstances).map(backend=>{
-            backend.flush() 
-        }))
+        await Promise.allSettled(Object.values(this.#backendInstances).map(backend=>backend.flush() ))
     }    
     /**
      * 捕获全局错误,自动添加到日志中
@@ -106,11 +107,13 @@ export class VoerkaLogger{
      * 输出日志
      * @param {*}  
      */
-    private _log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}) {  
+    log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}) {  
         if (!this.options.enabled) return
         const msg = typeof(message)=='function' ? message() : message
         let record:VoerkaLoggerRecord =Object.assign({},this.options.context, {
             level:options.level,
+            scope:this.options.scope,
+            timestamp:Date.now(),
             message:msg,
             ...options
         })            
@@ -124,7 +127,7 @@ export class VoerkaLogger{
             const limitLevel = backendInst.level || this.options.level
             if (backendInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
                 try{
-                    backendInst._output(record,vars)
+                    backendInst._output(Object.assign({},record),vars)
                 }catch{
 
                 }
@@ -138,25 +141,35 @@ export class VoerkaLogger{
      *  如果变量或message是函数会自动调用
      */
     debug(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.DEBUG}));
+        this.#rootScope?.debug(message,vars,options);
     }
     info(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
-        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.INFO}));
+        this.#rootScope?.info(message,vars,options);
     }
     warn(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
-        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.WARN}));
+        this.#rootScope?.warn(message,vars,options);
     }
     error(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.ERROR}));
+        this.#rootScope?.error(message,vars,options);
     }
     fatal(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this._log(message,vars,Object.assign({},options, {level:VoerkaLoggerLevel.FATAL}));
+        this.#rootScope?.fatal(message,vars,options);
     }  
 
     async destory(){
         Object.values(this.#backendInstances).forEach(instance=>{
             instance.destroy()
         })
+    }
+    /**
+     * 创建一个日志作用域
+     * 
+     * let log = logger.createScope({module:xxx})
+     * 
+     * @returns 
+     */
+     createScope(options:LoggerScopeOptions):VoerkaLoggerScope{
+        return new VoerkaLoggerScope(this,options)
     }
 }
  

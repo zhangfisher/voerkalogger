@@ -69,7 +69,7 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
             ...extras,            
             message: Array.isArray(interpVars) ? msg.params(...interpVars) : msg.params(interpVars),
             tags,
-            module,
+            scope: module,
             timestamp: Date.now()
         }
     }catch{
@@ -83,7 +83,7 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
  */
  export function getInterpolatedVars(this:VoerkaLogger,record:VoerkaLoggerRecord):Record<string,any>{
     const logger = this
-    const { message, level, timestamp, error,tags,module,...extras } = record
+    const { message, level, timestamp, error,tags,scope: module,...extras } = record
     let now = dayjs(record.timestamp)
     let levelName = VoerkaLoggerLevelNames[level]
     return { 

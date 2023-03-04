@@ -10,8 +10,8 @@ export function csv(this:VoerkaLogger,record:VoerkaLoggerRecord,backend?:Backend
     if(Array.isArray(record.tags) && record.tags.length>0){
         extra.push(`tags=${record.tags.join(',')}`)
     }
-    if(record.module){
-        extra.push(`module=${record.module}` )
+    if(record.scope){
+        extra.push(`module=${record.scope}` )
     }     
     return `{level},{datetime},{message}`
 } 

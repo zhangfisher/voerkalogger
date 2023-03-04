@@ -10,8 +10,8 @@ export function standard<T=string>(this:VoerkaLogger,record:VoerkaLoggerRecord,b
     if(Array.isArray(record.tags) && record.tags.length>0){
         extra.push(`tags=${record.tags.join(',')}`)
     }
-    if(record.module){
-        extra.push(`module=${record.module}` )
+    if(record.scope){
+        extra.push(`module=${record.scope}` )
     }     
     return `[{level}] - {datetime} : {message}${extra.length>0 ? '('+extra.join(",")+')' : ''}`.params(getInterpolatedVars.call(this,record) )   as T
 } 

@@ -1,4 +1,4 @@
-import { VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
+import { LogMethodVars, VoerkaLogger, VoerkaLoggerLevel, VoerkaLoggerRecord } from "@voerkalogger/core";
 import { timer,delay } from "flex-tools"
 import HttpBackend from "@voerkalogger/http"
 import axios from "axios"
@@ -7,11 +7,16 @@ import type { AxiosRequestConfig } from 'axios';
 
 const logger = new VoerkaLogger()
 
-
-const httpBackend = new HttpBackend<Record<string,any>>({
+type HttpOutputType = VoerkaLoggerRecord & {
+    scope:"888888"
+}
+const httpBackend = new HttpBackend<HttpOutputType>({
     url:"/log",
-    format:function(record,vars){
-        return record as Record<string,any>
+    format:function(record:VoerkaLoggerRecord,vars: LogMethodVars){
+        return {
+            ...record,
+            scope:"888888"
+        }
     }
 })
 const axiosInstance = axios.create(httpBackend.options)
@@ -21,6 +26,10 @@ httpBackend.http = axiosInstance
 logger.use("http",httpBackend)
 
 mock.onPost("/log").reply((config:AxiosRequestConfig)=>{
+    let logs = JSON.parse(config.data)
+    logs.forEach((log:any)=>{
+        console.log("Receive:",JSON.stringify(log))
+    })
     return [200]
 })
 
@@ -37,17 +46,11 @@ logger.warn("中华人民共和国{a}{b}{c}",{a:'繁荣',b:'富强',c:'昌盛'})
 logger.error("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
 logger.fatal("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
 timer.end()
+ 
 
-
-
-// setTimeout(async () => {
-//     await logger.backends.file.clear()
-//     for(let i = 1; i <=1000;i++){
-//         await delay(10)
-//         logger.info("运行模块：{}",i)
-//     }   
-//     await delay(100)
-//     await logger.flush()
-//     await logger.destory()        
-//     console.log("End")
-// })
+setTimeout(async () => { 
+    await delay(100)
+    await logger.flush()
+    await logger.destory()        
+    console.log("End")
+})

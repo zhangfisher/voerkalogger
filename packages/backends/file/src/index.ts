@@ -4,7 +4,7 @@
  *   
  */
 import "flex-tools/string"
-import { BackendBase, BackendBaseOptions } from "@voerkalogger/core"
+import { BackendBase, BackendBaseOptions, BackendOptions } from "@voerkalogger/core"
 import { assignObject } from "flex-tools/object"
 import type { FileSize } from "flex-tools/types"
 import { parseFileSize } from "flex-tools"
@@ -12,21 +12,20 @@ import path from "path"
 import fs  from "fs-extra" 
 import { zip } from "./zip"
 
-export type LogRotatePeriod= 'DAY' | 'MONTH' | 'WEEK' |'YEAR'
 
-export type FileBackendOptions =  BackendBaseOptions & { 
+export type FileBackendOptions<Output> =  BackendBaseOptions<Output> & { 
     location?: string                               // 保存日志文件的位置
     compress?: boolean                              // 是否进行压缩
     maxSize?: FileSize                              // 单个日志文件最大尺寸,如`5MB`    
     maxFileCount?: number                           // 日志文件数量限制   
 }
 
-export default class FileBackend<OutputRecord = string> extends BackendBase<OutputRecord,FileBackendOptions> {
+export default class FileBackend<Output = string> extends BackendBase<FileBackendOptions<Output>> {
     #outputPath:string = ""                                     // 日志完整输出路径
     #logFileSize:number = 0                                     // 当前输出日志文件的大小
     #logFilename?:string                                        // 当前输出文件名称
     #maxSize:number = 0                                         // 单个文件的最大尺寸限制
-    constructor(options?:FileBackendOptions) {
+    constructor(options?:BackendOptions<FileBackendOptions<Output>>) {
         super(
             assignObject({
                 location: "./logs",                             // 保存日志文件的位置         
@@ -39,7 +38,7 @@ export default class FileBackend<OutputRecord = string> extends BackendBase<Outp
         this.#outputPath = path.isAbsolute(this.options.location) ? this.options.location : path.join( process.cwd(),this.options.location)
         this.#maxSize = parseFileSize(this.options.maxSize)
     }   
-    async output(result: OutputRecord[]) {        
+    async output(result: Output[]) {        
         // 1. 取得当前文件
         if(!this.#logFilename){
             this.#logFilename = await this.getLogFilename()  
@@ -109,11 +108,7 @@ export default class FileBackend<OutputRecord = string> extends BackendBase<Outp
         await Promise.all(logs.map(async file=>{
             try{fs.rm(file)}catch{}
         }))
-    }
-
-    async destroy() {
-        
-    }
+    } 
 }
  
 

@@ -1,6 +1,6 @@
 {
     "name": "@voerkalogger/core",
-    "version": "1.0.4",
+    "version": "1.0.6",
     "description": "small, fast and easy-to-use logger",
     "main": "dist/index.js",
     "module": "dist/index.mjs",

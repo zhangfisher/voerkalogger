@@ -1,6 +1,6 @@
 {
     "name": "@voerkalogger/core",
-    "version": "1.0.8",
+    "version": "1.0.18",
     "description": "small, fast and easy-to-use logger",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -13,7 +13,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsup",
-        "version":"npm version patch --commit-hooks=false",
+        "version": "npm version patch --commit-hooks=false",
         "release": "pnpm build && pnpm publish --access public"
     },
     "keywords": [

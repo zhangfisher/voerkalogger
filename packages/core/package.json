@@ -1,6 +1,6 @@
 {
     "name": "@voerkalogger/core",
-    "version": "1.0.6",
+    "version": "1.0.8",
     "description": "small, fast and easy-to-use logger",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -8,12 +8,13 @@
     "homepage": "https://zhangfisher.github.io/voerkalogger",
     "repository": {
         "type": "git",
-        "url": "git+https://gitee.com/zhangfisher/voerkalogger.git"
+        "url": "https://gitee.com/zhangfisher/voerkalogger.git"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsup",
-        "release": "npm version patch  && pnpm build && pnpm publish --access public"
+        "version":"npm version patch --commit-hooks=false",
+        "release": "pnpm build && pnpm publish --access public"
     },
     "keywords": [
         "logger"

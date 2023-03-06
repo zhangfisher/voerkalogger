@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup",
-    "release": "npm version patch && pnpm build && pnpm publish --access public"
+    "version":"npm version patch --commit-hooks=false",
+    "release": "pnpm build && pnpm publish --access public"
   },
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",

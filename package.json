@@ -8,7 +8,7 @@
     "commit": "git add . && git cz",
     "prepare": "husky install",
     "build:all":"pnpm -r build",
-    "release:all":"pnpm -r release"
+    "release:all":"pnpm -r version && pnpm build:all && git add . && git commit -m 'build: release all packages' && pnpm -r release"
   },
   "keywords": [],
   "author": "",

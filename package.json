@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "commit": "git add . && git cz",
     "prepare": "husky install",
-    "build:all":"pnpm -r build"
+    "build:all":"pnpm -r build",
+    "release:all":"pnpm -r release"
   },
   "keywords": [],
   "author": "",

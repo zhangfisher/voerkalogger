@@ -8,8 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup",
-    "release":"npm version patch && npm build && npm publish"
-  },
+    "release": "npm version patch --commit-hooks=false && npm run build --commit-hooks && npm publish --access public"
+    },
   "keywords": [],
   "author": "",
   "license": "ISC",

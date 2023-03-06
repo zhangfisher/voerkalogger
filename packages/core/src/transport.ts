@@ -40,7 +40,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
             enabled: true,
             bufferSize:10,
             flushInterval:10 * 1000 ,
-            format:"[{levelName}] - {datetime} : {message}{<,scope=>scope}{<,tags=>tags}" 
+            format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}" 
         }, options) as DeepRequired<Options>
         if(this.#options.enabled) this._outputLogs()        
     }

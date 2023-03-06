@@ -38,7 +38,7 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             // 关闭缓冲区，控制台输出不需要启用异步输出
             bufferSize:0,     
             colorize:true,          
-            format:"[{levelName}] - {datetime} : {message}{<,scope=>scope}{<,tags=>tags}"    
+            format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
         },options))
         logsets.config({
             String:"lightGreen"

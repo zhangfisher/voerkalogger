@@ -21,7 +21,7 @@ export const DefaultLoggerOptions:VoerkaLoggerOptions = {
     output: [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
     injectGlobal:true,                          // 在globalThis注入一个logger全局变量
     catchGlobalErrors: true,                    // 是否自动捕获全局错误
-    scopeDelimiter:"/"
+    scope:{}
 }  
  
 

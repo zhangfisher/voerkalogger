@@ -5,7 +5,7 @@ import { LogMethodMessage, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord }
 
 
 export type LoggerScopeOptions = {
-    scope: string     
+    module: string     
 } & {[key: string]: string | number | boolean}
 
 
@@ -23,9 +23,9 @@ export class VoerkaLoggerScope{
         const msg = typeof(message)=='function' ? message() : message
         let record:VoerkaLoggerRecord =Object.assign({},logger.options.context, {
             level:options.level,
-            scope:this.#options.scope,
             timestamp:Date.now(),
             message:msg,
+            ...logger.options.scope || {},
             ...options
         })            
         if(record.error instanceof Error){
@@ -78,10 +78,10 @@ export class VoerkaLoggerScope{
      * @returns 
      */
     createScope(options:LoggerScopeOptions):VoerkaLoggerScope{
-        const scope =this.#options.scope ?  `${this.#options.scope}${this.logger.options.scopeDelimiter}${options.scope}` : options.scope
+        const scope =this.#options.module ?  `${this.#options.module}/${options.module}` : options.module
         return new VoerkaLoggerScope(this.logger,{
-            scope,            
-            ...omit(this.#options,["scope"])
+            module: scope,            
+            ...omit(this.#options,["module"])
         });
     } 
     

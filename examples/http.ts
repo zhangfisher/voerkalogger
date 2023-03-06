@@ -1,6 +1,6 @@
-import { LogMethodVars, VoerkaLogger, VoerkaLoggerLevel, VoerkaLoggerRecord } from "@voerkalogger/core";
+import { VoerkaLogger, VoerkaLoggerLevel,TransportBase, VoerkaLoggerRecord, LogMethodVars } from "../packages/core/src";
 import { timer,delay } from "flex-tools"
-import HttpTransport from "@voerkalogger/http"
+import HttpTransport from "../packages/transports/http"
 import axios from "axios"
 import mockAdapter from "axios-mock-adapter"
 import type { AxiosRequestConfig } from 'axios';
@@ -23,7 +23,7 @@ const axiosInstance = axios.create(httpTransport.options)
 const mock = new mockAdapter(axiosInstance, { delayResponse: 1000 });
 httpTransport.http = axiosInstance
 
-logger.use("http",httpTransport)
+logger.use("http",httpTransport as unknown as TransportBase)
 
 mock.onPost("/log").reply((config:AxiosRequestConfig)=>{
     let logs = JSON.parse(config.data)

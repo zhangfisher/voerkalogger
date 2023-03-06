@@ -2,9 +2,13 @@
   "name": "@voerkalogger/file",
   "version": "1.0.0",
   "description": "File transport for voerkalogger",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",    
+    "build": "tsup",
+    "release":"npm version patch && npm build && npm publish"
   },
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",

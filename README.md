@@ -7,29 +7,37 @@
 ## 主要特性
 
 - 基于`TypeScript`开发
-- 可扩展多种输出后端，包括`console/file/indexdb`等。
+- 可扩展多种输出后端，包括`console/file`等。
 
 ## 快速使用
 
 
 ```typescript
 
-import { Logger } from 'voerkaLogger';
-import FileTransport from 'voerkaLogger/transports/file';
-import HttpTransport from 'voerkaLogger/transports/http';
+import { Logger } from '@voerkaLogger/core';
+import FileTransport from '@voerkaLogger/ile';
+import HttpTransport from '@voerkaLogger/http';
 
 
-let logger = new Logger({
-    level:LogLevel.DEBUG,
-    output:["console","file"],         // 启用的日志后端
-    injectGlobal:true                  // 在globalThis注入一个logger全局变量
-});
+let logger = new VoerkaLogger()
 
-logger.use("http",new HttpTransport({}))
-logger.use("file", new FileTransport({}))
-
+// 启用文件输出传输
+logger.use("file",new FileTransport({
+    compress: false,
+    maxSize: "10k",
+    maxFileCount: 5
+}) as unknown as TransportBase )
  
-
+logger.error("程序出错{}",new TypeError("数据类型出错"))
+logger.info("应用启动完毕，耗时{s}s",123)
+logger.debug("打开程序{#red a}{b}",{a:1,b:2})
+logger.debug("打开程序{a}{b}",{a:1,b:2},{module:"switch",tags:["light","color"]})
+logger.debug("打开程序{a}{b}",{a:1,b:2},{module:"switch"})
+logger.warn("中华人民共和国{}{}{}",['繁荣','富强','昌盛'])
+logger.warn("中华人民共和国{a}{b}{c}",{a:'繁荣',b:'富强',c:'昌盛'})
+logger.error("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
+logger.fatal("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
+ 
 ```
 
 

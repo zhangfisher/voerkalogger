@@ -63,6 +63,7 @@ export default class FileTransport<Output = string> extends TransportBase<FileTr
         const backupFileCount = this.options.maxFileCount - 1    // 备份数量
         const logPath = path.dirname(curFilename)                // 输出文件夹
         await fs.mkdirp(logPath)
+        try{
         // 判定文件是否超出大小
         if (await fs.exists(curFilename)) {
             let stat = await fs.stat(curFilename)
@@ -73,10 +74,12 @@ export default class FileTransport<Output = string> extends TransportBase<FileTr
                     if(await fs.exists(logFile)){
                         const newFile = path.join(logPath,`${i+1}.log`)
                         await fs.rename(logFile,newFile)
-                        try{
-                            await this.compressLogFile(newFile)
-                            await fs.rm(newFile)
-                        }catch{ }                        
+                        if(this.options.compress){
+                            try{
+                                await this.compressLogFile(newFile)
+                                await fs.rm(newFile)
+                            }catch{ }                            
+                        }
                     }else if(await fs.exists(`${logFile}.zip`)){                        
                         await fs.rename(`${logFile}.zip`,path.join(logPath,`${i+1}.log.zip`))
                     }
@@ -88,10 +91,14 @@ export default class FileTransport<Output = string> extends TransportBase<FileTr
         }else{
             this.#logFileSize = 0
         }
+
+        }catch(e){
+            console.log(e)
+        }
+
         return curFilename
     }
     private async compressLogFile(logFile:string){
-        if(!this.options.compress) return
         zip(logFile,`${logFile}.zip`)
     }
     /**
@@ -106,7 +113,9 @@ export default class FileTransport<Output = string> extends TransportBase<FileTr
             return path.join(this.#outputPath,`${i+1}.log.zip`)
         }))
         await Promise.all(logs.map(async file=>{
-            try{fs.rm(file)}catch{}
+            try{
+                await fs.rm(file)
+            }catch{}
         }))
     } 
 }

@@ -1,14 +1,15 @@
-import { VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
+import { VoerkaLogger, VoerkaLoggerLevel,TransportBase } from "../packages/core/src";
 import { timer,delay } from "flex-tools"
-import FileTransport from "@voerkalogger/file"
+import FileTransport from "../packages/transports/file/src"
+
 
 let logger = new VoerkaLogger()
 
 logger.use("file",new FileTransport({
-    compress:true,
-    maxSize:"8k",
-    maxFileCount:5
-}))
+        compress: false,
+        maxSize: "10k",
+        maxFileCount: 5
+}) as unknown as TransportBase )
 
 logger.transports.console.enabled = false
 logger.level = VoerkaLoggerLevel.NOTSET
@@ -30,7 +31,7 @@ setTimeout(async () => {
     await logger.transports.file.clear()
     for(let i = 1; i <=1000;i++){
         await delay(10)
-        logger.info("运行模块：{}",i)
+        logger.info("运行模块：{}",i,{module:`M${i}`})
     }   
     await delay(100)
     await logger.flush()

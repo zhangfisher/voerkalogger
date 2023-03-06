@@ -27,6 +27,7 @@ import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecor
 import ConsoleTransport from "./console";
 import { DeepRequired } from "ts-essentials"  
 import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
+import { assignObject } from "flex-tools";
 
 
 
@@ -40,13 +41,13 @@ export class VoerkaLogger{
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.#options = Object.assign(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
+        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
         // 注册默认的控制台日志输出
         this.use("console",(new ConsoleTransport()) as unknown as TransportBase)
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
         VoerkaLogger.LoggerInstance = this              
-        this.#rootScope = new VoerkaLoggerScope(this,{scope:this.options.scope})  
+        this.#rootScope = new VoerkaLoggerScope(this,{module:this.options.scope.module})  
     }    
     get options() {return this.#options!}
     get enabled() { return this.options.enabled; }
@@ -65,7 +66,7 @@ export class VoerkaLogger{
     /**
     * 部署安装后端实例
     */
-    use(name:string,transportInstance:TransportBase){
+    use<T extends TransportBase=TransportBase>(name:string,transportInstance:T){
         transportInstance._bind(this)
         this.#transportInstances[name] =  transportInstance
     }      
@@ -111,10 +112,10 @@ export class VoerkaLogger{
         if (!this.options.enabled) return
         const msg = typeof(message)=='function' ? message() : message
         let record:VoerkaLoggerRecord =Object.assign({},this.options.context, {
-            level:options.level,
-            scope:this.options.scope,
+            level:options.level, 
             timestamp:Date.now(),
             message:msg,
+            ...this.options.scope || {},
             ...options
         })            
         if(record.error instanceof Error){

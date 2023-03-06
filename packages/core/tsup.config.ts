@@ -2,12 +2,12 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig({
     entry: [
-        'src/**/*.ts'
+        'src/index.ts'
     ],
     format: ['esm','cjs'],
     dts: true,
     splitting: true,
-    sourcemap: false,
+    sourcemap: true,
     clean: true,
     treeshake:true,  
     minify: true,
@@ -16,9 +16,9 @@ export default defineConfig({
         js: `/**
 *        
 *   ---=== VoerkaLogger ===---
-*   https://zhangfisher.github.com/voerka-logger
+*   https://zhangfisher.github.com/voerkalogger
 * 
-*   日志输出库
+*   轻量易用的日志输出库
 *
 */`}
 }) 

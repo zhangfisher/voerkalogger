@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/http",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Http transport for voerkalogger",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup",
     "release": "npm version patch --commit-hooks=false && npm run build --commit-hooks && npm publish --access public"
-    },
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

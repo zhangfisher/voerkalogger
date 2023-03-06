@@ -1,15 +1,15 @@
 {
   "name": "@voerkalogger/file",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "File transport for voerkalogger",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",    
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup",
     "release": "npm version patch --commit-hooks=false && npm run build --commit-hooks && npm publish --access public"
-    },
+  },
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
     "dayjs": "^1.11.7",

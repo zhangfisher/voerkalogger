@@ -54,9 +54,43 @@ export enum VoerkaLoggerLevel{
 }
 ```
 
-所有日志级别均提供对应的方法.
+- 当调用日志输出方法时，仅会输出大于配置级别的日志，比如`logger.level==WARN`，则所有`<WARN`的日志均不会输出。
+- 可以通过`logger.level`来指定日志输出级别
+- 也可以为每一个日志`Transport`单独指定日志日志级别。比如`logger.transports.file.level=ERROR`。这样，我们可以为不同的`Transport`指定不同的日志级别。
+
 
 ## 日记输出方法
+
+除了`NOSET`外，所有日志级别均提供对应的方法来输出日志，日志方法签名如下：
+
+```typescript 
+logger.debug(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions)
+logger.info(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions)
+logger.warn(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions)
+logger.error(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions)
+logger.fatal(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions)
+```
+
+
+- `message`
+   日志输出信息
+   类型：`string | (()=> string)`,支持字符串或返回字符串的函数
+   支持通过`{}`方式定义插值变量。
+   
+   ```typescript
+    // 位置插值
+    logger.debug("{a}+{b}={c}",[1,2,3])         //  1+2=3
+    logger.debug("{}+{}={}",[1,2,3])         //  1+2=3
+    // 命名插值
+    logger.debug("{a}+{b}={c}",{a:1,b:2,c:3})   //  1+2=3
+   ```
+
+
+- `vars`
+
+
+
+- 示例
 
 ## DEBUG模式
 

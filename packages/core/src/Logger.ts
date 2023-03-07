@@ -44,6 +44,10 @@ export class VoerkaLogger{
         this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
         // 注册默认的控制台日志输出
         this.use("console",(new ConsoleTransport()) as unknown as TransportBase)
+        // 注入全局日志实例
+        if(this.options.injectGlobal){
+            (globalThis as any)[this.options.injectGlobal===true ? "logger" : this.options.injectGlobal] = this
+        }
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
         VoerkaLogger.LoggerInstance = this              

@@ -24,9 +24,9 @@ export interface VoerkaLoggerOptions{
     debug?:boolean                                      // 是否在调试阶段，=true时所有日志均会输出
     output?: string[]                                   // 启用的输出后端
     context?:Record<string,any> | null                  // 全局上下文，可以用为输出时的插值变量，同时会被合并到VoerkaLoggerRecord中
-    injectGlobal?:boolean                               // 注入一个全局的logger变量名称
+    injectGlobal?:boolean | string                      // 注入一个全局的logger变量名称
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
-    tags?:string[]                            // scope分割
+    tags?:string[]                             
 }
 
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{

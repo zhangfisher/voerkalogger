@@ -21,12 +21,14 @@ export class VoerkaLoggerScope{
         const logger = this.logger
         if (!logger.options.enabled) return
         const msg = typeof(message)=='function' ? message() : message
-        let record:VoerkaLoggerRecord =Object.assign({},logger.options.context, {
+        const now = Date.now()
+        let record:VoerkaLoggerRecord =assignObject({},logger.options.context, {
             level:options.level,
             timestamp:Date.now(),
             message:msg,
             ...logger.options.scope || {},
-            ...options
+            ...options,
+            ...this.#options
         })            
         if(record.error instanceof Error){
             const err = record.error as Error
@@ -44,12 +46,6 @@ export class VoerkaLoggerScope{
                 }
             }
         })
-
-        // // --------------
-        // this.logger.log.call(this.logger,message,vars,Object.assign({},options, {
-        //     scope:this.#options.scope,
-        //     ...omit(this.#options,["scope"])
-        // }));
     }
     /**
      *  
@@ -78,9 +74,9 @@ export class VoerkaLoggerScope{
      * @returns 
      */
     createScope(options:LoggerScopeOptions):VoerkaLoggerScope{
-        const scope =this.#options.module ?  `${this.#options.module}/${options.module}` : options.module
+        const module =this.#options.module ?  `${this.#options.module}/${options.module}` : options.module
         return new VoerkaLoggerScope(this.logger,{
-            module: scope,            
+            module,            
             ...omit(this.#options,["module"])
         });
     } 

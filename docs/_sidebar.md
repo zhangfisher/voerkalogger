@@ -5,3 +5,4 @@
   * [更新历史](/intro/changelog)
   * [常见问题](/intro/question)
 * [指南](/guide/)
+* [输出目标](/guide/transports)

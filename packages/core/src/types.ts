@@ -47,7 +47,7 @@ export interface VoerkaLoggerRecord{
 }
 
 // 执行log方法时的参数类型
-export type LogMethodOptions =Partial<Omit<VoerkaLoggerRecord,'message' & 'timestamp'>>
+export type LogMethodOptions =Partial<Omit<VoerkaLoggerRecord,'message' & 'timestamp' & 'level'>>
 export type LogMethodVars = Record<string,any> | any[] | Error  | Function | any
 
 // 对日志记录进行格式化以便输出到后端

@@ -4,5 +4,5 @@
   * [快速入门](/intro/get-started)
   * [更新历史](/intro/changelog)
   * [常见问题](/intro/question)
-* [指南](/guide/)
+* [指南](/guide/readme)
 * [输出目标](/guide/transports)

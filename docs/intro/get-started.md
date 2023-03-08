@@ -25,7 +25,7 @@ import FileTransport from "@voerkalogger/file"
 import HttpTransport from "@voerkalogger/http"
 
 // 安装FileTransport
-logger.use("file",new new FileTransport({
+logger.use("file",new FileTransport({
     compress: false,
     maxSize: "10k",
     maxFileCount: 5

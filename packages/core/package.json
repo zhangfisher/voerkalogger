@@ -22,7 +22,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "flex-tools": "^1.0.58",
+        "flex-tools": "^1.0.63",
         "logsets": "^1.0.39"
     },
     "devDependencies": {

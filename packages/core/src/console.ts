@@ -1,72 +1,49 @@
 /**
- * this指向实现Logger实例
+ * 
+ * 默认的控制台输出
+ * 
  
  * 
  */
 import { TransportBaseOptions,TransportBase, TransportOptions } from './transport';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
-import logsets from "logsets" 
 import { assignObject } from 'flex-tools';
-
-const logLevelColors = [
-    "darkGray",                             // NOSET
-    "darkGray",                             // DEBUG
-    "lightGray",                            // INFO
-    "yellow",                               // WARN
-    "red",                                  // ERROR
-    "red,bright"                            // FATAL
-]
-
- 
+  
 const consoleMethods=[
-    logsets.log,
-	logsets.debug,
-	logsets.info,
-	logsets.warn,
-	logsets.error,
-    logsets.error
+    console.log,
+	console.debug,
+	console.info,
+	console.warn,
+	console.error,
+    console.error
 ]
 
 export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
-    colorize?: boolean                  // 是否着色输出
+     
 }
-
 
 export default class ConsoleTransport extends TransportBase<ConsoleTransportOptions>{     
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
         super(assignObject({
             // 关闭缓冲区，控制台输出不需要启用异步输出
             bufferSize:0,     
-            colorize:true,          
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
-        },options))
-        logsets.config({
-            String:"lightGreen"
-        })
+        },options)) 
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
-        const { colorize,format } = this.options
+        const { format } = this.options
         try{         
-            const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format
-           
-            if(colorize){
-                record.message = logsets.getColorizedTemplate(record.message,interpVars)
-            }else{
-                record.message = record.message.params(interpVars)
-            }
+            const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format           
+            record.message = record.message.params(interpVars)            
             const vars ={
                 ...this.getInterpVars(record),
                 ...record,
             }
             const output = template!.params(vars)
-            if(colorize){
-                const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
-                console.log(levelColorizer(logsets.getColorizedTemplate(output,vars)))
-            }else{
-                console.log(output.params(vars))
-            }            
+            const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
+            logMethod(output.params(vars))            
         }catch(e:any){   
-            console.log(e.stack)
+            console.error(e.stack)
         }        
     }    
     /**

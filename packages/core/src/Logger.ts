@@ -103,7 +103,7 @@ export class VoerkaLogger{
             })
         })
         safeCall(()=>{
-          process.on("uncaughtException",function(error:any){
+            process.on("uncaughtException",function(error:any){
                 self.error(error.stack);
             })             
         })

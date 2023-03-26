@@ -28,11 +28,11 @@ export default defineConfig([
             'src/index.ts'
         ],
         format: ['iife'],
-        splitting: true,
+        splitting: false,
         sourcemap: true,
         clean: true,
         treeshake:true,  
-        //minify: true,
+        minify: true,
         noExternal:["lodash","flex-tools"],
         banner: {
             js: `/**

@@ -32,7 +32,7 @@ export default defineConfig([
         sourcemap: true,
         clean: true,
         treeshake:true,  
-        minify: true,
+        minify: false,
         noExternal:["lodash","flex-tools"],
         banner: {
             js: `/**

@@ -28,7 +28,6 @@ messageLogger.warn("中华人民共和国{a}{b}{c}",{a:'繁荣',b:'富强',c:'�
 messageLogger.error("程序{}出现致命错误:{}",["MyApp","无法加载应用"])
 messageLogger.fatal("程序{}出现致命错误:{}",["MyApp","无法加载应用"]);
 
-(logger.transports.console as unknown as ConsoleTransport).options.colorize = false
 
 console.log("------- module:messager/device ----------------")
 let deviceLogger = messageLogger.createScope({module:"device"})

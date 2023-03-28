@@ -47,7 +47,7 @@ importers:
     specifiers:
       '@swc/core': ^1.3.31
       '@types/node': ^18.11.18
-      flex-tools: ^1.0.63
+      flex-tools: ^1.0.65
       ts-essentials: ^9.3.0
       ts-node: ^10.9.1
       tsup: ^6.5.0
@@ -55,7 +55,7 @@ importers:
       typescript: ^4.9.5
       vitest: ^0.28.3
     dependencies:
-      flex-tools: 1.0.63
+      flex-tools: 1.0.65
     devDependencies:
       '@swc/core': 1.3.31
       '@types/node': 18.11.18
@@ -291,6 +291,31 @@ packages:
       - '@swc/core'
       - '@swc/wasm'
     dev: true
+
+  /@commitlint/load/17.5.0:
+    resolution: {integrity: sha512-l+4W8Sx4CD5rYFsrhHH8HP01/8jEP7kKf33Xlx2Uk2out/UKoKPYMOIRcDH5ppT8UXLMV+x6Wm5osdRKKgaD1Q==}
+    engines: {node: '>=v14'}
+    requiresBuild: true
+    dependencies:
+      '@commitlint/config-validator': 17.4.4
+      '@commitlint/execute-rule': 17.4.0
+      '@commitlint/resolve-extends': 17.4.4
+      '@commitlint/types': 17.4.4
+      '@types/node': 18.11.18
+      chalk: 4.1.2
+      cosmiconfig: 8.1.0
+      cosmiconfig-typescript-loader: 4.3.0_vaspue3f4wjy25majeit5ekrna
+      lodash.isplainobject: 4.0.6
+      lodash.merge: 4.6.2
+      lodash.uniq: 4.5.0
+      resolve-from: 5.0.0
+      ts-node: 10.9.1_bdgp3l2zgaopogaavxusmetvge
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+    dev: true
+    optional: true
 
   /@commitlint/message/17.4.2:
     resolution: {integrity: sha512-3XMNbzB+3bhKA1hSAWPCQA3lNxR4zaeQAQcHj0Hx5sVdO6ryXtgUBGGv+1ZCLMgAPRixuc6en+iNAzZ4NzAa8Q==}
@@ -1484,7 +1509,7 @@ packages:
       longest: 2.0.1
       word-wrap: 1.2.3
     optionalDependencies:
-      '@commitlint/load': 17.4.4
+      '@commitlint/load': 17.5.0
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -1990,6 +2015,13 @@ packages:
     dependencies:
       fs-extra: 11.1.0
       lodash: 4.17.21
+      shelljs: 0.8.5
+    dev: false
+
+  /flex-tools/1.0.65:
+    resolution: {integrity: sha512-Yliq5N7hVPI/+jY29PnQQ7BPoNDX6gkg8rq6RBAdO86dZUvPa+DoQyIIzhrVO1MgYaw/T9OtiAEsVgOtWE0r2w==}
+    dependencies:
+      fs-extra: 11.1.0
       shelljs: 0.8.5
 
   /follow-redirects/1.15.2:
@@ -2644,7 +2676,7 @@ packages:
       ansicolor: 1.1.100
       core-js: 3.28.0
       deepmerge: 4.3.0
-      flex-tools: 1.0.64
+      flex-tools: 1.0.65
 
   /longest/2.0.1:
     resolution: {integrity: sha512-Ajzxb8CM6WAnFjgiloPsI3bF+WCxcvhdIG3KNA2KN962+tdBsHcuQ4k4qX/EcS/2CRkcc0iAkR956Nib6aXU/Q==}

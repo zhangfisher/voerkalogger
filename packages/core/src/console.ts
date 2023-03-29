@@ -7,7 +7,7 @@
  */
 import { TransportBaseOptions,TransportBase, TransportOptions } from './transport';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
-import { assignObject } from 'flex-tools';
+import { assignObject } from 'flex-tools/object/assignObject';
   
 const consoleMethods=[
     console.log,

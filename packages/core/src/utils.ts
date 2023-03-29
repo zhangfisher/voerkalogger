@@ -1,13 +1,15 @@
-
-import mapValues from "lodash/mapValues";
-import dayjs from "dayjs";
-import isError from "lodash/isError";
-import isFunction from "lodash/isFunction";
+import dayjs from "dayjs"; 
 import type { LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
 import { VoerkaLoggerLevelNames, VoerkaLoggerLevel } from './consts';
-import  isPlainObject from "lodash/isPlainObject";
+import  { isPlainObject,mapObject } from "flex-tools";
 import type { VoerkaLogger } from "./Logger";
 
+export function isFunction(fn:any){
+    return typeof fn === 'function'
+}
+export function isError(err:any){
+    return err instanceof Error
+}
 /**
  * 执行一个函数，如果出错则返回错误信息
  * @param {*} fn 
@@ -52,7 +54,7 @@ export function handleLogArgs(message:string | Function, vars:LogMethodVars,opti
         if (Array.isArray(interpVars)) {
             interpVars = interpVars.map(v => (isFunction(v) ?callWithError(v) : (isError(v) ? {error:v.message,errorStack:v.stack} : v )))
         } else if (isPlainObject(interpVars)) {
-            interpVars = mapValues(interpVars, (v: any) => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
+            interpVars = mapObject(interpVars, (v: any) => (isFunction(v) ?callWithError(v) : (isError(v) ? v.stack: v )))
             interpVars["levelName"]= getLevelName(interpVars.level)
             interpVars["datetime"] = now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23)
             interpVars["date"]= now.format('YYYY-MM-DD')

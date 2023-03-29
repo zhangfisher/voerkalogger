@@ -27,7 +27,7 @@ import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecor
 import ConsoleTransport from "./console";
 import { DeepRequired } from "ts-essentials"  
 import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
-import { assignObject } from "flex-tools";
+import { assignObject } from "flex-tools/object/assignObject";
 
 
 

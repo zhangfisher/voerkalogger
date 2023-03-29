@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TransportBase, TransportBaseOptions, TransportOptions, LogMethodVars, VoerkaLoggerRecord } from '@voerkalogger/core';
+import { TransportBase, TransportBaseOptions, TransportOptions, VoerkaLoggerRecord } from '@voerkalogger/core';
 import type { AxiosInstance,AxiosRequestConfig} from 'axios';
 import { assignObject } from 'flex-tools';
 

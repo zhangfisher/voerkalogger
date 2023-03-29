@@ -3,8 +3,10 @@ import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./type
 import type { VoerkaLogger, VoerkaLoggerLevel  } from './Logger';
 import dayjs from "dayjs";
 import { outputError } from "./utils";
-import { assignObject,asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools";
+import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
 import { VoerkaLoggerLevelNames  } from "./consts"
+import { assignObject } from "flex-tools/object/assignObject";
+
 
 
 export interface TransportBaseOptions<Output>{

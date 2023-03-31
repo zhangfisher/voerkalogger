@@ -51,15 +51,15 @@ export default defineConfig({
       splitting: false,
       sourceMap: false, 
       minify:false,
-      dts: false,
-      target: 'es2021',
+    //   dts: false,
+      target: 'es2017',
     }, 
-    {
-      buildType: 'bundleless',
-      dts: {
-        only: true
-      }
-    },
+    // {
+    //   buildType: 'bundleless',
+    //   dts: {
+    //     only: true
+    //   }
+    // },
     {
       input: ['src/index.ts'],
       format: 'cjs',
@@ -67,7 +67,7 @@ export default defineConfig({
       sourceMap: false,
       minify: false,//'esbuild',
       dts: false,
-      target: 'es2021',
+      target: 'es2017',
     }
   ]
 }) 

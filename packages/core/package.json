@@ -23,7 +23,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "flex-tools": "^1.0.66"
+        "flex-tools": "^1.0.70"
     },
     "devDependencies": {
         "@modern-js/module-tools": "^2.10.0",

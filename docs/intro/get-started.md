@@ -3,15 +3,12 @@
 ## 第1步：创建日志器实例
 
 ```typescript
-import { VoerkaLogger, VoerkaLoggerLevel,TransportBase } from "@voerkalogger/core";
-
-let logger = new VoerkaLogger({
-    // 配置参数
-})
-
-- `VoerkaLogger`默认启用了`console`控制台日志输出。
+import "@voerkalogger/core";
 
 ```
+- 直接导入`@voerkalogger/core`模块即可创建一个全局日志器实例`logger`。
+- 在应用中可以直接使用`logger`进行日志输出。
+- `VoerkaLogger`默认启用了`console`控制台日志输出。
 
 ## 第2步：安装可选的日志`Transport`
 

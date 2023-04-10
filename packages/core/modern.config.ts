@@ -39,7 +39,7 @@ const ModulePlugin = (): CliPlugin<ModuleTools> => ({
       };
       return config;
     },
-  }),
+  }) as any,
 });
 
 export default defineConfig({

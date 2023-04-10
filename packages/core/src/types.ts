@@ -1,4 +1,5 @@
-import { VoerkaLoggerLevel } from "./consts"
+import type { VoerkaLoggerLevel } from "./consts"
+import type { VoerkaLogger } from "./Logger"
 
 
 /**
@@ -57,3 +58,6 @@ export type VoerkaLoggerFormatter<Output=VoerkaLoggerRecord> = (
 )=>Output
 
  
+declare global{
+    export const logger:VoerkaLogger
+}

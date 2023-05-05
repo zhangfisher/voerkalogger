@@ -2,13 +2,15 @@
 
 ## 创建日志实例
 
-直接引入`@voerkalogger/core`，即可创建一个全局日志实例`logger`。
-
 ```typescript
-import "@voerkalogger/core";
-```
+import {VoerkaLogger } from  "@voerkalogger/core";
 
-```
+const logger = new VoerkaLogger({
+   // ...options
+})
+
+``` 
+
 ## 引用日志实例
 
 - `VoerkaLogger`采用单例模式设计，全局仅允许建一个实例。

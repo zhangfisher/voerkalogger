@@ -60,11 +60,30 @@ importers:
         specifier: ^6.5.0
         version: 6.5.0(@swc/core@1.3.31)(ts-node@10.9.1)(typescript@4.9.5)
 
+  examples:
+    dependencies:
+      '@voerkalogger/core':
+        specifier: workspace:^1.0.0
+        version: link:../packages/core
+      '@voerkalogger/file':
+        specifier: workspace:^1.0.0
+        version: link:../packages/transports/file
+      '@voerkalogger/http':
+        specifier: workspace:^1.0.0
+        version: link:../packages/transports/http
+      flex-tools:
+        specifier: ^1.0.87
+        version: 1.0.87
+    devDependencies:
+      axios-mock-adapter:
+        specifier: ^1.21.2
+        version: 1.21.2(axios@1.2.6)
+
   packages/core:
     dependencies:
       flex-tools:
-        specifier: ^1.0.70
-        version: 1.0.70
+        specifier: ^1.0.87
+        version: 1.0.87
     devDependencies:
       '@modern-js/module-tools':
         specifier: ^2.10.0
@@ -100,11 +119,11 @@ importers:
         specifier: workspace:^1.0.0
         version: link:../../core
       flex-tools:
-        specifier: ^1.0.70
-        version: 1.0.70
+        specifier: ^1.0.87
+        version: 1.0.87
       logsets:
-        specifier: ^1.0.39
-        version: 1.0.39
+        specifier: ^1.0.42
+        version: 1.0.42
 
   packages/transports/file:
     dependencies:
@@ -115,8 +134,8 @@ importers:
         specifier: ^1.11.7
         version: 1.11.7
       flex-tools:
-        specifier: ^1.0.70
-        version: 1.0.70
+        specifier: ^1.0.87
+        version: 1.0.87
       fs-extra:
         specifier: ^11.1.0
         version: 11.1.0
@@ -158,8 +177,8 @@ importers:
         specifier: ^1.2.6
         version: 1.2.6
       flex-tools:
-        specifier: ^1.0.70
-        version: 1.0.70
+        specifier: ^1.0.87
+        version: 1.0.87
     devDependencies:
       '@swc/core':
         specifier: ^1.3.31
@@ -192,8 +211,8 @@ importers:
         specifier: workspace:^1.0.0
         version: link:../../core
       flex-tools:
-        specifier: ^1.0.70
-        version: 1.0.70
+        specifier: ^1.0.87
+        version: 1.0.87
 
 packages:
 
@@ -2432,7 +2451,7 @@ packages:
       enquirer: 2.3.6
       fast-glob: 3.2.12
       fs-extra: 10.1.0
-      logsets: 1.0.39
+      logsets: 1.0.42
       semver: 7.3.8
       shelljs: 0.8.5
     dev: true
@@ -3194,6 +3213,7 @@ packages:
   /deepmerge@4.3.0:
     resolution: {integrity: sha512-z2wJZXrmeHdvYJp/Ux55wIjqo81G5Bp4c+oELTW+7ar6SogWHajt5a9gO3s3IDaGSAXjDk0vlQKN3rms8ab3og==}
     engines: {node: '>=0.10.0'}
+    dev: true
 
   /defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
@@ -4141,8 +4161,8 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /flex-tools@1.0.70:
-    resolution: {integrity: sha512-eR1deTra/GHqM0U5rC7Fp5xt+AkNQieti7M0L4xb8sc2FXi4CVIkbMGCGBp+xdqXDz9PH2vn+6EqemWRQpzA8A==}
+  /flex-tools@1.0.87:
+    resolution: {integrity: sha512-GUrRxvrk50p/310v9JjzRh5m4/+purgVop85RFtHbB8B3PAb9PvF/nZCmHC8CKknsGXrGMWvuE9JPiN8/hL7bw==}
     dependencies:
       fs-extra: 11.1.0
       shelljs: 0.8.5
@@ -5101,14 +5121,13 @@ packages:
       wrap-ansi: 6.2.0
     dev: true
 
-  /logsets@1.0.39:
-    resolution: {integrity: sha512-/AL9mc3MOEhCMmRP6mh9BpwqMVjR9OA8ULxiYKPha7Za8DBWGnDvGNuk7LC3fmhSZm2GWy2EVE7ayLq3rLsYnA==}
+  /logsets@1.0.42:
+    resolution: {integrity: sha512-utk1XPItyFgBKGVzONeYbfQP4fNf1OPwm/Jgr+rgIOo5eUh0uVMp/OTlVNGFaPEDsoXsmdS3VylSYRfugligDg==}
     dependencies:
       '@babel/runtime-corejs3': 7.21.0
       ansicolor: 1.1.100
       core-js: 3.28.0
-      deepmerge: 4.3.0
-      flex-tools: 1.0.70
+      flex-tools: 1.0.87
 
   /longest@2.0.1:
     resolution: {integrity: sha512-Ajzxb8CM6WAnFjgiloPsI3bF+WCxcvhdIG3KNA2KN962+tdBsHcuQ4k4qX/EcS/2CRkcc0iAkR956Nib6aXU/Q==}

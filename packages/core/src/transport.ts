@@ -1,12 +1,11 @@
 import type { DeepRequired } from "ts-essentials"
 import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
 import type { VoerkaLogger, VoerkaLoggerLevel  } from './Logger';
-import dayjs from "dayjs";
 import { outputError } from "./utils";
 import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
 import { VoerkaLoggerLevelNames  } from "./consts"
 import { assignObject } from "flex-tools/object/assignObject";
-
+import { formatDateTime } from "flex-tools/misc/formatDateTime"
 
 
 export interface TransportBaseOptions<Output>{
@@ -78,13 +77,13 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      * @return {Array | Record} 位置插值数组或字典
      */
     getInterpVars(record: VoerkaLoggerRecord) {
-        const now = dayjs()
+        const now = Date.now()
         return {
             ...record,
             levelName: VoerkaLoggerLevelNames[record.level < 0 || record.level > 5 ? 0 : record.level].padEnd(5),
-            datetime: now.format('YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
-            date: now.format('YYYY-MM-DD'),
-            time: now.format('HH:mm:ss'),
+            datetime: formatDateTime(now,'YYYY-MM-DD HH:mm:ss SSS').padEnd(23),
+            date: formatDateTime(now,'YYYY-MM-DD'),
+            time: formatDateTime(now,'HH:mm:ss'),
         }
     }
     /**
@@ -188,7 +187,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         try {
             await this.output(this.#buffer)
         }catch (e: any) {
-            console.error(`[Error] - ${dayjs().format('YYYY-MM-DD HH:mm:ss SSS')} : while output logs,${e.stack}`)
+            console.error(`[Error] - ${formatDateTime(new Date(),'YYYY-MM-DD HH:mm:ss SSS')} : while output logs,${e.stack}`)
         }finally {
             this.#buffer = []
         }      

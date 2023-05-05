@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
-    "flex-tools": "^1.0.70",
-    "logsets": "^1.0.39"
+    "flex-tools": "^1.0.87",
+    "logsets": "^1.0.42"
   }
 }

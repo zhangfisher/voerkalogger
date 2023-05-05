@@ -1,15 +1,8 @@
-import { VoerkaLogger } from '../../../core/src/Logger';
 /**
  * 
  * 支持控制台着色输出的日志传输器
  * 
- */
-
-/**
- * this指向实现Logger实例
- 
- * 
- */
+ */ 
 import { TransportBaseOptions,TransportBase, TransportOptions } from '@VoerkaLogger/core';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "@VoerkaLogger/core"
 import logsets from "logsets" 
@@ -35,7 +28,7 @@ const consoleMethods=[
 ]
 
 export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
-    colorize?: boolean                  // 是否着色输出
+     
 }
 
 
@@ -52,26 +45,17 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
         })
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
-        const { colorize,format } = this.options
+        const { format } = this.options
         try{         
             const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format
-           
-            if(colorize){
-                record.message = logsets.getColorizedTemplate(record.message,interpVars)
-            }else{
-                record.message = record.message.params(interpVars)
-            }
+            record.message = logsets.getColorizedTemplate(record.message,interpVars)
             const vars ={
                 ...this.getInterpVars(record),
                 ...record,
             }
             const output = template!.params(vars)
-            if(colorize){
-                const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
-                console.log(levelColorizer(logsets.getColorizedTemplate(output,vars)))
-            }else{
-                console.log(output.params(vars))
-            }            
+            const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
+            console.log(levelColorizer(logsets.getColorizedTemplate(output,vars))) 
         }catch(e:any){   
             console.log(e.stack)
         }        

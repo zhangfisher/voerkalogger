@@ -227,6 +227,13 @@ logger.use("file",new FileTransport({
 -  每隔`flushInterval`时间执行一次输出，不论缓冲区是否已满，`flushInterval`默认值是`10 * 1000`
 - 调用`logger.flush()`方法可以马上将缓冲区的日志进行输出。
 
+## 控制台输出
+
+`VoerkaLogger`内置了一个`console`用来将日志输出到控制台。该控制台输出不支持着色输出。支持在 `nodejs` 和 `浏览器` 环境下使用。
+
+如果要在`Nodejs`环境进行着色输出，可以使用`@voerkalogger/console`模块。
+
+
 ## 销毁日志实例
 
 建议在退出应用程序时调用`logger.destory()`方法用来销毁日志实例，如果退出`nodejs`程序出现不能正常退出时，可能需要调用该方法。

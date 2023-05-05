@@ -14,7 +14,7 @@
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
     "dayjs": "^1.11.7",
-    "flex-tools": "^1.0.70",
+    "flex-tools": "^1.0.87",
     "fs-extra": "^11.1.0"
   },
   "keywords": [],

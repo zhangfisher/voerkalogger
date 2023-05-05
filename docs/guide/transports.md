@@ -1,23 +1,29 @@
 # Transport
 ## 控制台输出
 
-控制台输出内置并默认启用。支持输出着色后的日志信息。
+当实例化`VoerkaLogger`时，内置了一个名称为`console`的控制台输出`Transport`，该内置`Transport`不支持着色输出。
+如果需要着色输出，需要安装`@voerkalogger/console`模块。
+
+### 安装
+
+```typescript
+
+> npm install @voerkalogger/console
+
+logger.use("console",new ConsoleTransport() as unknown as TransportBase)
+
+```
+
 
 ![](../intro/log1.png)
 
-- 控制台输出是默认启用的，不需要额外配置
 - 使用`logger.transports.console`可以访问`console transport`实例
 - 使用`logger.transports.console.enabled=false`可以禁用控制台输出
 
 
 ### 配置参数
 
-```typescript
-{
-    colorize?: boolean    // 是否着色输出
-}
-```
-
+无
 ### 自定义模板
 
 默认控制台输出模板字符器为：
@@ -60,10 +66,7 @@ logger.info("My name is {#red}","tom")  // tom为红色显示
 ```
 
 着色输出使用的是[logsets](https://zhangfisher.github.io/logsets)
-
-### 禁用着色输出
-
-通过`logger.transports.console.colorize=false`可以禁用控制台着色输出。
+ 
 
 ## 文件输出
 

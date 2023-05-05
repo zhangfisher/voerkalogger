@@ -23,6 +23,7 @@ const logger = new VoerkaLogger({
 
 - 通过`logger.enabled=<true/false>`可以启用或禁用所有日志输出。
 - 也可以单独对启用/禁用某个`Transport`日志输出。
+- `logger.enabled=<true/false>`不会影响`console`的输出。
 
 ```typescript
     logger.transports.console.enabled=false   // 禁用控制器台输出

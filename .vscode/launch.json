@@ -19,7 +19,7 @@
             "protocol": "inspector",
             "internalConsoleOptions": "openOnSessionStart"
         },{
-            "name": "ConsoleTransportDemo2",
+            "name": "Console Buf",
             "type": "node",
             "request": "launch",
             "args": [

@@ -178,13 +178,10 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
                     }catch(e){ // 当异步信号被销毁时会触发AsyncSignalAbort错误
                         if(e instanceof AsyncSignalAbort)  break
                     }                    
-                    if(!this.enabled) break
                     // 2. 输出日志数据
                     await this.flush()
                 } 
             }finally{
-                // 输出日志数据
-                await this.flush()
                 this.#outputSingal.destroy()
             }
         },0)        

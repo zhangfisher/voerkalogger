@@ -36,7 +36,7 @@ export class VoerkaLoggerScope{
         }
         Object.values(logger.transports).forEach((transportInst) => {
             const limitLevel = transportInst.level || logger.options.level
-            if (transportInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || logger.options.debug)) {                        
+            if ((record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || logger.options.debug)) {                        
                 try{
                     transportInst._output(record,vars)
                 }catch{

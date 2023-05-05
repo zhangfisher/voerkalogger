@@ -16,6 +16,8 @@ export interface TransportBaseOptions<Output>{
     // 如果bufferSize=0则禁用输出，比如ConsoleTransport就禁用输出
     bufferSize?   : number                                              // 输出缓冲区大小
     flushInterval?: number                                              // 延迟输出时间间隔，当大于间隔时间j时进行输出
+    // 当日志enable=false时，输出会缓存到这里，等enable=true时再输出
+    cache?:number
 }
 
 // 注入format泛型
@@ -39,7 +41,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     constructor(options?: TransportOptions<Options>) {
         this.#options = assignObject({
             enabled: true,
-            bufferSize:10,
+            bufferSize:100,
             flushInterval:10 * 1000 ,
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}" 
         }, options) as DeepRequired<Options>
@@ -47,7 +49,9 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     }
     get level() { return this.#options.level }
     get options() { return this.#options }
-    set options(value) { Object.assign(this.#options, value) }
+    set options(value) {         
+        Object.assign(this.#options, value) 
+    }
     get buffer() { return this.#buffer}
     get logger() { return this.#logger }    
     get enabled() { return this.#options.enabled }
@@ -138,11 +142,14 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      * @param {*} info =  {{message: string, level: number, timestamp: string, error: *,tags:[],module:string}}
      */
      _output(record: VoerkaLoggerRecord, inVars: LogMethodVars) {
-        if (!this.options.enabled) return
         const output = this.format(record, inVars)
         if (output && this.options.bufferSize>0){
+            // 当超出缓冲区大小时，丢弃最早的日志
+            if(this.#buffer.length>this.options.bufferSize){
+                this.#buffer.splice(0,1)
+            } 
             this.#buffer.push(output)
-            if(this.#buffer.length>=this.options.bufferSize) this.#outputSingal?.resolve() // 有数据进来
+            if(this.#buffer.length>=this.options.bufferSize && this.enabled) this.#outputSingal?.resolve() // 有数据进来
         }
     }
     /**
@@ -175,6 +182,8 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
                     await this.flush()
                 } 
             }finally{
+                // 输出日志数据
+                await this.flush()
                 this.#outputSingal.destroy()
             }
         },0)        

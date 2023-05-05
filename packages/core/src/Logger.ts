@@ -53,9 +53,14 @@ export class VoerkaLogger{
         VoerkaLogger.LoggerInstance = this              
         this.#rootScope = new VoerkaLoggerScope(this,{module:this.options.scope.module})  
     }    
-    get options() {return this.#options!}
+    get options() {return this.#options!}    
     get enabled() { return this.options.enabled; }
-    set enabled(value) { this.options.enabled = value; }
+    set enabled(value) { 
+        this.options.enabled = value; 
+        for(const transport of Object.values(this.transports)){
+            transport.enabled = value
+        }
+    }
     get level() { return this.options.level }
     set level(value:VoerkaLoggerLevel) {this.options.level = value;} 
     get output() { return this.options.output  }   
@@ -113,7 +118,6 @@ export class VoerkaLogger{
      * @param {*}  
      */
     log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}) {  
-        if (!this.options.enabled) return
         const msg = typeof(message)=='function' ? message() : message
         let record:VoerkaLoggerRecord =Object.assign({},this.options.context, {
             level:options.level, 

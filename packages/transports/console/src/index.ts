@@ -17,16 +17,6 @@ const logLevelColors = [
     "red,bright"                            // FATAL
 ]
 
- 
-const consoleMethods=[
-    logsets.log,
-	logsets.debug,
-	logsets.info,
-	logsets.warn,
-	logsets.error,
-    logsets.error
-]
-
 export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
      
 }

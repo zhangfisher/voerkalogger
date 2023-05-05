@@ -24,10 +24,37 @@ const logger = new VoerkaLogger({
 - 通过`logger.enabled=<true/false>`可以启用或禁用所有日志输出。
 - 也可以单独对启用/禁用某个`Transport`日志输出。
 
-    ```typescript
-        logger.transports.console.enabled=false   // 禁用控制器台输出
-        logger.transports.file.enabled=false      // 禁用文件输出
-    ```
+```typescript
+    logger.transports.console.enabled=false   // 禁用控制器台输出
+    logger.transports.file.enabled=false      // 禁用文件输出
+```
+
+- **注意**： 
+
+当`enabled=false`时，输出的日志不会被丢弃，而是会被缓存起来，当`enabled=true`时，缓存的日志会被输出。利用这个特性,我们可以在应用启动时先启用日志。 
+
+```typescript
+// index.js
+
+import {VoerkaLogger } from  "@voerkalogger/core";
+const logger = new VoerkaLogger({
+   // ...options
+   enabled:false        // 先禁用日志输出
+})
+
+// ...do something
+// 可以正常调用logger.debug等进行日志输出等
+// 但是由于enabled=false,所有日志不会被输出，而是被缓存起来
+// 比如从环境变量，或者其他配置中读取日志配置
+
+logger.options = {
+    // 新配置
+}
+
+// 当配置好日志后，再启用日志输出，此时缓存的日志会被输出
+logger.enabled = true
+
+```
 
 ## 日志级别
 

@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/console",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "colorized of console transport for voerkalogger",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

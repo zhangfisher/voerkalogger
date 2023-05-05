@@ -295,7 +295,7 @@ logger.use("http",new HttpTransport<HttpOutputType>({
 ```
 - `console`是内置的不需要安装。
 - `@voerkalogger/file`和`@voerkalogger/http`两个`Transport`均是适用于`nodejs`。
-
+- `@voerkalogger/console`是支持着色输出的`console`，适用于`nodejs`。
 
 ### 构造参数
 
@@ -447,5 +447,5 @@ export default class HttpTransport<Output=VoerkaLoggerRecord> extends TransportB
 }
 ```
 
-- 上例中，由于`TransportBase`默认的`format`方法实现是输出一个插值后的字符串。而大部份情况下，输出到日志服务器时会采用JSON格式，所以我们配置`format=null`，则默认输出的是`JSON`格式的`VoerkaLoggerRecord`。
+- 上例中，由于`TransportBase`默认的`format`方法实现是输出一个插值后的字符串。而大部份情况下，输出到日志服务器时会采用`JSON`格式，所以我们配置`format=null`，则默认输出的是`JSON`格式的`VoerkaLoggerRecord`。
 

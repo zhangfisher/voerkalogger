@@ -1,9 +1,10 @@
-# 1.0.0 (2023-04-10)
+# 1.0.0 (2023-05-05)
 
 
 ### Bug Fixes
 
 * 优化引入`flex-tools` ([55dd4c4](https://gitee.com/zhangfisher/voerkalogger/commits/55dd4c4df9a497d7c290937dd48e578f519d3662))
+* **core,console-transport:** 调整参数并优化文档说明 ([7ea64b4](https://gitee.com/zhangfisher/voerkalogger/commits/7ea64b49e884e6be2f13573759fb127a95c81510))
 
 
 ### Features

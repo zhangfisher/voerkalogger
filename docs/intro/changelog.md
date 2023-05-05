@@ -4,6 +4,7 @@
 ### Bug Fixes
 
 * 优化引入`flex-tools` ([55dd4c4](https://gitee.com/zhangfisher/voerkalogger/commits/55dd4c4df9a497d7c290937dd48e578f519d3662))
+* **core,console-transport:** 调整`enable`属性对控制台的输出 ([341f1ac](https://gitee.com/zhangfisher/voerkalogger/commits/341f1acf4a010028566d658b6f3a8ccf31fa0d8c))
 * **core,console-transport:** 调整参数并优化文档说明 ([7ea64b4](https://gitee.com/zhangfisher/voerkalogger/commits/7ea64b49e884e6be2f13573759fb127a95c81510))
 * **core,console-transport:** 修复enable导致的延迟输出功能 ([2083cad](https://gitee.com/zhangfisher/voerkalogger/commits/2083cad52546efee1fa8fb4d0df73ac2a644e0ac))
 * **core:** 解决enabled=false时的延迟输出问题 ([2d449ab](https://gitee.com/zhangfisher/voerkalogger/commits/2d449aba98be508e82cd055a6d27c8a52a0dcfc7))

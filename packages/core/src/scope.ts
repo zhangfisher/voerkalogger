@@ -19,9 +19,7 @@ export class VoerkaLoggerScope{
     get logger(){return this.#logger} 
     private log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}){
         const logger = this.logger
-        if (!logger.options.enabled) return
         const msg = typeof(message)=='function' ? message() : message
-        const now = Date.now()
         let record:VoerkaLoggerRecord =assignObject({},logger.options.context, {
             level:options.level,
             timestamp:Date.now(),

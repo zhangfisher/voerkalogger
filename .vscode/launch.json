@@ -18,6 +18,19 @@
             "cwd": "${workspaceRoot}/examples",
             "protocol": "inspector",
             "internalConsoleOptions": "openOnSessionStart"
+        },{
+            "name": "ConsoleTransportDemo2",
+            "type": "node",
+            "request": "launch",
+            "args": [
+                "console_buf.ts"
+            ],
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "cwd": "${workspaceRoot}/examples", 
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "name": "FileTransportDemo",

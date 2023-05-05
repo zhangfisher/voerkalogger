@@ -7,6 +7,7 @@ test("缓存输出",()=>{
         injectGlobal:false,
         enabled:false
     })
+
     new Array(10).fill(0).forEach((_,i)=>{
         logger.info(`test:${i+1}`)
     })

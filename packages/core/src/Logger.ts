@@ -43,7 +43,9 @@ export class VoerkaLogger{
         } 
         this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
         // 注册默认的控制台日志输出
-        this.use("console",(new ConsoleTransport()) as unknown as TransportBase)
+        this.use("console",(new ConsoleTransport({
+            enabled:this.options.enabled
+        })) as unknown as TransportBase)
         // 注入全局日志实例
         if(this.options.injectGlobal){
             (globalThis as any)[this.options.injectGlobal===true ? "logger" : this.options.injectGlobal] = this
@@ -74,9 +76,12 @@ export class VoerkaLogger{
     get transports() { return this.#transportInstances; }
     /**
     * 部署安装后端实例
+    * - 默认enable与logger一致
+    * - 
     */
     use<T extends TransportBase=TransportBase>(name:string,transportInstance:T){
-        transportInstance._bind(this)
+        transportInstance._bind(this)     
+        transportInstance.enabled = this.enabled
         this.#transportInstances[name] =  transportInstance
     }      
     /**

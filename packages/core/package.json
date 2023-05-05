@@ -1,10 +1,13 @@
 {
     "name": "@voerkalogger/core",
-    "version": "1.0.24",
+    "version": "1.0.25",
     "description": "small, fast and easy-to-use logger",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
+    "main": "src/index.ts",
+    "publishConfig": {
+        "main": "dist/index.js",
+        "module": "dist/index.mjs",
+        "types": "dist/index.d.ts"
+    },
     "homepage": "https://zhangfisher.github.io/voerkalogger",
     "repository": {
         "type": "git",

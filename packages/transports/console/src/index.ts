@@ -3,7 +3,7 @@
  * 支持控制台着色输出的日志传输器
  * 
  */ 
-import { TransportBaseOptions,TransportBase, TransportOptions } from '@VoerkaLogger/core';
+import { TransportBaseOptions,TransportBase, TransportOptions, TransportOutputType } from '@VoerkaLogger/core';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "@VoerkaLogger/core"
 import logsets from "logsets" 
 import { assignObject } from 'flex-tools';
@@ -24,17 +24,19 @@ export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
 
 export default class ConsoleTransport extends TransportBase<ConsoleTransportOptions>{     
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
-        super(assignObject({
-            // 关闭缓冲区，控制台输出不需要启用异步输出
-            bufferSize:0,     
-            colorize:true,          
+        super(assignObject({        
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
         },options))
         logsets.config({
             String:"lightGreen"
         })
     }
-    format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
+    /**
+     * 控制台输出时不进行缓冲，所以需要立刻输出
+     * @param record 
+     * @param interpVars 
+     */
+    format(record: VoerkaLoggerRecord,interpVars:LogMethodVars){      
         const { format } = this.options
         try{         
             const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format
@@ -45,11 +47,23 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             }
             const output = template!.params(vars)
             const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
-            console.log(levelColorizer(logsets.getColorizedTemplate(output,vars))) 
+            const coloredOutput = levelColorizer(logsets.getColorizedTemplate(output,vars))
+            if(this.enabled){
+                console.log(coloredOutput) 
+            }else{
+                return coloredOutput
+            }
         }catch(e:any){   
-            console.log(e.stack)
+            if(this.enabled){
+                console.log(e.stack)
+            }else{
+                return e.stack
+            }
         }        
     }    
+    async output(result: TransportOutputType<ConsoleTransportOptions>[]) {
+        result.forEach(item=>console.log(item))
+    }
     /**
      * 清除所有存储的日志
      */

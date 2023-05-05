@@ -45,7 +45,6 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
             flushInterval:10 * 1000 ,
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}" 
         }, options) as DeepRequired<Options>
-        if(this.#options.enabled) this._outputLogs()        
     }
     get level() { return this.#options.level }
     get options() { return this.#options }
@@ -71,6 +70,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      */
     _bind(logger: VoerkaLogger) {
         this.#logger = logger
+        if(this.#options.enabled) this._outputLogs()        
     }
     protected outputError(e:Error){
         outputError(e)
@@ -172,6 +172,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
             try{
                 while(this.enabled){
                     // 1. 等待有数据或者超时
+                    if(this.#buffer.length>0) await this.flush()
                     try{
                         await this.#outputSingal(this.options.flushInterval)             
                     }catch(e){ // 当异步信号被销毁时会触发AsyncSignalAbort错误

@@ -2,7 +2,7 @@
  * 日志
  *       logger.level=0       取值0-5
  *
- *          0 : NOTSET	    不输出,enabled=false即level=0
+ *          0 : NOTSET	    不输出,enable=false即level=0
  *          1 : DEBUG
  *          2 : INFO
  *          3 : WARNING
@@ -23,7 +23,7 @@
 import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
 import { safeCall } from "./utils";
 import {TransportBase} from "./transport";
-import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from "./types";
+import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from './types';
 import ConsoleTransport from "./console";
 import { DeepRequired } from "ts-essentials"  
 import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
@@ -37,6 +37,8 @@ export class VoerkaLogger{
     #transportInstances:Record<string,TransportBase>={}                     // 后端实例
     #options?:DeepRequired<VoerkaLoggerOptions> 
     #rootScope?:VoerkaLoggerScope
+    // 用来当enable=false时缓存日志,当enable=true时输出  [[record,vars],...]
+    #cache:[any,any][] =[]        
     constructor(options?:VoerkaLoggerOptions) {
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
@@ -44,7 +46,7 @@ export class VoerkaLogger{
         this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
         // 注册默认的控制台日志输出
         this.use("console",(new ConsoleTransport({
-            enabled:this.options.enabled
+            enable:this.options.enable
         })) as unknown as TransportBase)
         // 注入全局日志实例
         if(this.options.injectGlobal){
@@ -56,11 +58,13 @@ export class VoerkaLogger{
         this.#rootScope = new VoerkaLoggerScope(this,{module:this.options.scope.module})  
     }    
     get options() {return this.#options!}    
-    get enabled() { return this.options.enabled; }
-    set enabled(value) { 
-        this.options.enabled = value; 
-        for(const transport of Object.values(this.transports)){
-            transport.enabled = value
+    get enable() { return this.options.enable; }
+    set enable(value) { 
+        this.options.enable = value; 
+        // 如果enable=true,则输出缓冲区的日志
+        if(value && this.#cache.length>0){
+            this.#cache.forEach(([record,vars])=>this.outputToTransports(record,vars,["!console"]))
+            this.#cache = []
         }
     }
     get level() { return this.options.level }
@@ -70,7 +74,7 @@ export class VoerkaLogger{
         this.options.output = value
         // 如果不在输出列表中，则需要禁用
         for(const [name,transport] of Object.entries(this.transports)){
-            transport.enabled = this.options.output.includes(name)
+            transport.enable = this.options.output.includes(name)
         }
     }
     get transports() { return this.#transportInstances; }
@@ -81,7 +85,6 @@ export class VoerkaLogger{
     */
     use<T extends TransportBase=TransportBase>(name:string,transportInstance:T){
         transportInstance._bind(this)     
-        transportInstance.enabled = this.enabled
         this.#transportInstances[name] =  transportInstance
     }      
     /**
@@ -119,6 +122,27 @@ export class VoerkaLogger{
         })
     }
     /**
+     *  输出日志到各个transports
+     * @param record 
+     * @param vars 
+     * @param exclude 排除输出的transport名称
+     */
+    private outputToTransports(record:VoerkaLoggerRecord,vars:any,targets:string[]=[]){
+        if(targets.length==0) targets= Object.keys(this.#transportInstances)        
+        targets.forEach((name) => {
+            if(name.startsWith("!")) return
+            const transport = this.#transportInstances[name]
+            const limitLevel = transport.level || this.options.level
+            if ((record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
+                try{
+                    transport._output(Object.assign({},record),vars)
+                }catch(e:any){
+                    console.error(`VoerkaLogger:transport ${name} output error`,e)
+                }
+            }
+        })
+    }
+    /**
      * 输出日志
      * @param {*}  
      */
@@ -137,16 +161,18 @@ export class VoerkaLogger{
             record.errorStack = err.stack
             record.errorLine = err.stack
         }
-        Object.values(this.#transportInstances).forEach((transportInst) => {
-            const limitLevel = transportInst.level || this.options.level
-            if (transportInst.enabled && (record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
-                try{
-                    transportInst._output(Object.assign({},record),vars)
-                }catch{
-
-                }
+        // 如果enable=false,则缓存日志，在此进行缓存，这样可以保证后续添加的transport也能输出
+        // 当enable=true时，再将缓存的日志输出到transport
+        if(!this.enable){
+            if(this.#cache.length>this.options.bufferSize){
+                this.#cache.shift()
             }
-        })
+            this.#cache.push([record,vars])
+            // 如果此时console.enable=true,则输出
+            this.outputToTransports(record,vars,['console'])
+            return
+        }                
+        this.outputToTransports(record,vars)
     }
     /**
      *  

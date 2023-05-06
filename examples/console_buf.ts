@@ -3,7 +3,7 @@ import ConsoleTransport from "../packages/transports/console/src";
 import { timer } from "flex-tools" 
 
 let log = new VoerkaLogger({
-    enabled:false
+    enable:false
 })
 log.use("console",new ConsoleTransport() as unknown as TransportBase)
 log.level = VoerkaLoggerLevel.NOTSET
@@ -38,7 +38,7 @@ deviceLogger.warn("打开程序{a}{b}",{a:1,b:2})
 
 
 setTimeout(() => {    
-    log.enabled=true
+    log.enable=true
     setTimeout(()=>{
         log.destory().then(() =>{
             console.log("End")

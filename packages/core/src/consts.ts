@@ -14,14 +14,15 @@ export const VoerkaLoggerLevelNames = [ 'NOSET', 'DEBUG', 'INFO', 'WARN', 'ERROR
 
 
 export const DefaultLoggerOptions:VoerkaLoggerOptions = {
-    id:"",
-    enabled:true,
-    level:  VoerkaLoggerLevel.WARN,
-    debug:  false,
-    output: [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
-    injectGlobal:true,                          // 在globalThis注入一个logger全局变量
+    id               : "",
+    enable          : true,
+    level            : VoerkaLoggerLevel.WARN,
+    debug            : false,
+    output           : [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
+    injectGlobal     : true,                          // 在globalThis注入一个logger全局变量
     catchGlobalErrors: true,                    // 是否自动捕获全局错误
-    scope:{}
+    bufferSize       : 200,                            // 缓存大小
+    scope            : {}
 }  
  
 

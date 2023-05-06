@@ -18,7 +18,7 @@ logger.use("console",new ConsoleTransport() as unknown as TransportBase)
 ![](../intro/log1.png)
 
 - 使用`logger.transports.console`可以访问`console transport`实例
-- 使用`logger.transports.console.enabled=false`可以禁用控制台输出
+- 使用`logger.transports.console.enable=false`可以禁用控制台输出
 
 
 ### 配置参数

@@ -33,7 +33,7 @@ mock.onPost("/log").reply((config:AxiosRequestConfig)=>{
     return [200]
 })
 
-logger.transports.console.enabled = false
+logger.transports.console.enable = false
 logger.level = VoerkaLoggerLevel.NOTSET
 timer.begin()
 logger.error("程序出错{}",new TypeError("数据类型出错"))

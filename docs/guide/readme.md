@@ -21,18 +21,30 @@ const logger = new VoerkaLogger({
 
 ## 启用/禁用日志输出
 
-- 通过`logger.enabled=<true/false>`可以启用或禁用所有日志输出。
-- 也可以单独对启用/禁用某个`Transport`日志输出。
-- `logger.enabled=<true/false>`不会影响`console`的输出。
+- 通过`logger.enable=<true/false>`可以启用或禁用所有日志输出。
+- 也可以单独对启用/禁用某个`Transport`日志输出。 
 
 ```typescript
-    logger.transports.console.enabled=false   // 禁用控制器台输出
-    logger.transports.file.enabled=false      // 禁用文件输出
+    logger.transports.console.enable=false   // 禁用控制器台输出
+    logger.transports.file.enable=false      // 禁用文件输出
 ```
 
-- **注意**： 
+## 延迟日志输出
 
-当`enabled=false`时，输出的日志不会被丢弃，而是会被缓存起来，当`enabled=true`时，缓存的日志会被输出。利用这个特性,我们可以在应用启动时先启用日志。 
+由于日志输出作为一个基础设施，我们希望在应用启动时第一时间就加载，这样我们就可以尽快得到日志输出能力。
+而日志一般是来自三个地方：
+
+- 环境变量
+- 代码中静态配置
+- 配置系统中读取，这是为了为日志系统提供动态配置能力
+
+这样为了确保日志系统参数的实时性，我们要么让配置模块先于日志模块加载，要么需要为日志模块提供独立的配置来源。
+
+如果配置模块先于日志模块加载，则问题不大。如果配置模块晚于日志模块加载，毕竟加载配置时可能也会需要日志输出，所以现实中是很有可能配置模块晚于日志模块加载的。`VoerkaLogger`提供了一种延迟输出日志来解决这个问题。大体思路是：
+
+- 在应用中第一时间加载日志模块，并且配置`logger.enable=false`，这样日志就不会输出,而是先缓存起来。
+- 然后就可以加载配置模块,配置模块加载完成再，再更新`logger.options`，这样日志就可以得到实时的配置参数,最后再将`logger.enable=true`，将缓冲区的配置输出。
+- 以上延迟输出机制中，对控制台输出进行了额外处理。除非显式设置`logger.transport.enable=false`，否则会保持控制台输出。
 
 ```typescript
 // index.js
@@ -40,12 +52,14 @@ const logger = new VoerkaLogger({
 import {VoerkaLogger } from  "@voerkalogger/core";
 const logger = new VoerkaLogger({
    // ...options
-   enabled:false        // 先禁用日志输出
+   bufferSize:100,      // 日志缓存大小，在enable=false时
+   enable:false        // 先禁用日志输出
+   ...<从环境变量或配置系统中读取的日志参数>
 })
 
 // ...do something
 // 可以正常调用logger.debug等进行日志输出等
-// 但是由于enabled=false,所有日志不会被输出，而是被缓存起来
+// 但是由于enabled=false,所以日志不会被输出，而是被缓存起来
 // 比如从环境变量，或者其他配置中读取日志配置
 
 logger.options = {
@@ -53,7 +67,7 @@ logger.options = {
 }
 
 // 当配置好日志后，再启用日志输出，此时缓存的日志会被输出
-logger.enabled = true
+logger.enable = true
 
 ```
 
@@ -301,7 +315,7 @@ logger.use("http",new HttpTransport<HttpOutputType>({
 
 ```typescript
 export interface TransportBaseOptions<Output>{
-    enabled?      : boolean                        // 可以单独关闭指定的日志后端
+    enable?      : boolean                        // 可以单独关闭指定的日志后端
     level?        : VoerkaLoggerLevel
     format?       : VoerkaLoggerFormatter<Output> | string | null    // 格式化日志
     // 缓冲区满或达到间隔时间时进行日志输出

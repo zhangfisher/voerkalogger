@@ -24,7 +24,8 @@ export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
 
 export default class ConsoleTransport extends TransportBase<ConsoleTransportOptions>{     
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
-        super(assignObject({        
+        super(assignObject({      
+            bufferSize:0,       // 控制台输出时不需要缓冲区  
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
         },options))
         logsets.config({
@@ -48,22 +49,11 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             const output = template!.params(vars)
             const levelColorizer = logsets.getColorizer(logLevelColors[record.level])
             const coloredOutput = levelColorizer(logsets.getColorizedTemplate(output,vars))
-            if(this.enabled){
-                console.log(coloredOutput) 
-            }else{
-                return coloredOutput
-            }
+            console.log(coloredOutput) 
         }catch(e:any){   
-            if(this.enabled){
-                console.log(e.stack)
-            }else{
-                return e.stack
-            }
+            console.log(e.stack)
         }        
-    }    
-    async output(result: TransportOutputType<ConsoleTransportOptions>[]) {
-        result.forEach(item=>console.log(item))
-    }
+    }     
     /**
      * 清除所有存储的日志
      */

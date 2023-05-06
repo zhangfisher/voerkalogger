@@ -11,7 +11,7 @@ logger.use("file",new FileTransport({
         maxFileCount: 5
 }) as unknown as TransportBase )
 
-logger.transports.console.enabled = false
+logger.transports.console.enable = false
 logger.level = VoerkaLoggerLevel.NOTSET
 // timer.begin()
 // logger.error("程序出错{}",new TypeError("数据类型出错"))

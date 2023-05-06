@@ -9,7 +9,7 @@ import { formatDateTime } from "flex-tools/misc/formatDateTime"
 
 
 export interface TransportBaseOptions<Output>{
-    enabled?      : boolean                                             // 可以单独关闭指定的日志后端
+    enable?      : boolean                                             // 可以单独关闭指定的日志后端
     level?        : VoerkaLoggerLevel
     format?       : VoerkaLoggerFormatter<Output> | string | null       // 格式化日志
     // 缓冲区满或达到间隔时间时进行日志输出
@@ -40,8 +40,8 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     #outputSingal?:IAsyncSignal 
     constructor(options?: TransportOptions<Options>) {
         this.#options = assignObject({
-            enabled: true,
-            bufferSize:100,
+            enable: true,
+            bufferSize:200,
             flushInterval:10 * 1000 ,
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}" 
         }, options) as DeepRequired<Options>
@@ -53,10 +53,10 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     }
     get buffer() { return this.#buffer}
     get logger() { return this.#logger }    
-    get enabled() { return this.#options.enabled }
-    set enabled(value) { 
-        if(value==this.#options.enabled) return
-        this.#options.enabled = value 
+    get enable() { return this.#options.enable }
+    set enable(value) { 
+        if(value==this.#options.enable) return
+        this.#options.enable = value 
         if(value){
             this._outputLogs()
         }else{
@@ -70,7 +70,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      */
     _bind(logger: VoerkaLogger) {
         this.#logger = logger
-        if(this.#options.enabled) this._outputLogs()        
+        if(this.#options.enable) this._outputLogs()        
     }
     protected outputError(e:Error){
         outputError(e)
@@ -119,37 +119,19 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
             return record as TransportOutputType<Options>
         }  
     }
-    // *************** 操作日志***************
-
-    /**
-     * 清除所有存储的日志
-     */
-    async clear() { 
-        //throw new NotImplementedError()
-    }
-    /**
-     * 读取日志
-     * @param query  查询字符串，取决具体的实现
-     */
-    async getLogs(query: string) {
-        //throw new NotImplementedError()
-    }
-
     // ***************输出日志***************
 
     /**
-     * 本方法由日志实例调用
+     * 本方法由日志实例调用,用户不应该直接调用
      * @param {*} info =  {{message: string, level: number, timestamp: string, error: *,tags:[],module:string}}
      */
      _output(record: VoerkaLoggerRecord, inVars: LogMethodVars) {
+        if(!this.enable) return
         const output = this.format(record, inVars)
         if (output && this.options.bufferSize>0){
-            // 当超出缓冲区大小时，丢弃最早的日志
-            if(this.#buffer.length>this.options.bufferSize){
-                this.#buffer.splice(0,1)
-            } 
             this.#buffer.push(output)
-            if(this.#buffer.length>=this.options.bufferSize && this.enabled) this.#outputSingal?.resolve() // 有数据进来
+            // 当超出缓冲区大小时，立即输出
+            if(this.#buffer.length>=this.options.bufferSize && this.enable) this.#outputSingal?.resolve() // 有数据进来
         }
     }
     /**
@@ -170,15 +152,13 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         this.#timerId = setTimeout(async () => {
             this.#outputSingal = asyncSignal()
             try{
-                while(this.enabled){
-                    // 1. 等待有数据或者超时
-                    if(this.#buffer.length>0) await this.flush()
+                while(this.enable){
+                    await this.flush()
                     try{
                         await this.#outputSingal(this.options.flushInterval)             
                     }catch(e){ // 当异步信号被销毁时会触发AsyncSignalAbort错误
                         if(e instanceof AsyncSignalAbort)  break
                     }                    
-                    // 2. 输出日志数据
                     await this.flush()
                 } 
             }finally{
@@ -202,5 +182,20 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     async destroy() { 
         this.#outputSingal?.destroy()
     }
+    // *************** 操作日志***************
+    /**
+     * 清除所有存储的日志
+     */
+     async clear() { 
+        //throw new NotImplementedError()
+    }
+    /**
+     * 读取日志
+     * @param query  查询字符串，取决具体的实现
+     */
+    async getLogs(query: string) {
+        //throw new NotImplementedError()
+    }
 }
+
 

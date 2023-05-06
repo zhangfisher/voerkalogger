@@ -1,4 +1,4 @@
-# 1.0.0 (2023-05-05)
+# 1.0.0 (2023-05-06)
 
 
 ### Bug Fixes
@@ -13,7 +13,8 @@
 ### Features
 
 * **console-transport:** 新增加适用于nodejs的增强控制台输出transport ([b1288f5](https://gitee.com/zhangfisher/voerkalogger/commits/b1288f5cb26c0d38b68f91089088a8c019437fcf))
-* **core:** 调整`enable`属性行行为，当`enable=false`时会先输出到缓冲区 ([b048aad](https://gitee.com/zhangfisher/voerkalogger/commits/b048aad04b767d0e6913aa75b9cecb3fca81c956))
+* **core,console-transport:** 更新延迟输出机制 ([aeae2e9](https://gitee.com/zhangfisher/voerkalogger/commits/aeae2e9df51a29925ea2ec55d40a0ed5e994278d))
+* **core:** 调整`enabled`属性行行为，当`enabled=false`时会先输出到缓冲区 ([b048aad](https://gitee.com/zhangfisher/voerkalogger/commits/b048aad04b767d0e6913aa75b9cecb3fca81c956))
 * **core:** 调整实例创建模式,import时不再默认创建实例 ([69d50c9](https://gitee.com/zhangfisher/voerkalogger/commits/69d50c94ef53d5192eebbd5d0a6c7a918dec648c))
 * **core:** 默认自动创建日志实例 ([bce2110](https://gitee.com/zhangfisher/voerkalogger/commits/bce211087898c57ace5db3b3995e07d1d60e87bd))
 * **file-backend:** 更新文件名称生成策略 ([2d99c38](https://gitee.com/zhangfisher/voerkalogger/commits/2d99c3862ddb8f616e717a5ea95584986bcf3a95))

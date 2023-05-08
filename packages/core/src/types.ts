@@ -1,5 +1,6 @@
 import type { VoerkaLoggerLevel } from "./consts"
 import type { VoerkaLogger } from "./Logger"
+import { VoerkaLoggerLevelName } from './consts';
 
 
 /**
@@ -19,9 +20,9 @@ export interface VoerkaLoggerScope{
 // 日志配置
 export interface VoerkaLoggerOptions{
     id?: string                                         // 当前应用ID
-    enable?:boolean                                    // 全局开关
+    enable?:boolean                                     // 全局开关
     scope?: VoerkaLoggerScope                           // 用来标识当前应用，如设备所在的IP地址，或者用户名称等
-    level?:VoerkaLoggerLevel                            // 全局日志级别
+    level?:VoerkaLoggerLevel | VoerkaLoggerLevelName    // 全局日志级别
     debug?:boolean                                      // 是否在调试阶段，=true时所有日志均会输出
     output?: string[]                                   // 启用的输出后端
     context?:Record<string,any> | null                  // 全局上下文，可以用为输出时的插值变量，同时会被合并到VoerkaLoggerRecord中

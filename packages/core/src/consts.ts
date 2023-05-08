@@ -2,15 +2,21 @@ import { VoerkaLoggerOptions } from "./types";
 
 
 export enum VoerkaLoggerLevel{
-    NOTSET = 0,
     DEBUG = 1,
     INFO = 2,
     WARN = 3,
     ERROR = 4,
     FATAL = 5
 }
+export enum VoerkaLoggerLevelName{
+    DEBUG = 'DEBUG',
+    INFO = 'INFO',
+    WARN = 'WARN',
+    ERROR = 'ERROR',
+    FATAL = 'FATAL'
+}
 
-export const VoerkaLoggerLevelNames = [ 'NOSET', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL' ];
+export const VoerkaLoggerLevelNames = [ 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL' ];
 
 
 export const DefaultLoggerOptions:VoerkaLoggerOptions = {

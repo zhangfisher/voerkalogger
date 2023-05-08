@@ -1,16 +1,16 @@
 import type { DeepRequired } from "ts-essentials"
 import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
 import type { VoerkaLogger, VoerkaLoggerLevel  } from './Logger';
-import { outputError } from "./utils";
+import { normalizeLevel, outputError } from "./utils";
 import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
-import { VoerkaLoggerLevelNames  } from "./consts"
+import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName } from "./consts"
 import { assignObject } from "flex-tools/object/assignObject";
 import { formatDateTime } from "flex-tools/misc/formatDateTime"
 
 
 export interface TransportBaseOptions<Output>{
     enable?      : boolean                                             // 可以单独关闭指定的日志后端
-    level?        : VoerkaLoggerLevel
+    level?        : VoerkaLoggerLevel | VoerkaLoggerLevelName
     format?       : VoerkaLoggerFormatter<Output> | string | null       // 格式化日志
     // 缓冲区满或达到间隔时间时进行日志输出
     // 如果bufferSize=0则禁用输出，比如ConsoleTransport就禁用输出
@@ -33,7 +33,7 @@ export type TransportOutputType<T extends TransportBaseOptions<any>> =  T['forma
  * <Output> 是日志经过Formatter后的输出结果类型 
 */
 export class TransportBase<Options extends TransportBaseOptions<any> = TransportBaseOptions<any>>{
-    #options: DeepRequired<Options>
+    #options: DeepRequired<Options> & {level:VoerkaLoggerLevel}
     #buffer: TransportOutputType<Options>[] = []
     #logger?: VoerkaLogger
     #timerId: any = 0
@@ -44,9 +44,13 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
             bufferSize:200,
             flushInterval:10 * 1000 ,
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}" 
-        }, options) as DeepRequired<Options>
+        }, options) 
+        this.#options.level = normalizeLevel(this.#options.level)
     }
-    get level() { return this.#options.level }
+    get level() { return this.#options.level as VoerkaLoggerLevel }
+    set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName){        
+        this.#options.level = normalizeLevel(value)
+    }
     get options() { return this.#options }
     set options(value) {         
         Object.assign(this.#options, value) 

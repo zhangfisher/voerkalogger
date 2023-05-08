@@ -1,6 +1,6 @@
 import dayjs from "dayjs"; 
 import type { LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
-import { VoerkaLoggerLevelNames, VoerkaLoggerLevel } from './consts';
+import { VoerkaLoggerLevelNames, VoerkaLoggerLevel, VoerkaLoggerLevelName } from './consts';
 import  { isPlainObject,mapObject } from "flex-tools";
 import type { VoerkaLogger } from "./Logger";
 
@@ -116,4 +116,28 @@ export function safeCall(fn:Function){
 export function outputError(e:Error,now?:number){
     const datetime = dayjs(now || new Date()).format("YYYY-MM-DD HH:mm:ss SSS")
     console.error(`[ERROR] - ${datetime} : ${e.stack}`)
+}
+
+/**
+ * 用来将日志级别转换为数字
+ * 
+ * 内部使用数字来标识日志级别，但是在配置时允许使用字符串来标识日志级别，
+ * 比如：'debug','info','warn','error','fatal'
+ * 比如：'DEBUG','INFO','WARN','ERROR','FATAL'
+ * 也可以是数字：1,2,3,4,5
+ * 
+ * 
+ * @param level 
+ */
+export function normalizeLevel(level:string | number | VoerkaLoggerLevel | VoerkaLoggerLevelName):VoerkaLoggerLevel{
+    if(level===undefined || level===null){
+        return VoerkaLoggerLevel.WARN
+    }else if(typeof(level)=='string'){
+        const levelValue = VoerkaLoggerLevelNames.indexOf(level.toUpperCase())
+        return levelValue<=0 ? VoerkaLoggerLevel.WARN : levelValue
+    }else if(typeof(level)=='number'){
+        return level<0 || level>4 ? VoerkaLoggerLevel.WARN : level
+    }else{
+        return VoerkaLoggerLevel.WARN
+    }
 }

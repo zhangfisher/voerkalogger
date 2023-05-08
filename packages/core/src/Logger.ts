@@ -20,8 +20,8 @@
  *  
  * 
  */
-import { DefaultLoggerOptions, VoerkaLoggerLevel  } from "./consts" 
-import { safeCall } from "./utils";
+import { DefaultLoggerOptions, VoerkaLoggerLevel, VoerkaLoggerLevelName  } from "./consts" 
+import { safeCall, normalizeLevel } from './utils';
 import {TransportBase} from "./transport";
 import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from './types';
 import ConsoleTransport from "./console";
@@ -44,6 +44,7 @@ export class VoerkaLogger{
             return VoerkaLogger.LoggerInstance
         } 
         this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
+        this.#options.level = normalizeLevel(this.#options.level)
         // 注册默认的控制台日志输出
         this.use("console",(new ConsoleTransport({
             enable:this.options.enable
@@ -67,8 +68,10 @@ export class VoerkaLogger{
             this.#cache = []
         }
     }
-    get level() { return this.options.level }
-    set level(value:VoerkaLoggerLevel) {this.options.level = value;} 
+    get level() { return this.options.level as VoerkaLoggerLevel; }
+    set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName) {
+        this.options.level = normalizeLevel(value)
+    } 
     get output() { return this.options.output  }   
     set output(value:string[]){
         this.options.output = value
@@ -133,7 +136,7 @@ export class VoerkaLogger{
             if(name.startsWith("!")) return
             const transport = this.#transportInstances[name]
             const limitLevel = transport.level || this.options.level
-            if ((record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
+            if ((record.level >= limitLevel || this.options.debug)) {                        
                 try{
                     transport._output(Object.assign({},record),vars)
                 }catch(e:any){

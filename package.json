@@ -11,7 +11,9 @@
     "prepare": "husky install",
     "build:all": "pnpm -r build",
     "release:all": "pnpm -r version:patch && pnpm build:all && pnpm changelog && git add . && git commit -m \"build: release all packages\" && pnpm -r release",
-    "changelog": "conventional-changelog -p angular -i ./docs/intro/changelog.md -s -r 0 && git add ./docs/intro/changelog.md"
+    "changelog": "conventional-changelog -p angular -i ./docs/intro/changelog.md -s -r 0 && git add ./docs/intro/changelog.md",
+    "sync":"cnpm sync @voerkalogger/core @voerkalogger/file @voerkalogger/http @voerkalogger/console"
+
   },
   "keywords": [],
   "author": "",

@@ -3,7 +3,7 @@
  * 支持控制台着色输出的日志传输器
  * 
  */ 
-import { TransportBaseOptions,TransportBase, TransportOptions, TransportOutputType } from '@VoerkaLogger/core';
+import { TransportBaseOptions,TransportBase, TransportOptions } from '@VoerkaLogger/core';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "@VoerkaLogger/core"
 import logsets from "logsets" 
 import { assignObject } from 'flex-tools';

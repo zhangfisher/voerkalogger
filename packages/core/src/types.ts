@@ -31,7 +31,7 @@ export interface VoerkaLoggerOptions{
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
     tags?:string[]                             
 }
-
+  
 export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
      
 }

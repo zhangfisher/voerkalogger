@@ -35,7 +35,7 @@ import { assignObject } from "flex-tools/object/assignObject";
 export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
     #transportInstances:Record<string,TransportBase>={}                     // 后端实例
-    #options?:DeepRequired<VoerkaLoggerOptions> 
+    #options?:DeepRequired<VoerkaLoggerOptions> & {level: VoerkaLoggerLevel}
     #rootScope?:VoerkaLoggerScope
     // 用来当enable=false时缓存日志,当enable=true时输出  [[record,vars],...]
     #cache:[any,any][] =[]        
@@ -43,7 +43,7 @@ export class VoerkaLogger{
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
+        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  & {level: VoerkaLoggerLevel} 
         this.#options.level = normalizeLevel(this.#options.level)
         // 注册默认的控制台日志输出
         this.use("console",new ConsoleTransport() as unknown as TransportBase)
@@ -144,7 +144,7 @@ export class VoerkaLogger{
      * 输出日志
      * @param {*}  
      */
-    log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}) {  
+    log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={},transports:string[]=[]) {  
         const msg = typeof(message)=='function' ? message() : message
         let record:VoerkaLoggerRecord =Object.assign({},this.options.context, {
             level:options.level, 
@@ -170,7 +170,7 @@ export class VoerkaLogger{
             this.outputToTransports(record,vars,['console'])
             return
         }                
-        this.outputToTransports(record,vars)
+        this.outputToTransports(record,vars,transports)
     }
     /**
      *  

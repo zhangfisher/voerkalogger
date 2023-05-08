@@ -38,6 +38,8 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     #logger?: VoerkaLogger
     #timerId: any = 0
     #outputSingal?:IAsyncSignal 
+    // 是否可用,比如HttpTransport参数没有提供配置参数时就不可用
+    #available:boolean = true               
     constructor(options?: TransportOptions<Options>) {
         this.#options = assignObject({
             level:VoerkaLoggerLevel.NOTSET,
@@ -48,6 +50,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         }, options) 
         this.#options.level = normalizeLevel(this.#options.level)
     }
+    get available(){ return this.#available }
     get level() { return this.#options.level as VoerkaLoggerLevel }
     set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName){        
         this.#options.level = normalizeLevel(value)
@@ -55,6 +58,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     get options() { return this.#options }
     set options(value) {         
         Object.assign(this.#options, value) 
+        this.onOptionUpdated(Object.keys(value))
     }
     get buffer() { return this.#buffer}
     get logger() { return this.#logger }    
@@ -67,6 +71,13 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         }else{
             this.destroy()
         }
+    }
+    /**
+     * 当配置发生变化时调用，供子类重载实现
+     * @param options 
+     */
+    onOptionUpdated(optionKeys:string[]) {
+
     }    
     /**
      * 绑定日志实例
@@ -75,10 +86,25 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      */
     _bind(logger: VoerkaLogger) {
         this.#logger = logger
-        if(this.#options.enable) this._outputLogs()        
+        this.#available = this.isAvailable()
+        // 检查是否可用，如果不可用则需要在控制台输出警告
+        if(!this.#available){
+            this.logger?.log("VoerkaLogger Transport <{}> is not available!",[this.constructor.name],{
+                level:VoerkaLoggerLevel.WARN,
+            },['console'])          
+        }
+        if(this.#options.enable) this._outputLogs()   
     }
     protected outputError(e:Error){
         outputError(e)
+    }
+    /**
+     * 返回当前Transport是否可用
+     * 比如HttpTransport参数没有提供url配置参数时就不可用
+     * @returns 
+     */
+    isAvailable():boolean{ 
+        return true
     }
     /**
      * 处理输入的插值变量列表参数
@@ -178,7 +204,11 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      * 马上将缓冲区的内容输出,一般情况下子类不需要重载本方法，而应该重载
      */
     async flush() {
-        if (this.#buffer.length == 0) return 
+        if (this.#buffer.length == 0) return         
+        if(!this.#available) {
+            this.#buffer = []
+            return 
+        }
         try {
             await this.output(this.#buffer)
         }catch (e: any) {

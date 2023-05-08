@@ -1,6 +1,6 @@
 import { assignObject, omit } from "flex-tools/object";
 import { type VoerkaLogger, VoerkaLoggerLevel } from "./Logger";
-import { LogMethodMessage, LogMethodOptions, LogMethodVars } from "./types";
+import { LogMethodMessage, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
 
 
 

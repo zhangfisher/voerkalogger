@@ -11,7 +11,7 @@ type HttpOutputType = VoerkaLoggerRecord & {
     scope:"888888"
 }
 const httpTransport = new HttpTransport<HttpOutputType>({
-    url:"/log",
+    url:"",
     format:function(record:VoerkaLoggerRecord,vars: LogMethodVars){
         return {
             ...record,

@@ -122,9 +122,9 @@ export function outputError(e:Error,now?:number){
  * 用来将日志级别转换为数字
  * 
  * 内部使用数字来标识日志级别，但是在配置时允许使用字符串来标识日志级别，
- * 比如：'debug','info','warn','error','fatal'
- * 比如：'DEBUG','INFO','WARN','ERROR','FATAL'
- * 也可以是数字：1,2,3,4,5
+ * 比如：'NOSET','debug','info','warn','error','fatal'
+ * 比如：'NOSET','DEBUG','INFO','WARN','ERROR','FATAL'
+ * 也可以是数字：0,1,2,3,4,5
  * 
  * 
  * @param level 
@@ -136,7 +136,7 @@ export function normalizeLevel(level:string | number | VoerkaLoggerLevel | Voerk
         const levelValue = VoerkaLoggerLevelNames.indexOf(level.toUpperCase())
         return levelValue<=0 ? VoerkaLoggerLevel.WARN : levelValue
     }else if(typeof(level)=='number'){
-        return level<0 || level>4 ? VoerkaLoggerLevel.WARN : level
+        return level<0 || level>5 ? VoerkaLoggerLevel.WARN : level
     }else{
         return VoerkaLoggerLevel.WARN
     }

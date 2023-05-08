@@ -1,9 +1,9 @@
 import type { DeepRequired } from "ts-essentials"
 import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
-import type { VoerkaLogger, VoerkaLoggerLevel  } from './Logger';
+import type { VoerkaLogger  } from './Logger';
 import { normalizeLevel, outputError } from "./utils";
 import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
-import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName } from "./consts"
+import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName,VoerkaLoggerLevel } from "./consts"
 import { assignObject } from "flex-tools/object/assignObject";
 import { formatDateTime } from "flex-tools/misc/formatDateTime"
 
@@ -40,6 +40,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     #outputSingal?:IAsyncSignal 
     constructor(options?: TransportOptions<Options>) {
         this.#options = assignObject({
+            level:VoerkaLoggerLevel.NOTSET,
             enable: true,
             bufferSize:200,
             flushInterval:10 * 1000 ,
@@ -131,6 +132,9 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      */
      _output(record: VoerkaLoggerRecord, inVars: LogMethodVars) {
         if(!this.enable) return
+        // 级别过滤
+        if(this.level!=VoerkaLoggerLevel.NOTSET && record.level<this.level) return
+        
         const output = this.format(record, inVars)
         if (output && this.options.bufferSize>0){
             this.#buffer.push(output)

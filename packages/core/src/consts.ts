@@ -2,6 +2,7 @@ import { VoerkaLoggerOptions } from "./types";
 
 
 export enum VoerkaLoggerLevel{
+    NOTSET = 0,
     DEBUG = 1,
     INFO = 2,
     WARN = 3,
@@ -9,6 +10,7 @@ export enum VoerkaLoggerLevel{
     FATAL = 5
 }
 export enum VoerkaLoggerLevelName{
+    NOTSET = 'NOTSET',
     DEBUG = 'DEBUG',
     INFO = 'INFO',
     WARN = 'WARN',
@@ -16,13 +18,13 @@ export enum VoerkaLoggerLevelName{
     FATAL = 'FATAL'
 }
 
-export const VoerkaLoggerLevelNames = [ 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL' ];
+export const VoerkaLoggerLevelNames = ['NOTSET' ,'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL' ];
 
 
 export const DefaultLoggerOptions:VoerkaLoggerOptions = {
     id               : "",
     enable          : true,
-    level            : VoerkaLoggerLevel.WARN,
+    level            : VoerkaLoggerLevel.NOTSET,
     debug            : false,
     output           : [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
     injectGlobal     : true,                          // 在globalThis注入一个logger全局变量

@@ -46,9 +46,7 @@ export class VoerkaLogger{
         this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  
         this.#options.level = normalizeLevel(this.#options.level)
         // 注册默认的控制台日志输出
-        this.use("console",(new ConsoleTransport({
-            enable:this.options.enable
-        })) as unknown as TransportBase)
+        this.use("console",new ConsoleTransport() as unknown as TransportBase)
         // 注入全局日志实例
         if(this.options.injectGlobal){
             (globalThis as any)[this.options.injectGlobal===true ? "logger" : this.options.injectGlobal] = this
@@ -83,8 +81,6 @@ export class VoerkaLogger{
     get transports() { return this.#transportInstances; }
     /**
     * 部署安装后端实例
-    * - 默认enable与logger一致
-    * - 
     */
     use<T extends TransportBase=TransportBase>(name:string,transportInstance:T){
         transportInstance._bind(this)     
@@ -132,11 +128,10 @@ export class VoerkaLogger{
      */
     private outputToTransports(record:VoerkaLoggerRecord,vars:any,targets:string[]=[]){
         if(targets.length==0) targets= Object.keys(this.#transportInstances)        
-        targets.forEach((name) => {
-            if(name.startsWith("!")) return
+        targets.forEach((name) => {            
+            if(name.startsWith("!")) return         // 以!开头的transport不输出
             const transport = this.#transportInstances[name]
-            const limitLevel = transport.level || this.options.level
-            if ((record.level >= limitLevel || this.options.debug)) {                        
+            if ((record.level >= this.options.level || record.level==VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
                 try{
                     transport._output(Object.assign({},record),vars)
                 }catch(e:any){

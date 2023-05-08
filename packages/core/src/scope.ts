@@ -17,34 +17,6 @@ export class VoerkaLoggerScope{
         this.#options = assignObject({},options)
     }
     get logger(){return this.#logger} 
-    private log(message:LogMethodMessage,vars:LogMethodVars={},options:LogMethodOptions={}){
-        const logger = this.logger
-        const msg = typeof(message)=='function' ? message() : message
-        let record:VoerkaLoggerRecord =assignObject({},logger.options.context, {
-            level:options.level,
-            timestamp:Date.now(),
-            message:msg,
-            ...logger.options.scope || {},
-            ...options,
-            ...this.#options
-        })            
-        if(record.error instanceof Error){
-            const err = record.error as Error
-            record.error = err.message
-            record.errorStack = err.stack
-            record.errorLine = err.stack
-        }
-        Object.values(logger.transports).forEach((transportInst) => {
-            const limitLevel = transportInst.level || logger.options.level
-            if ((record.level >= limitLevel || limitLevel === VoerkaLoggerLevel.NOTSET || logger.options.debug)) {                        
-                try{
-                    transportInst._output(record,vars)
-                }catch{
-
-                }
-            }
-        })
-    }
     /**
      *  
      *  logger.debug(message,{插值变量},{tags,module,error})
@@ -52,19 +24,19 @@ export class VoerkaLoggerScope{
      *  如果变量或message是函数会自动调用
      */
     debug(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this.log(message,vars,{...options,level:VoerkaLoggerLevel.DEBUG});
+        this.logger.log(message,vars,{...options,level:VoerkaLoggerLevel.DEBUG});
     }
     info(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
-        this.log(message,vars,{...options,level:VoerkaLoggerLevel.INFO});
+        this.logger.log(message,vars,{...options,level:VoerkaLoggerLevel.INFO});
     }
     warn(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
-        this.log(message,vars,{...options,level:VoerkaLoggerLevel.WARN});
+        this.logger.log(message,vars,{...options,level:VoerkaLoggerLevel.WARN});
     }
     error(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this.log(message,vars,{...options,level:VoerkaLoggerLevel.ERROR});
+        this.logger.log(message,vars,{...options,level:VoerkaLoggerLevel.ERROR});
     }
     fatal(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this.log(message,vars,{...options,level:VoerkaLoggerLevel.FATAL});
+        this.logger.log(message,vars,{...options,level:VoerkaLoggerLevel.FATAL});
     }   
     /**
      * 创建子作用域
@@ -77,7 +49,6 @@ export class VoerkaLoggerScope{
             module,            
             ...omit(this.#options,["module"])
         });
-    } 
-    
+    }     
 }
 

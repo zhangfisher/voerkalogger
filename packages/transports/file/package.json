@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/file",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "File transport for voerkalogger",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

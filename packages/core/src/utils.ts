@@ -9,7 +9,8 @@ import {
 	VoerkaLoggerLevel,
 	VoerkaLoggerLevelName,
 } from "./consts";
-import { isPlainObject, mapObject } from "flex-tools";
+import { isPlainObject } from "flex-tools/typecheck/isPlainObject";
+import { mapObject } from "flex-tools/object/mapObject";
 import type { VoerkaLogger } from "./Logger";
 
 export function isFunction(fn: any) {
@@ -214,5 +215,5 @@ const presetColors: any = {
 };
 
 export function colorize(message: string, color: keyof typeof presetColors) {
-	return `\u001b[${presetColors[color]}m${message}\u001b[39m`;
+	return "\x1b["+presetColors[color]+"m"+message+"\x1b[0m";
 }

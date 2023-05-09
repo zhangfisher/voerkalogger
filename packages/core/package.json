@@ -25,6 +25,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "ansicolor": "^1.1.100",
         "chalk": "^5.2.0",
         "flex-tools": "^1.0.90"
     },

@@ -9,8 +9,9 @@
 import { TransportBaseOptions,TransportBase, TransportOptions } from './transport';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
 import { assignObject } from 'flex-tools/object/assignObject';
-import chalk from "chalk"
 import { colorize } from './utils';
+import ansicolor from "ansicolor"
+import { isNumber } from 'flex-tools/typecheck/isNumber';
 
 const consoleMethods=[
     console.log,
@@ -28,16 +29,32 @@ export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
 export default class ConsoleTransport extends TransportBase<ConsoleTransportOptions>{     
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
         super(assignObject({
-            // 关闭缓冲区，控制台输出不需要启用异步输出
             bufferSize:0,     
             format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
         },options)) 
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
         const { format } = this.options
+        const inBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'
         try{         
             const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format           
-            record.message = record.message.params(interpVars)            
+            if(inBrowser){
+                record.message = record.message.params(interpVars)            
+            }else{
+                record.message = record.message.params(interpVars,{
+                    $forEach:(name:string,value:string,prefix:string,suffix:string):[string,string,string ]=>{
+                        const varType = isNumber(value) ? 'number' : ( value === 'true' || value === 'false' ? 'boolean' : 'string')
+                        if(varType=='number'){
+                            value = ansicolor.yellow(value)
+                        }else if(varType=='string'){
+                            value = ansicolor.green(value)
+                        }else if(varType=='boolean'){
+                            value = ansicolor.cyan(value)
+                        }
+                        return [prefix,value,suffix]            
+                    }})            
+            }
+            
             const vars ={
                 ...this.getInterpVars(record),
                 ...record,
@@ -45,22 +62,22 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             let output = template!.params(vars)    
 
             const level = record.level 
-            if(level==5){   // fatal
-                output =colorize(output,'brightRed')
-            }else if(level==4){ // error
-                output =colorize(output,'red')
-            }else if(level==3){ // warn
-                output = colorize(output,'yellow')
-            }else if(level==2){ // info
-                output = colorize(output,'white')
-            }else{             // debug
-                output = colorize(output,'darkGray')
-            }
-            console.log(output)
-            return
-            const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
-            logMethod(output.params(vars))      
-                  
+            if(inBrowser){
+                const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
+                logMethod(output.params(vars))  
+            }else{
+                if(level==5){   // fatal
+                    output =ansicolor.lightRed(output)
+                }else if(level==4){ // error
+                    output =ansicolor.red(output)
+                }else if(level==3){ // warn
+                    output = ansicolor.yellow(output)
+                }else if(level==2){ // info
+                }else{             // debug
+                    output = ansicolor.darkGray(output)
+                }
+                console.log(output)
+            }     
         }catch(e:any){   
             console.error(e.stack)
         }        

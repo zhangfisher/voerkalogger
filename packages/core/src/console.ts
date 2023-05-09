@@ -9,7 +9,9 @@
 import { TransportBaseOptions,TransportBase, TransportOptions } from './transport';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
 import { assignObject } from 'flex-tools/object/assignObject';
-  
+import chalk from "chalk"
+import { colorize } from './utils';
+
 const consoleMethods=[
     console.log,
 	console.debug,
@@ -39,10 +41,26 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             const vars ={
                 ...this.getInterpVars(record),
                 ...record,
+            }            
+            let output = template!.params(vars)    
+
+            const level = record.level 
+            if(level==5){   // fatal
+                output =colorize(output,'brightRed')
+            }else if(level==4){ // error
+                output =colorize(output,'red')
+            }else if(level==3){ // warn
+                output = colorize(output,'yellow')
+            }else if(level==2){ // info
+                output = colorize(output,'white')
+            }else{             // debug
+                output = colorize(output,'darkGray')
             }
-            const output = template!.params(vars)
+            console.log(output)
+            return
             const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
-            logMethod(output.params(vars))            
+            logMethod(output.params(vars))      
+                  
         }catch(e:any){   
             console.error(e.stack)
         }        

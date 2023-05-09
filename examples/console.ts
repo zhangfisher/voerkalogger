@@ -1,9 +1,7 @@
-import { TransportBase, VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
-import ConsoleTransport from "../packages/transports/console";
+import {  VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
 import { timer } from "flex-tools" 
 
 let log = new VoerkaLogger()
-log.use("console",new ConsoleTransport() as unknown as TransportBase)
 log.level = VoerkaLoggerLevel.NOTSET
 timer.begin()
 log.error("程序出错{}",new TypeError("数据类型出错"))

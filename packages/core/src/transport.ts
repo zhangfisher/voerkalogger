@@ -6,7 +6,7 @@ import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
 import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName,VoerkaLoggerLevel } from "./consts"
 import { assignObject } from "flex-tools/object/assignObject";
 import { formatDateTime } from "flex-tools/misc/formatDateTime"
-
+import type {ChangeFieldType} from "flex-tools/types"
 
 export interface TransportBaseOptions<Output>{
     enable?      : boolean                                             // 可以单独关闭指定的日志后端
@@ -33,7 +33,7 @@ export type TransportOutputType<T extends TransportBaseOptions<any>> =  T['forma
  * <Output> 是日志经过Formatter后的输出结果类型 
 */
 export class TransportBase<Options extends TransportBaseOptions<any> = TransportBaseOptions<any>>{
-    #options: DeepRequired<Options> & {level:VoerkaLoggerLevel}
+    #options: ChangeFieldType<DeepRequired<Options>,'level',VoerkaLoggerLevel>
     #buffer: TransportOutputType<Options>[] = []
     #logger?: VoerkaLogger
     #timerId: any = 0
@@ -51,7 +51,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         this.#options.level = normalizeLevel(this.#options.level)
     }
     get available(){ return this.#available }
-    get level() { return this.#options.level as VoerkaLoggerLevel }
+    get level() { return this.#options.level  }
     set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName){        
         this.#options.level = normalizeLevel(value)
     }
@@ -159,7 +159,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      _output(record: VoerkaLoggerRecord, inVars: LogMethodVars) {
         if(!this.enable) return
         // 级别过滤
-        if(this.level!=VoerkaLoggerLevel.NOTSET && record.level<this.level) return
+        if(this.#options.level !=VoerkaLoggerLevel.NOTSET && record.level<this.#options.level) return
         
         const output = this.format(record, inVars)
         if (output && this.options.bufferSize>0){

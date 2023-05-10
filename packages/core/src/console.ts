@@ -62,10 +62,11 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             let output = template!.params(vars)    
 
             const level = record.level 
+            // 在浏览器端采用console输出
             if(inBrowser){
                 const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
                 logMethod(output.params(vars))  
-            }else{
+            }else{// 在node端采用ansicolor着色输出
                 if(level==5){   // fatal
                     output =ansicolor.lightRed(output)
                 }else if(level==4){ // error

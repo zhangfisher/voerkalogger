@@ -316,7 +316,7 @@ logger.use("http",new HttpTransport<HttpOutputType>({
 ```typescript
 export interface TransportBaseOptions<Output>{
     enable?      : boolean                        // 可以单独关闭指定的日志后端
-    level?        : VoerkaLoggerLevel
+    level?        : VoerkaLoggerLevel | VoerkaLoggerLevelName
     format?       : VoerkaLoggerFormatter<Output> | string | null    // 格式化日志
     // 缓冲区满或达到间隔时间时进行日志输出
     // 如果bufferSize=0则禁用输出，比如ConsoleTransport就禁用输出

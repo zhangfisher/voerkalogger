@@ -196,6 +196,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
                     await this.flush()
                 } 
             }finally{
+                await this.flush()
                 this.#outputSingal.destroy()
             }
         },0)        
@@ -218,6 +219,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         }      
     }    
     async destroy() { 
+        await this.flush()
         this.#outputSingal?.destroy()
     }
     // *************** 操作日志***************

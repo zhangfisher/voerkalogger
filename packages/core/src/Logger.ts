@@ -195,9 +195,7 @@ export class VoerkaLogger{
     }  
 
     async destory(){
-        Object.values(this.#transportInstances).forEach(instance=>{
-            instance.destroy()
-        })
+        await Promise.allSettled(Object.values(this.#transportInstances).map(instance=>instance.destroy()))
     }
     /**
      * 创建一个日志作用域

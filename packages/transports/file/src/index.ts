@@ -5,9 +5,9 @@
  */
 import "flex-tools/string"
 import { TransportBase, TransportBaseOptions, TransportOptions } from "@voerkalogger/core"
-import { assignObject } from "flex-tools/object"
+import { assignObject } from "flex-tools/object/assignObject"
 import type { FileSize } from "flex-tools/types"
-import { parseFileSize } from "flex-tools"
+import { parseFileSize } from "flex-tools/misc"
 import path from "path"
 import fs  from "fs-extra" 
 import { zip } from "./zip"

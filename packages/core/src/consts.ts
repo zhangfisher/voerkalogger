@@ -24,7 +24,7 @@ export const VoerkaLoggerLevelNames = ['NOTSET' ,'DEBUG', 'INFO', 'WARN', 'ERROR
 export const DefaultLoggerOptions:VoerkaLoggerOptions = {
     id               : "",
     enable          : true,
-    level            : VoerkaLoggerLevel.WARN,
+    level            : VoerkaLoggerLevel.DEBUG,
     debug            : false,
     output           : [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
     injectGlobal     : true,                          // 在globalThis注入一个logger全局变量

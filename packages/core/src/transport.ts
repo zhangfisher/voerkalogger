@@ -89,7 +89,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         this.#available = this.isAvailable()
         // 检查是否可用，如果不可用则需要在控制台输出警告
         if(!this.#available){
-            this.logger?.log("VoerkaLogger Transport <{}> is not available!",[this.constructor.name],{
+            this.logger?.log("VoerkaLogger <{}> is not available!",[this.constructor.name],{
                 level:VoerkaLoggerLevel.WARN,
             },['console'])          
         }

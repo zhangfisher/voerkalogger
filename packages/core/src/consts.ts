@@ -1,4 +1,4 @@
-import { VoerkaLoggerOptions } from "./types";
+import { VoerkaLoggerConstructorOptions } from "./types";
 
 
 export enum VoerkaLoggerLevel{
@@ -20,20 +20,18 @@ export enum VoerkaLoggerLevelName{
 
 export const VoerkaLoggerLevelNames = ['NOTSET' ,'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL' ];
 
-
-export const DefaultLoggerOptions:VoerkaLoggerOptions = {
+// 用在构造函数参数
+export const DefaultLoggerOptions:VoerkaLoggerConstructorOptions = {
     id               : "",
     enable          : true,
     level            : VoerkaLoggerLevel.DEBUG,
     debug            : false,
     output           : [process.env.NODE_ENV === 'test' ?  "file" : 'console'],
-    injectGlobal     : true,                          // 在globalThis注入一个logger全局变量
-    catchGlobalErrors: true,                    // 是否自动捕获全局错误
-    bufferSize       : 200,                            // 缓存大小
+    injectGlobal     : true,                                // 在globalThis注入一个logger全局变量
+    catchGlobalErrors: true,                                // 是否自动捕获全局错误
+    bufferSize       : 200,                                 // 缓存大小
     scope            : {}
 }  
- 
-
 
 
  

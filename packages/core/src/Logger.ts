@@ -23,27 +23,27 @@
 import { DefaultLoggerOptions, VoerkaLoggerLevel, VoerkaLoggerLevelName, VoerkaLoggerLevelNames } from './consts';
 import { safeCall, normalizeLevel } from './utils';
 import {TransportBase} from "./transport";
-import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from './types';
+import { VoerkaLoggerConstructorOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage,VoerkaLoggerOptions } from './types';
 import ConsoleTransport from "./console";
 import { DeepRequired } from "ts-essentials"  
 import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
 import { assignObject } from "flex-tools/object/assignObject";
-
+import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';
 
 
 
 export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
     #transportInstances:Record<string,TransportBase>={}                     // 后端实例
-    #options?:DeepRequired<VoerkaLoggerOptions> & {level: VoerkaLoggerLevel}
+    #options?:VoerkaLoggerOptions
     #rootScope?:VoerkaLoggerScope
     // 用来当enable=false时缓存日志,当enable=true时输出  [[record,vars],...]
     #cache:[any,any][] =[]        
-    constructor(options?:VoerkaLoggerOptions) {
+    constructor(options?:VoerkaLoggerConstructorOptions) {
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions>  & {level: VoerkaLoggerLevel} 
+        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerConstructorOptions>  & {level: VoerkaLoggerLevel} 
         this.#options.level = normalizeLevel(this.#options.level)
         // 注册默认的控制台日志输出
         this.use("console",new ConsoleTransport() as unknown as TransportBase)
@@ -56,7 +56,16 @@ export class VoerkaLogger{
         VoerkaLogger.LoggerInstance = this              
         this.#rootScope = new VoerkaLoggerScope(this,{module:this.options.scope.module})  
     }    
-    get options() {return this.#options!}    
+    get options():VoerkaLoggerOptions {return this.#options!}    
+    set options(value:VoerkaLoggerConstructorOptions) { 
+        Object.entries(this.#transportInstances).forEach(([name,transport])=>{
+            if((name in value) && isPlainObject(value[name])){
+                transport.options = value[name] as any  // 该操作是局部更新
+                delete value[name]
+            }
+        })
+        Object.assign(this.#options!,value)  
+    }
     get enable() { return this.options.enable; }
     set enable(value) { 
         this.options.enable = value; 
@@ -212,5 +221,3 @@ export class VoerkaLogger{
 
 export * from "./consts"
 
-
- 

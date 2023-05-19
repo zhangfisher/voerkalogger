@@ -1,6 +1,7 @@
 import type { VoerkaLoggerLevel } from "./consts"
 import type { VoerkaLogger } from "./Logger"
 import { VoerkaLoggerLevelName } from './consts';
+import type { DeepRequired } from "ts-essentials";
 
 
 /**
@@ -17,8 +18,8 @@ export interface VoerkaLoggerScope{
 
 
 
-// 日志配置
-export interface VoerkaLoggerOptions{
+// 日志配置，用于构建VoerkaLogger实例时使用，全部使用可选参数
+export interface VoerkaLoggerConstructorOptions{
     id?: string                                         // 当前应用ID
     enable?:boolean                                     // 全局开关
     scope?: VoerkaLoggerScope                           // 用来标识当前应用，如设备所在的IP地址，或者用户名称等
@@ -30,9 +31,14 @@ export interface VoerkaLoggerOptions{
     bufferSize?:number                                  // 缓冲区大小，当缓冲区满时保留最新的日志
     catchGlobalErrors?: boolean                         // 是否捕获全局错误
     tags?:string[]                             
+    [key: string]:any                                   // 其他参数
 }
+
+
+export type VoerkaLoggerOptions=  DeepRequired<VoerkaLoggerConstructorOptions> & {level: VoerkaLoggerLevel}
+
   
-export interface VoerkaLoggerConfiguration extends VoerkaLoggerOptions{
+export interface VoerkaLoggerConfiguration extends VoerkaLoggerConstructorOptions{
      
 }
 

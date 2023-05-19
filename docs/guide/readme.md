@@ -70,6 +70,23 @@ logger.options = {
 logger.enable = true
 
 ```
+## 更新配置
+
+通过`logger.options={...}`可以更新日志配置，该操作采用的是`Object.assign`方式，所以可以只更新部分配置，比如：
+
+```typescript
+console.log(logger.options)   // 读取到的是所有配置参数
+logger.options={level:VoerkaLoggerLevel.WARN}  // 只更新日志级别，而不影响其他配置
+```
+也可以直接更新已经安装的`Transport`配置，比如：
+
+```typescript
+logger.options={
+    file:{
+        maxCount:10
+    }
+}
+```
 
 ## 日志级别
 

@@ -20,6 +20,7 @@
 * **console-transport:** 新增加适用于nodejs的增强控制台输出transport ([b1288f5](https://gitee.com/zhangfisher/voerkalogger/commits/b1288f5cb26c0d38b68f91089088a8c019437fcf))
 * **core,console-transport:** 更新延迟输出机制 ([aeae2e9](https://gitee.com/zhangfisher/voerkalogger/commits/aeae2e9df51a29925ea2ec55d40a0ed5e994278d))
 * **core:** `logger.level`现在支持使用数字或大小写无关的字符串来配置 ([1b80819](https://gitee.com/zhangfisher/voerkalogger/commits/1b80819c765c99947c5297d1563375129e1e2b12))
+* **core:** `logger.options.output`构建时可以使用`console,file`形式的参数，内部转换为['console','file']数组 ([2711c23](https://gitee.com/zhangfisher/voerkalogger/commits/2711c233753fe71a073fbe3f8d1bd926cf509e09))
 * **core:** 调整`enabled`属性行行为，当`enabled=false`时会先输出到缓冲区 ([b048aad](https://gitee.com/zhangfisher/voerkalogger/commits/b048aad04b767d0e6913aa75b9cecb3fca81c956))
 * **core:** 调整日志输出策略 ([e8d0805](https://gitee.com/zhangfisher/voerkalogger/commits/e8d0805caa64bebc532cba22e023436dbc94f109))
 * **core:** 调整实例创建模式,import时不再默认创建实例 ([69d50c9](https://gitee.com/zhangfisher/voerkalogger/commits/69d50c94ef53d5192eebbd5d0a6c7a918dec648c))

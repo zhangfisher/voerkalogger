@@ -12,6 +12,7 @@
 * **core,console-transport:** 修复enable导致的延迟输出功能 ([2083cad](https://gitee.com/zhangfisher/voerkalogger/commits/2083cad52546efee1fa8fb4d0df73ac2a644e0ac))
 * **core:** 解决enabled=false时的延迟输出问题 ([2d449ab](https://gitee.com/zhangfisher/voerkalogger/commits/2d449aba98be508e82cd055a6d27c8a52a0dcfc7))
 * **core:** 修复`destory`时执行`flush`逻辑 ([f20d6ec](https://gitee.com/zhangfisher/voerkalogger/commits/f20d6ecb4186e1a30c75f85b01f51edb5fd9b4b3))
+* **core:** 修复延迟输出不能正常工作的问题 ([5f9ea6d](https://gitee.com/zhangfisher/voerkalogger/commits/5f9ea6d2191ded55f1acaa198aaae523e14655d5))
 
 
 ### Features

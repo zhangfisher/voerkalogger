@@ -72,13 +72,14 @@ export class VoerkaLogger{
         this.options.enable = value; 
         // 如果enable=true,则输出缓冲区的日志
         if(value && this.#cache.length>0){
-            this.#cache.forEach(([record,vars])=>this.outputToTransports(record,vars,["!console"]))
-            this.#cache = []
+            this.#cache.forEach(([record,vars])=>this.outputToTransports(record,vars,{excludes:["console"]}))
+            this.#cache = [] 
         }
     }
     get levelName(){ return VoerkaLoggerLevelNames[this.options.level]}
     get level() { return this.options.level as VoerkaLoggerLevel; }    
     set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName) {this.options.level = normalizeLevel(value)}     
+    get cache() { return this.#cache; }
     get output() { return this.options.output  }   
     set output(value:string[]){
         this.options.output = value
@@ -135,10 +136,15 @@ export class VoerkaLogger{
      * @param vars 
      * @param exclude 排除输出的transport名称
      */
-    private outputToTransports(record:VoerkaLoggerRecord,vars:any,targets:string[]=[]){
-        if(targets.length==0) targets= Object.keys(this.#transportInstances)        
-        targets.forEach((name) => {            
-            if(name.startsWith("!")) return         // 以!开头的transport不输出
+    private outputToTransports(record:VoerkaLoggerRecord,vars:any,{includes=[],excludes=[]}:{includes?:string[],excludes?:string[]}){
+        if(includes && includes.length==0){
+            includes= Object.keys(this.#transportInstances)        
+        } 
+        if(excludes && excludes.length>0){
+            includes = includes.filter(name=>!excludes.includes(name))
+        }
+        includes.forEach((name) => {            
+            if(!(name in this.#transportInstances)) return         // 以!开头的transport不输出
             const transport = this.#transportInstances[name]
             if ((record.level >= this.options.level || record.level==VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
                 try{
@@ -176,10 +182,10 @@ export class VoerkaLogger{
             }
             this.#cache.push([record,vars])
             // 如果此时console.enable=true,则输出
-            this.outputToTransports(record,vars,['console'])
+            this.outputToTransports(record,vars,{includes:['console']})
             return
         }                
-        this.outputToTransports(record,vars,transports)
+        this.outputToTransports(record,vars,{includes:transports})
     }
     /**
      *  

@@ -25,7 +25,13 @@ const consoleMethods=[
 export interface ConsoleTransportOptions extends TransportBaseOptions<void>{
      
 }
-
+function inBrowser(){
+    try{
+        return typeof window !== 'undefined' && typeof window.document !== 'undefined'
+    }catch{
+        return false
+    }    
+}
 export default class ConsoleTransport extends TransportBase<ConsoleTransportOptions>{     
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
         super(assignObject({
@@ -35,10 +41,10 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
         const { format } = this.options
-        const inBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'
+        let  isBrowser = inBrowser()
         try{         
             const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format           
-            if(inBrowser){
+            if(isBrowser){
                 record.message = record.message.params(interpVars)            
             }else{
                 record.message = record.message.params(interpVars,{
@@ -63,7 +69,7 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
 
             const level = record.level 
             // 在浏览器端采用console输出
-            if(inBrowser){
+            if(isBrowser){
                 const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
                 logMethod(output.params(vars))  
             }else{// 在node端采用ansicolor着色输出

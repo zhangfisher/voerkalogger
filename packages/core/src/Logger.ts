@@ -20,7 +20,7 @@
  *  
  * 
  */
-import { DefaultLoggerOptions, VoerkaLoggerLevel, VoerkaLoggerLevelName  } from "./consts" 
+import { DefaultLoggerOptions, VoerkaLoggerLevel, VoerkaLoggerLevelName, VoerkaLoggerLevelNames } from './consts';
 import { safeCall, normalizeLevel } from './utils';
 import {TransportBase} from "./transport";
 import { VoerkaLoggerOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage } from './types';
@@ -66,10 +66,9 @@ export class VoerkaLogger{
             this.#cache = []
         }
     }
-    get level() { return this.options.level as VoerkaLoggerLevel; }
-    set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName) {
-        this.options.level = normalizeLevel(value)
-    } 
+    get levelName(){ return VoerkaLoggerLevelNames[this.options.level]}
+    get level() { return this.options.level as VoerkaLoggerLevel; }    
+    set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName) {this.options.level = normalizeLevel(value)}     
     get output() { return this.options.output  }   
     set output(value:string[]){
         this.options.output = value

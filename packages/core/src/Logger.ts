@@ -43,7 +43,8 @@ export class VoerkaLogger{
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerConstructorOptions>  & {level: VoerkaLoggerLevel} 
+        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions> 
+        if(typeof(this.#options.output)=='string') this.#options.output = this.#options.output.split(",")
         this.#options.level = normalizeLevel(this.#options.level)
         // 注册默认的控制台日志输出
         this.use("console",new ConsoleTransport() as unknown as TransportBase)

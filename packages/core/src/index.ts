@@ -4,6 +4,6 @@ export * from "./Logger"
 export * from "./consts"
 export * from "./types"
 export * from "./transport"
- 
+export * from "./scope"
 
 

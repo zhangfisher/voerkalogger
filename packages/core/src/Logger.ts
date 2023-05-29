@@ -26,7 +26,7 @@ import {TransportBase} from "./transport";
 import { VoerkaLoggerConstructorOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage,VoerkaLoggerOptions } from './types';
 import ConsoleTransport from "./console";
 import { DeepRequired } from "ts-essentials"  
-import { LoggerScopeOptions, VoerkaLoggerScope } from "./scope";
+import { VoerkaLoggerScope, VoerkaLoggerScopeOptions } from "./scope";
 import { assignObject } from "flex-tools/object/assignObject";
 import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';
 
@@ -219,12 +219,8 @@ export class VoerkaLogger{
      * 
      * @returns 
      */
-     createScope(options:LoggerScopeOptions):VoerkaLoggerScope{
+     createScope(options:VoerkaLoggerScopeOptions):VoerkaLoggerScope{
         return new VoerkaLoggerScope(this,options)
     }
 }
  
- 
-
-export * from "./consts"
-

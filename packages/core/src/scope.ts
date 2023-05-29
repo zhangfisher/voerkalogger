@@ -1,18 +1,26 @@
 import { assignObject, omit } from "flex-tools/object";
-import { type VoerkaLogger, VoerkaLoggerLevel } from "./Logger";
-import { LogMethodMessage, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord } from "./types";
+import { type VoerkaLogger } from "./Logger";
+import { LogMethodMessage, LogMethodOptions, LogMethodVars } from "./types";
+import {  VoerkaLoggerLevel } from "./consts";
 
 
-
-export type LoggerScopeOptions = {
-    module: string     
-} & {[key: string]: string | number | boolean}
+/**
+ * 用来标识日志的作用域信息
+ */
+export interface VoerkaLoggerScopeOptions{
+    version?: string                                    // 设备或应用软件版本号   
+    module?: string                                     // 模块名称
+    app?: string                                        // 应用名称
+    host?: string                                       // 当前主机名称，如IP地址或
+    sn?: string                                         // 设备序列号
+    [key: string]: string | number | boolean | undefined
+}
 
 
 export class VoerkaLoggerScope{
-    #options: LoggerScopeOptions
+    #options: VoerkaLoggerScopeOptions
     #logger: VoerkaLogger;
-    constructor(logger:VoerkaLogger, options:LoggerScopeOptions){
+    constructor(logger:VoerkaLogger, options:VoerkaLoggerScopeOptions){
         this.#logger = logger;
         this.#options = assignObject({},options)
     }
@@ -43,7 +51,7 @@ export class VoerkaLoggerScope{
      * @param options 
      * @returns 
      */
-    createScope(options:LoggerScopeOptions):VoerkaLoggerScope{
+    createScope(options:VoerkaLoggerScopeOptions):VoerkaLoggerScope{
         const module =this.#options.module ?  `${this.#options.module}/${options.module}` : options.module
         return new VoerkaLoggerScope(this.logger,{
             module,            

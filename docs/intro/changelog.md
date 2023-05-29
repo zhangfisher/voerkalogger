@@ -10,6 +10,7 @@
 * **core,console-transport:** 调整`enable`属性对控制台的输出 ([341f1ac](https://gitee.com/zhangfisher/voerkalogger/commits/341f1acf4a010028566d658b6f3a8ccf31fa0d8c))
 * **core,console-transport:** 调整参数并优化文档说明 ([7ea64b4](https://gitee.com/zhangfisher/voerkalogger/commits/7ea64b49e884e6be2f13573759fb127a95c81510))
 * **core,console-transport:** 修复enable导致的延迟输出功能 ([2083cad](https://gitee.com/zhangfisher/voerkalogger/commits/2083cad52546efee1fa8fb4d0df73ac2a644e0ac))
+* **core:** 解决未导出VoerkaLoggerScope的问题 ([d79085a](https://gitee.com/zhangfisher/voerkalogger/commits/d79085acd248f81b08e1ac9e9639e06f427e4efc))
 * **core:** 解决enabled=false时的延迟输出问题 ([2d449ab](https://gitee.com/zhangfisher/voerkalogger/commits/2d449aba98be508e82cd055a6d27c8a52a0dcfc7))
 * **core:** 修复`destory`时执行`flush`逻辑 ([f20d6ec](https://gitee.com/zhangfisher/voerkalogger/commits/f20d6ecb4186e1a30c75f85b01f51edb5fd9b4b3))
 * **core:** 修复`VoerkaLoggerScopeOptions`类型冲突 ([40964c8](https://gitee.com/zhangfisher/voerkalogger/commits/40964c8e1dc089310c0d44b9f07801f53553fc06))

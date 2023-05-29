@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/http",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "Http transport for voerkalogger",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -1,10 +1,11 @@
-# 1.0.0 (2023-05-29)
+# 1.0.0 (2023-05-31)
 
 
 ### Bug Fixes
 
 * 更新控制台输出机制 ([0c1e13f](https://gitee.com/zhangfisher/voerkalogger/commits/0c1e13f2ecfe849de862c98cf7cbc8aeeec8a66e))
 * 修复控制台着色输出问题 ([a6811f4](https://gitee.com/zhangfisher/voerkalogger/commits/a6811f41d2dbb9bc58c2664436ed121e8bd7d9d6))
+* 修改`format`参数中的插值变量替换机制 ([60b20fc](https://gitee.com/zhangfisher/voerkalogger/commits/60b20fc21273da8308d0f7b6d1461535e677b4cb))
 * 移除packages/transports/console ([224f2e8](https://gitee.com/zhangfisher/voerkalogger/commits/224f2e87a0ded2ecb5726c0cd01cc43fe1108450))
 * 优化引入`flex-tools` ([55dd4c4](https://gitee.com/zhangfisher/voerkalogger/commits/55dd4c4df9a497d7c290937dd48e578f519d3662))
 * **core,console-transport:** 调整`enable`属性对控制台的输出 ([341f1ac](https://gitee.com/zhangfisher/voerkalogger/commits/341f1acf4a010028566d658b6f3a8ccf31fa0d8c))

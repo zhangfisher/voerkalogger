@@ -43,6 +43,7 @@ export interface VoerkaLoggerRecord{
     error?: string | Error                      // 错误信息
     tags?:string[]                              // 日志标签
     module?:string,                             // 应用模块名称或源文件，使用/分割
+    lineno?:number,                             // 代码行号
     [key: string]:any                           // 额外的信息
 }
 

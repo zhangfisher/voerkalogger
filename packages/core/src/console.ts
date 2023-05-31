@@ -9,9 +9,9 @@
 import { TransportBaseOptions,TransportBase, TransportOptions } from './transport';
 import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
 import { assignObject } from 'flex-tools/object/assignObject';
-import { colorize } from './utils';
 import ansicolor from "ansicolor"
 import { isNumber } from 'flex-tools/typecheck/isNumber';
+import {isNothing} from 'flex-tools/typecheck/isNothing'
 
 const consoleMethods=[
     console.log,
@@ -36,7 +36,7 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
         super(assignObject({
             bufferSize:0,     
-            format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}"    
+            format:"[{levelName}] - {datetime} : {message}{<,tags=>tags}{<(>app/module/func/lineno<)>}"    
         },options)) 
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
@@ -48,7 +48,7 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
                 record.message = record.message.params(interpVars)            
             }else{
                 record.message = record.message.params(interpVars,{
-                    $forEach:(name:string,value:string,prefix:string,suffix:string):[string,string,string ]=>{
+                    $forEach:(name:string,value:string,prefix:string,suffix:string)=>{
                         const varType = isNumber(value) ? 'number' : ( value === 'true' || value === 'false' ? 'boolean' : 'string')
                         if(varType=='number'){
                             value = ansicolor.yellow(value)
@@ -61,11 +61,28 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
                     }})            
             }
             
-            const vars ={
+            const vars:Record<string,any> = {
                 ...this.getInterpVars(record),
                 ...record,
-            }            
-            let output = template!.params(vars)    
+            }       
+
+            let output = template!.params(vars,{
+                $forEach:(name:string,value:string,prefix:string,suffix:string)=>{
+                    if(name.includes("/")){
+                        const varnames = name.split("/")
+                        // 如果所有的变量都是空的，则返回
+                        const isEmpty = varnames.every((name:string)=>isNothing(name in vars ? vars[name] : null))
+                        if(isEmpty){
+                            return null
+                        }else{
+                            value = varnames.map((name:string)=>{
+                               return vars[name] = vars[name] || ""
+                            }).filter(v=>String(v).length>0).join("/")
+                            return [ansicolor.darkGray(prefix),ansicolor.darkGray(value),ansicolor.darkGray(suffix)]
+                        }
+                    }
+                }
+            })    
 
             const level = record.level 
             // 在浏览器端采用console输出

@@ -390,17 +390,34 @@ VoerkaLoggerFormatter<Output> | string | null
 }
 ```
 
-默认的`format`参数值是:`[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}`
+默认的`format`参数值是:`[{levelName}] - {datetime} : {message}{<,tags=>tags}{<(>app/module/func/lineno<)>}`
 
-注意：插值字符串中的`{<,module=>module}`采用的是[flex-tools/string/params](https://zhangfisher.github.io/flex-tools/#/guide?id=params)函数来进行插值处理的，该插值算法可以正确处理当`module`参数为空时的显示问题。
+注意：插值字符串中的`{<,module=>module}`采用的是[flex-tools/string/params](https://zhangfisher.github.io/flex-tools/#/guide?id=params)函数来进行插值处理的，并针对日志输出的特点做了少量扩展，扩展的规则如下：
+
 
 ```typescript
+// 正常的字符串插值是这样的，每个插值变量使用{}包裹
+const str = "hello {a}{b}{c}"
+str.params({a:1,b:2,c:3})
+
+// 在voerkalogger里面，允许在插值变量中使用多个变量
+const str = "hello {<(>a/b/c<)>},{b},{c}"
+str.params({a:1,b:2,c:3}) // hello (1/2/3),2,3 
+// 并且当值为undefined时，会移除
+str.params({a:1,c:3}) // hello (1/3),2,3 
+str.params({a:1}) // hello (1),2,3 
+str.params({}) // hello ,2,3 
+
 
 logger.debug("参数{}不正确","count")
 // [DEBUG] - 2023-03-08 10:05:07 372 : 参数count不正确
 
 logger.debug("参数{}不正确","count",{module:'file'})
-// [DEBUG] - 2023-03-08 10:05:07 372 : 参数count不正确,module=file
+// [DEBUG] - 2023-03-08 10:05:07 372 : 参数count不正确(file)
+logger.debug("参数{}不正确","count",{app:"voerka",module:'file'})
+// [DEBUG] - 2023-03-08 10:05:07 372 : 参数count不正确(voerka/file)
+logger.debug("参数{}不正确","count",{app:"voerka",module:'file',line:100})})
+// [DEBUG] - 2023-03-08 10:05:07 372 : 参数count不正确(voerka/file/100)
 
 ```
 

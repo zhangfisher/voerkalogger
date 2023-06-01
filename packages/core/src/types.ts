@@ -10,10 +10,10 @@ import type { VoerkaLoggerScopeOptions } from "./scope";
 export interface VoerkaLoggerConstructorOptions{
     id?: string                                         // 当前应用ID
     enable?:boolean                                     // 全局开关
-    scope?: VoerkaLoggerScopeOptions                       // 用来标识当前应用，如设备所在的IP地址，或者用户名称等
+    scope?: VoerkaLoggerScopeOptions                    // 用来标识当前应用，如设备所在的IP地址，或者用户名称等
     level?:VoerkaLoggerLevel | VoerkaLoggerLevelName    // 全局日志级别
     debug?:boolean                                      // 是否在调试阶段，=true时所有日志均会输出
-    output?: string[] | string                                  // 启用的输出后端
+    output?: string[] | string                          // 启用的输出后端
     context?:Record<string,any> | null                  // 全局上下文，可以用为输出时的插值变量，同时会被合并到VoerkaLoggerRecord中
     injectGlobal?:boolean | string                      // 注入一个全局的logger变量名称
     bufferSize?:number                                  // 缓冲区大小，当缓冲区满时保留最新的日志

@@ -3,7 +3,9 @@ import { timer } from "flex-tools"
 
 let log = new VoerkaLogger()
 log.level = VoerkaLoggerLevel.NOTSET
+
 timer.begin()
+log.options.scope.app="xyz"
 log.debug("打开程序{a}{b}",()=>({a:11,b:2}),{module:"auth",app:"voerka",lineno:123})
 log.error("程序出错{}",new TypeError("数据类型出错"))
 log.debug("打开程序{a}{b}",()=>({a:11,b:2}))
@@ -19,7 +21,7 @@ timer.end()
 
 console.log("------- module:messager ----------------")
 
-let messageLogger = log.createScope({module:"messager"})
+let messageLogger = log.createScope({app:"voerka",module:"messager"})
 messageLogger.debug("打开程序{a}{b}",{a:1,b:2},{tags:["light","color"]})
 messageLogger.debug("打开程序{a}{b}",{a:1,b:2})
 messageLogger.warn("中华人民共和国{}{}{}",['繁荣','富强','昌盛'])

@@ -84,12 +84,9 @@ importers:
       ansicolor:
         specifier: ^1.1.100
         version: 1.1.100
-      chalk:
-        specifier: ^5.2.0
-        version: 5.2.0
       flex-tools:
-        specifier: ^1.1.10
-        version: 1.1.10
+        specifier: ^1.1.17
+        version: 1.1.17
       ts-essentials:
         specifier: ^9.3.0
         version: 9.3.0(typescript@4.9.5)
@@ -1216,11 +1213,6 @@ packages:
       supports-color: 7.2.0
     dev: true
 
-  /chalk@5.2.0:
-    resolution: {integrity: sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
-    dev: false
-
   /chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: true
@@ -2147,6 +2139,14 @@ packages:
       fs-extra: 11.1.0
       shelljs: 0.8.5
       string.prototype.replaceall: 1.0.7
+    dev: false
+
+  /flex-tools@1.1.17:
+    resolution: {integrity: sha512-M+hhlsMhvocEV5BPDJEknta0Q9Bbm7WRRT72PDkPpJcrC66vDE4UxvCiBwNb7b3LmVefis9/t2q+CI8XqXG/WQ==}
+    dependencies:
+      fs-extra: 11.1.0
+      shelljs: 0.8.5
+      string.prototype.replaceall: 1.0.7
 
   /follow-redirects@1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
@@ -2901,7 +2901,7 @@ packages:
       '@babel/runtime-corejs3': 7.21.0
       ansicolor: 1.1.100
       core-js: 3.28.0
-      flex-tools: 1.1.10
+      flex-tools: 1.1.17
     dev: true
 
   /longest@2.0.1:

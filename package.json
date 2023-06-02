@@ -4,6 +4,7 @@
   "description": "small, fast and easy-to-use logger",
   "main": "index.js", 
   "homepage": "https://github.com/zhangfisher/voerkalogger",
+  "private":true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "commit": "git add . && git cz",

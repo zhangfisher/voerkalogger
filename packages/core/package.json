@@ -1,6 +1,6 @@
 {
     "name": "@voerkalogger/core",
-    "version": "1.0.49",
+    "version": "1.0.50",
     "description": "small, fast and easy-to-use logger",
     "main": "src/index.ts",
     "publishConfig": {

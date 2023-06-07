@@ -12,6 +12,7 @@ import { assignObject } from 'flex-tools/object/assignObject';
 import ansicolor from "ansicolor"
 import { isNumber } from 'flex-tools/typecheck/isNumber';
 import {isNothing} from 'flex-tools/typecheck/isNothing'
+import { DefaultFormatTemplate } from './consts';
 
 const consoleMethods=[
     console.log,
@@ -36,7 +37,7 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
     constructor(options?:TransportOptions<ConsoleTransportOptions>){
         super(assignObject({
             bufferSize:0,     
-            format:"[{levelName}] - {datetime} : {message}{<,tags=>tags}{<(>app/module/func/lineno<)>}"    
+            format:DefaultFormatTemplate
         },options)) 
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      

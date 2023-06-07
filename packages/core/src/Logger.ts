@@ -34,16 +34,16 @@ import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';
 
 export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
-    #transportInstances:Record<string,TransportBase>={}                     // 后端实例
-    #options?:VoerkaLoggerOptions
-    #rootScope?:VoerkaLoggerScope
+    private _transportInstances:Record<string,TransportBase>={}                     // 后端实例
+    private _options:VoerkaLoggerOptions =  DefaultLoggerOptions as VoerkaLoggerOptions
+    _rootScope?:VoerkaLoggerScope
     // 用来当enable=false时缓存日志,当enable=true时输出  [[record,vars],...]
     #cache:[any,any][] =[]        
     constructor(options?:VoerkaLoggerConstructorOptions) {
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.initOptions(options)        
+        this.updateOptions(options)        
         // 注册默认的控制台日志输出
         this.use("console",new ConsoleTransport() as unknown as TransportBase)
         // 注入全局日志实例
@@ -53,17 +53,17 @@ export class VoerkaLogger{
         // 捕获全局错误,自动添加到日志中
         this.catchGlobalErrors();
         VoerkaLogger.LoggerInstance = this              
-        this.#rootScope = new VoerkaLoggerScope(this,{module:this.options.scope.module})  
+        this._rootScope = new VoerkaLoggerScope(this,this.options.scope)  
     }    
-    get options():VoerkaLoggerOptions {return this.#options!}    
+    get options():VoerkaLoggerOptions {return this._options!}    
     set options(value:VoerkaLoggerConstructorOptions) { 
-        Object.entries(this.#transportInstances).forEach(([name,transport])=>{
+        Object.entries(this._transportInstances).forEach(([name,transport])=>{
             if((name in value) && isPlainObject(value[name])){
                 transport.options = value[name] as any  // 该操作是局部更新
                 delete value[name]
             }
         })
-        Object.assign(this.#options!,value)  
+        this.updateOptions(value)
     }
     get enable() { return this.options.enable; }
     set enable(value) { 
@@ -86,26 +86,26 @@ export class VoerkaLogger{
             transport.enable = this.options.output.includes(name)
         }
     }
-    get transports() { return this.#transportInstances; }
+    get transports() { return this._transportInstances; }
 
-    private initOptions(value?:VoerkaLoggerConstructorOptions){
+    private updateOptions(value?:VoerkaLoggerConstructorOptions){
         let options = assignObject(DefaultLoggerOptions,value) as DeepRequired<VoerkaLoggerOptions> 
         if(typeof(options.output)=='string') options.output = options.output.split(",")
         options.level = normalizeLevel(options.level)
-        this.#options = options
+        Object.assign(this._options,options)
     }
     /**
     * 部署安装后端实例
     */
     use<T extends TransportBase=TransportBase>(name:string,transportInstance:T){
         transportInstance._bind(this)     
-        this.#transportInstances[name] =  transportInstance
+        this._transportInstances[name] =  transportInstance
     }      
     /**
      * 将缓冲区的日志输出到存储
      */
     async flush(){ 
-        await Promise.allSettled(Object.values(this.#transportInstances).map(transport=>transport.flush() ))
+        await Promise.allSettled(Object.values(this._transportInstances).map(transport=>transport.flush() ))
     }    
     /**
      * 捕获全局错误,自动添加到日志中
@@ -143,14 +143,14 @@ export class VoerkaLogger{
      */
     private outputToTransports(record:VoerkaLoggerRecord,vars:any,{includes=[],excludes=[]}:{includes?:string[],excludes?:string[]}){
         if(includes && includes.length==0){
-            includes= Object.keys(this.#transportInstances)        
+            includes= Object.keys(this._transportInstances)        
         } 
         if(excludes && excludes.length>0){
             includes = includes.filter(name=>!excludes.includes(name))
         }
         includes.forEach((name) => {            
-            if(!(name in this.#transportInstances)) return         // 以!开头的transport不输出
-            const transport = this.#transportInstances[name]
+            if(!(name in this._transportInstances)) return         // 以!开头的transport不输出
+            const transport = this._transportInstances[name]
             if ((record.level >= this.options.level || record.level==VoerkaLoggerLevel.NOTSET || this.options.debug)) {                        
                 try{
                     transport._output(Object.assign({},record),vars)
@@ -199,23 +199,23 @@ export class VoerkaLogger{
      *  如果变量或message是函数会自动调用
      */
     debug(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this.#rootScope?.debug(message,vars,options);
+        this._rootScope?.debug(message,vars,options);
     }
     info(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
-        this.#rootScope?.info(message,vars,options);
+        this._rootScope?.info(message,vars,options);
     }
     warn(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions){
-        this.#rootScope?.warn(message,vars,options);
+        this._rootScope?.warn(message,vars,options);
     }
     error(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this.#rootScope?.error(message,vars,options);
+        this._rootScope?.error(message,vars,options);
     }
     fatal(message:LogMethodMessage,vars?:LogMethodVars,options?:LogMethodOptions) {
-        this.#rootScope?.fatal(message,vars,options);
+        this._rootScope?.fatal(message,vars,options);
     }  
 
     async destory(){
-        await Promise.allSettled(Object.values(this.#transportInstances).map(instance=>instance.destroy()))
+        await Promise.allSettled(Object.values(this._transportInstances).map(instance=>instance.destroy()))
     }
     /**
      * 创建一个日志作用域

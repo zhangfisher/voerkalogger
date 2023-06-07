@@ -17,6 +17,7 @@ export interface VoerkaLoggerScopeOptions{
     sn?: string                                         // 设备序列号
     [key: string]: string | number | boolean | undefined
 }
+export type VoerkaLoggerRootScopeOptions = Omit<VoerkaLoggerScopeOptions,'module' | 'func' | 'lineno'>
 
 
 export class VoerkaLoggerScope{

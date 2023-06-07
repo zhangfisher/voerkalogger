@@ -3,10 +3,11 @@ import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./type
 import type { VoerkaLogger  } from './Logger';
 import { normalizeLevel, outputError } from "./utils";
 import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
-import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName,VoerkaLoggerLevel } from "./consts"
+import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName,VoerkaLoggerLevel, DefaultFormatTemplate } from "./consts"
 import { assignObject } from "flex-tools/object/assignObject";
 import { formatDateTime } from "flex-tools/misc/formatDateTime"
 import type {ChangeFieldType} from "flex-tools/types"
+import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';
 
 export interface TransportBaseOptions<Output>{
     enable?      : boolean                                             // 可以单独关闭指定的日志后端
@@ -33,44 +34,50 @@ export type TransportOutputType<T extends TransportBaseOptions<any>> =  T['forma
  * <Output> 是日志经过Formatter后的输出结果类型 
 */
 export class TransportBase<Options extends TransportBaseOptions<any> = TransportBaseOptions<any>>{
-    #options: ChangeFieldType<DeepRequired<Options>,'level',VoerkaLoggerLevel>
-    #buffer: TransportOutputType<Options>[] = []
-    #logger?: VoerkaLogger
-    #timerId: any = 0
-    #outputSingal?:IAsyncSignal 
-    // 是否可用,比如HttpTransport参数没有提供配置参数时就不可用
-    #available:boolean = true               
+    private _options: ChangeFieldType<DeepRequired<Options>,'level',VoerkaLoggerLevel>
+    private _buffer: TransportOutputType<Options>[] = []
+    private _logger?: VoerkaLogger
+    private _timerId: any = 0
+    private _outputSingal?:IAsyncSignal    
+    private _available:boolean = true                // 是否可用,比如HttpTransport参数没有提供配置参数时就不可用
     constructor(options?: TransportOptions<Options>) {
-        this.#options = assignObject({
+        this._options = assignObject({
             level:VoerkaLoggerLevel.NOTSET,
             enable: true,
             bufferSize:200,
             flushInterval:10 * 1000 ,
-            format:"[{levelName}] - {datetime} : {message}{<,module=>module}{<,tags=>tags}" 
+            format:DefaultFormatTemplate
         }, options) 
-        this.#options.level = normalizeLevel(this.#options.level)
+        this._options.level = normalizeLevel(this._options.level)
     }
-    get available(){ return this.#available }
-    get level() { return this.#options.level  }
+    get available(){ return this._available }
+    get level() { return this._options.level  }
     set level(value:VoerkaLoggerLevel | VoerkaLoggerLevelName){        
-        this.#options.level = normalizeLevel(value)
+        this._options.level = normalizeLevel(value)
     }
-    get options() { return this.#options }
-    set options(value) {         
-        Object.assign(this.#options, value) 
-        this.onOptionUpdated(Object.keys(value))
+    get options() { return this._options }
+    set options(value) {     
+        if(isPlainObject(value)){
+            this.updateOptions(value) 
+        }    
     }
-    get buffer() { return this.#buffer}
-    get logger() { return this.#logger }    
-    get enable() { return this.#options.enable }
+    get buffer() { return this._buffer}
+    get logger() { return this._logger }    
+    get enable() { return this._options.enable }
     set enable(value) { 
-        if(value==this.#options.enable) return
-        this.#options.enable = value 
+        if(value==this._options.enable) return
+        this._options.enable = value 
         if(value){
             this._outputLogs()
         }else{
             this.destroy()
         }
+    }
+    private updateOptions(value:any){
+        const opts = Object.assign({},value)
+        if(opts.level) opts.level = normalizeLevel(opts.level)
+        Object.assign(this._options, value)        
+        this.onOptionUpdated(Object.keys(value))
     }
     /**
      * 当配置发生变化时调用，供子类重载实现
@@ -85,15 +92,15 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      * @param VoerkaLogger 
      */
     _bind(logger: VoerkaLogger) {
-        this.#logger = logger
-        this.#available = this.isAvailable()
+        this._logger = logger
+        this._available = this.isAvailable()
         // 检查是否可用，如果不可用则需要在控制台输出警告
-        if(!this.#available){
+        if(!this._available){
             this.logger?.log("VoerkaLogger <{}> is not available!",[this.constructor.name],{
                 level:VoerkaLoggerLevel.WARN,
             },['console'])          
         }
-        if(this.#options.enable) this._outputLogs()   
+        if(this._options.enable) this._outputLogs()   
     }
     protected outputError(e:Error){
         outputError(e)
@@ -159,13 +166,13 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      _output(record: VoerkaLoggerRecord, inVars: LogMethodVars) {
         if(!this.enable) return
         // 级别过滤
-        if(this.#options.level !=VoerkaLoggerLevel.NOTSET && record.level<this.#options.level) return
+        if(this._options.level !=VoerkaLoggerLevel.NOTSET && record.level<this._options.level) return
         
         const output = this.format(record, inVars)
         if (output && this.options.bufferSize>0){
-            this.#buffer.push(output)
+            this._buffer.push(output)
             // 当超出缓冲区大小时，立即输出
-            if(this.#buffer.length>=this.options.bufferSize && this.enable) this.#outputSingal?.resolve() // 有数据进来
+            if(this._buffer.length>=this.options.bufferSize && this.enable) this._outputSingal?.resolve() // 有数据进来
         }
     }
     /**
@@ -183,20 +190,20 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     _outputLogs() {
         // 如果缓冲区为0,则关闭输出
         if(this.options.bufferSize<=0) return     
-        this.#timerId = setTimeout(async () => {
-            this.#outputSingal = asyncSignal()
+        this._timerId = setTimeout(async () => {
+            this._outputSingal = asyncSignal()
             try{
                 while(this.enable){
                     await this.flush()
                     try{
-                        await this.#outputSingal(this.options.flushInterval)             
+                        await this._outputSingal(this.options.flushInterval)             
                     }catch(e){ // 当异步信号被销毁时会触发AsyncSignalAbort错误
                         if(e instanceof AsyncSignalAbort)  break
                     }                    
                 } 
             }finally{
                 await this.flush()
-                this.#outputSingal.destroy()
+                this._outputSingal.destroy()
             }
         },0)        
     }
@@ -204,22 +211,22 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
      * 马上将缓冲区的内容输出,一般情况下子类不需要重载本方法，而应该重载
      */
     async flush() {
-        if (this.#buffer.length == 0) return         
-        if(!this.#available) {
-            this.#buffer = []
+        if (this._buffer.length == 0) return         
+        if(!this._available) {
+            this._buffer = []
             return 
         }
         try {
-            await this.output(this.#buffer)
+            await this.output(this._buffer)
         }catch (e: any) {
             console.error(`[Error] - ${formatDateTime(new Date(),'YYYY-MM-DD HH:mm:ss SSS')} : while output logs,${e.stack}`)
         }finally {
-            this.#buffer = []
+            this._buffer = []
         }      
     }    
     async destroy() { 
         await this.flush()
-        this.#outputSingal?.destroy()
+        this._outputSingal?.destroy()
     }
     // *************** 操作日志***************
     /**

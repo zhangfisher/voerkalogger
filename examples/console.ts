@@ -2,7 +2,7 @@ import {  VoerkaLogger, VoerkaLoggerLevel } from "@voerkalogger/core";
 import { timer } from "flex-tools" 
 
 let log = new VoerkaLogger()
-log.level = VoerkaLoggerLevel.NOTSET
+//log.level = VoerkaLoggerLevel.NOTSET
 
 timer.begin()
 log.options.scope.app="xyz"

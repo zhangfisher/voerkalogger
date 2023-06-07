@@ -43,9 +43,7 @@ export class VoerkaLogger{
         if(VoerkaLogger.LoggerInstance){
             return VoerkaLogger.LoggerInstance
         } 
-        this.#options = assignObject(DefaultLoggerOptions,options || {}) as DeepRequired<VoerkaLoggerOptions> 
-        if(typeof(this.#options.output)=='string') this.#options.output = this.#options.output.split(",")
-        this.#options.level = normalizeLevel(this.#options.level)
+        this.initOptions(options)        
         // 注册默认的控制台日志输出
         this.use("console",new ConsoleTransport() as unknown as TransportBase)
         // 注入全局日志实例
@@ -89,6 +87,13 @@ export class VoerkaLogger{
         }
     }
     get transports() { return this.#transportInstances; }
+
+    private initOptions(value?:VoerkaLoggerConstructorOptions){
+        let options = assignObject(DefaultLoggerOptions,value) as DeepRequired<VoerkaLoggerOptions> 
+        if(typeof(options.output)=='string') options.output = options.output.split(",")
+        options.level = normalizeLevel(options.level)
+        this.#options = options
+    }
     /**
     * 部署安装后端实例
     */

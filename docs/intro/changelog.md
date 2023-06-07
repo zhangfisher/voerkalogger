@@ -1,4 +1,4 @@
-# 1.0.0 (2023-06-02)
+# 1.0.0 (2023-06-07)
 
 
 ### Bug Fixes
@@ -31,6 +31,7 @@
 * **core:** 默认自动创建日志实例 ([bce2110](https://gitee.com/zhangfisher/voerkalogger/commits/bce211087898c57ace5db3b3995e07d1d60e87bd))
 * **core:** 升级内置的consoleTransport，支持着色输出 ([ae31829](https://gitee.com/zhangfisher/voerkalogger/commits/ae318292e87b24d761b14140236469c67dd49e90))
 * **core:** 新增加levelName用来返回当前级别名称 ([02b1676](https://gitee.com/zhangfisher/voerkalogger/commits/02b1676ae36ccb2ba3091c2170b27ce13f0350e1))
+* **core:** 优化配置更新时的容错处理 ([15c7849](https://gitee.com/zhangfisher/voerkalogger/commits/15c7849bc71c432be09ec1709c651624723603eb))
 * **core:** 支持通过`logger.options={...}`对配置进行局部更新 ([48e7d99](https://gitee.com/zhangfisher/voerkalogger/commits/48e7d997c96e08caaf6ebe304c186e9baf4e5408))
 * **file-backend:** 更新文件名称生成策略 ([2d99c38](https://gitee.com/zhangfisher/voerkalogger/commits/2d99c3862ddb8f616e717a5ea95584986bcf3a95))
 * **file-backend:** 构建FileBackend ([5470862](https://gitee.com/zhangfisher/voerkalogger/commits/54708623f5e7e7e362de6fac07b4b90328d99b31))

@@ -1,4 +1,4 @@
-# 1.0.0 (2023-06-07)
+# 1.0.0 (2023-06-12)
 
 
 ### Bug Fixes
@@ -33,6 +33,7 @@
 * **core:** 新增加levelName用来返回当前级别名称 ([02b1676](https://gitee.com/zhangfisher/voerkalogger/commits/02b1676ae36ccb2ba3091c2170b27ce13f0350e1))
 * **core:** 优化配置更新时的容错处理 ([15c7849](https://gitee.com/zhangfisher/voerkalogger/commits/15c7849bc71c432be09ec1709c651624723603eb))
 * **core:** 支持通过`logger.options={...}`对配置进行局部更新 ([48e7d99](https://gitee.com/zhangfisher/voerkalogger/commits/48e7d997c96e08caaf6ebe304c186e9baf4e5408))
+* **core:** LoggerScope现在允许单独指定level ([7cdcb61](https://gitee.com/zhangfisher/voerkalogger/commits/7cdcb61096cfff194a0b3964ab762586d6cbf045))
 * **file-backend:** 更新文件名称生成策略 ([2d99c38](https://gitee.com/zhangfisher/voerkalogger/commits/2d99c3862ddb8f616e717a5ea95584986bcf3a95))
 * **file-backend:** 构建FileBackend ([5470862](https://gitee.com/zhangfisher/voerkalogger/commits/54708623f5e7e7e362de6fac07b4b90328d99b31))
 * **log:** fdfdfdf ([fb93ea3](https://gitee.com/zhangfisher/voerkalogger/commits/fb93ea3812907ea2099970d3b1774cd09ad8f9ee))

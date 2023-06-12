@@ -16,6 +16,7 @@
 * **core:** 修复`destory`时执行`flush`逻辑 ([f20d6ec](https://gitee.com/zhangfisher/voerkalogger/commits/f20d6ecb4186e1a30c75f85b01f51edb5fd9b4b3))
 * **core:** 修复`VoerkaLoggerScopeOptions`类型冲突 ([40964c8](https://gitee.com/zhangfisher/voerkalogger/commits/40964c8e1dc089310c0d44b9f07801f53553fc06))
 * **core:** 修复延迟输出不能正常工作的问题 ([5f9ea6d](https://gitee.com/zhangfisher/voerkalogger/commits/5f9ea6d2191ded55f1acaa198aaae523e14655d5))
+* **core:** 修复level==NaN的写法 ([c7f7335](https://gitee.com/zhangfisher/voerkalogger/commits/c7f733551545157db5d20d42e72f5a79886e34ec))
 
 
 ### Features

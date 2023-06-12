@@ -182,7 +182,7 @@ export function normalizeLevel(
 	level: string | number | VoerkaLoggerLevel | VoerkaLoggerLevelName
 ): VoerkaLoggerLevel {
 	let result: VoerkaLoggerLevel;
-	if (level === undefined || level === null) {
+	if (level === undefined || level === null || level==NaN) {
 		result = VoerkaLoggerLevel.WARN;
 	} else if (typeof level == "string") {
 		const levelValue = VoerkaLoggerLevelNames.indexOf(level.toUpperCase());

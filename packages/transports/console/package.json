@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/console",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "Colorized console transport for voerkalogger",
   "main": "src/index.ts",
   "publishConfig": {
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
-    "ansicolor": "^1.1.100", 
+    "ansicolor": "^1.1.100",
     "flex-tools": "^1.3.23"
   },
   "keywords": [],

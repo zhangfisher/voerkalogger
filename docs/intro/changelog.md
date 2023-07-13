@@ -1,4 +1,4 @@
-# 1.0.0 (2023-06-12)
+# 1.0.0 (2023-07-13)
 
 
 ### Bug Fixes
@@ -21,6 +21,7 @@
 
 ### Features
 
+* 新增加@voerkalogger/console ([d38df03](https://gitee.com/zhangfisher/voerkalogger/commits/d38df03a518c09bde92a0d34973292c96487c695))
 * 增加transport的`available`属性用来标识是否可用 ([66e4939](https://gitee.com/zhangfisher/voerkalogger/commits/66e49392d26c92e9c3ccfd2debab3b5bab6b57a6))
 * **console-transport:** 新增加适用于nodejs的增强控制台输出transport ([b1288f5](https://gitee.com/zhangfisher/voerkalogger/commits/b1288f5cb26c0d38b68f91089088a8c019437fcf))
 * **core,console-transport:** 更新延迟输出机制 ([aeae2e9](https://gitee.com/zhangfisher/voerkalogger/commits/aeae2e9df51a29925ea2ec55d40a0ed5e994278d))

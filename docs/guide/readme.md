@@ -345,7 +345,7 @@ export interface TransportBaseOptions<Output>{
 ### 格式化
 
 内置支持`console`、`file`、`http`等`Transport`，一般而言:
-- 输出至`控制台`会采用字符串或者经过着色后的字符串
+- 输出至`控制台`
 - 输出到`文件`也会采用字符串
 - 输出到`HTTP`则采用`JSON`格式。
 

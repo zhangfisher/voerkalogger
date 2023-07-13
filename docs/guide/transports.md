@@ -1,5 +1,25 @@
 # Transport
 
+## 彩色控制台输出
+
+支持在控制台彩色输出，适用于`nodejs`。
+### 安装
+
+```shell
+npm install @voerkalogger/console
+yarn add @voerkalogger/console
+pnpm add @voerkalogger/console
+
+```
+### 基本用法
+
+```typescript
+
+import ColorizedConsoleTransport from "@voerkalogger/console"
+
+logger.use("console",new ColorizedConsoleTransport() as unknown as TransportBase )
+
+```
 ## 文件输出
 
 将日志输出为文件中，适用于`nodejs`

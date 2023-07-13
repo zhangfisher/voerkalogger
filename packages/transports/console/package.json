@@ -1,0 +1,35 @@
+{
+  "name": "@voerkalogger/console",
+  "version": "1.0.38",
+  "description": "Colorized console transport for voerkalogger",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup",
+    "version:patch": "npm version patch --commit-hooks=false",
+    "release": "pnpm build && pnpm publish --access public"
+  },
+  "dependencies": {
+    "@voerkalogger/core": "workspace:^1.0.0",
+    "ansicolor": "^1.1.100", 
+    "flex-tools": "^1.3.23"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@swc/core": "^1.3.31",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.11.18",
+    "ts-essentials": "^9.3.0",
+    "ts-node": "^10.9.1",
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.5",
+    "vitest": "^0.28.3"
+  }
+}

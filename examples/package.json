@@ -13,6 +13,7 @@
     "@voerkalogger/core": "workspace:^1.0.0",
     "@voerkalogger/file": "workspace:^1.0.0",
     "@voerkalogger/http": "workspace:^1.0.0",
+    "@voerkalogger/console": "workspace:^1.0.0",
     "flex-tools": "^1.3.23"
   },
   "devDependencies": {

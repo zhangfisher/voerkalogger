@@ -26,7 +26,7 @@
     "license": "MIT",
     "dependencies": {
         "ansicolor": "^1.1.100",
-        "flex-tools": "^1.1.17",
+        "flex-tools": "^1.3.23",
         "ts-essentials": "^9.3.0"
     },
     "devDependencies": {

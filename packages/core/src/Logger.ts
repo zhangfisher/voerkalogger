@@ -25,7 +25,7 @@ import { safeCall, normalizeLevel } from './utils';
 import {TransportBase} from "./transport";
 import { VoerkaLoggerConstructorOptions, LogMethodOptions, LogMethodVars, VoerkaLoggerRecord, LogMethodMessage,VoerkaLoggerOptions } from './types';
 import ConsoleTransport from "./console";
-import { DeepRequired } from "ts-essentials"  
+import type { DeepRequired } from "ts-essentials"  
 import { VoerkaLoggerScope, VoerkaLoggerScopeOptions } from "./scope";
 import { assignObject } from "flex-tools/object/assignObject";
 import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';

@@ -2,12 +2,12 @@ import type { DeepRequired } from "ts-essentials"
 import { LogMethodVars, VoerkaLoggerFormatter, VoerkaLoggerRecord } from "./types"
 import type { VoerkaLogger  } from './Logger';
 import { normalizeLevel, outputError } from "./utils";
-import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async";
 import { VoerkaLoggerLevelNames,VoerkaLoggerLevelName,VoerkaLoggerLevel, DefaultFormatTemplate } from "./consts"
 import { assignObject } from "flex-tools/object/assignObject";
 import { formatDateTime } from "flex-tools/misc/formatDateTime"
 import type {ChangeFieldType} from "flex-tools/types"
 import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';
+import { asyncSignal,IAsyncSignal, AsyncSignalAbort } from "flex-tools/async/asyncSignal";
 
 export interface TransportBaseOptions<Output>{
     enable?      : boolean                                             // 可以单独关闭指定的日志后端

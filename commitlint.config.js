@@ -2,7 +2,7 @@ module.exports = {
 	extends: ["@commitlint/config-conventional"],
 	defaultIgnores: false,
 	rules: { 
-        "scope-enum":[1,"always",["core","file-transport","http-transport","console-transport","syslog-transport"]]
+        "scope-enum":[1,"always",["core","console-transport","file-transport","http-transport","console-transport","syslog-transport"]]
     },
 	prompt: {
         settings:{

@@ -279,13 +279,11 @@ export interface VoerkaLoggerRecord{
 
 ```typescript
 logger.use("file",new FileTransport({
-    bufferSize:10,          // 默认是保存10条记录
-    flushInterval:10 * 1000 ,       // 每隔10秒执行一次输出
+    bufferSize:10,          
 }) as unknown as TransportBase )
 ```
 
 - 当缓冲区的日志记录超出`bufferSize`时马上执行输出，`bufferSize`默认值是`10`
--  每隔`flushInterval`时间执行一次输出，不论缓冲区是否已满，`flushInterval`默认值是`10 * 1000`
 - 调用`logger.flush()`方法可以马上将缓冲区的日志进行输出。
 
 ## 控制台输出

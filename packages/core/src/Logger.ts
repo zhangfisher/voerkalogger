@@ -214,9 +214,6 @@ export class VoerkaLogger{
         this._rootScope?.fatal(message,vars,options);
     }  
 
-    async destory(){
-        await Promise.allSettled(Object.values(this._transportInstances).map(instance=>instance.destroy()))
-    }
     /**
      * 创建一个日志作用域
      * 

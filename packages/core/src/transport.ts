@@ -43,7 +43,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
         this._options = assignObject({
             level:VoerkaLoggerLevel.NOTSET,
             enable: true,
-            bufferSize:100,
+            bufferSize:20,
             format:DefaultFormatTemplate
         }, options) 
         this._options.level = normalizeLevel(this._options.level)

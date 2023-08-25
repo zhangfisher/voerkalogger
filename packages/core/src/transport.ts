@@ -146,7 +146,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
             }
             try {
                 return formatter!.params(vars) as TransportOutputType<Options>
-            } catch (e: any) {
+            } catch (e: any) {                
                 return `[ERROR] - ${vars.datetime} : ${e.stack}` as TransportOutputType<Options>
             } 
         }else{
@@ -210,11 +210,7 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
                 this._buffer = []
                 return 
             }
-            try {
-                await this.output(this._buffer)
-            }catch (e: any) {
-                console.error(`[Error] - ${formatDateTime(new Date(),'YYYY-MM-DD HH:mm:ss SSS')} : while output logs,${e.stack}`)
-            }      
+            await this.output(this._buffer)  
         }finally{
             this._buffer =[...this._inBuffer]
             this._inBuffer = []

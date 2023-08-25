@@ -41,9 +41,7 @@ deviceLogger.warn("打开程序{a}{b}",{a:1,b:2})
 
 
 setTimeout(() => {
-    log.destory().then(() =>{
-        console.log("End")
-    })
+    console.log("End")
 })
 
 

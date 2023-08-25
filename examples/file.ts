@@ -8,9 +8,9 @@ let logger = new VoerkaLogger({
 })
 
 logger.use("file",new FileTransport({
-        compress: false,
-        maxSize: "10k",
-        maxFileCount: 5
+    compress: false,
+    maxSize: "10k",
+    maxFileCount: 5
 }) as unknown as TransportBase )
 
 logger.transports.console.enable = false
@@ -36,8 +36,7 @@ setTimeout(async () => {
         await delay(10)
         logger.info("运行模块：{}",i,{module:`M${i}`})
     }   
-    await delay(100)
     await logger.flush()
-    await logger.destory()        
+    await delay(1000)
     console.log("End")
 })

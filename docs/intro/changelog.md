@@ -1,9 +1,10 @@
-# 1.0.0 (2023-07-14)
+# 1.0.0 (2023-08-25)
 
 
 ### Bug Fixes
 
 * 更新控制台输出机制 ([0c1e13f](https://gitee.com/zhangfisher/voerkalogger/commits/0c1e13f2ecfe849de862c98cf7cbc8aeeec8a66e))
+* 升级日志保存机制 ([60433cd](https://gitee.com/zhangfisher/voerkalogger/commits/60433cd499cb465e07a3eaa8a231f41427b577f6))
 * 修复控制台着色输出问题 ([a6811f4](https://gitee.com/zhangfisher/voerkalogger/commits/a6811f41d2dbb9bc58c2664436ed121e8bd7d9d6))
 * 修改`format`参数中的插值变量替换机制 ([60b20fc](https://gitee.com/zhangfisher/voerkalogger/commits/60b20fc21273da8308d0f7b6d1461535e677b4cb))
 * 移除packages/transports/console ([224f2e8](https://gitee.com/zhangfisher/voerkalogger/commits/224f2e87a0ded2ecb5726c0cd01cc43fe1108450))
@@ -30,6 +31,7 @@
 * **core:** 调整`enabled`属性行行为，当`enabled=false`时会先输出到缓冲区 ([b048aad](https://gitee.com/zhangfisher/voerkalogger/commits/b048aad04b767d0e6913aa75b9cecb3fca81c956))
 * **core:** 调整日志输出策略 ([e8d0805](https://gitee.com/zhangfisher/voerkalogger/commits/e8d0805caa64bebc532cba22e023436dbc94f109))
 * **core:** 调整实例创建模式,import时不再默认创建实例 ([69d50c9](https://gitee.com/zhangfisher/voerkalogger/commits/69d50c94ef53d5192eebbd5d0a6c7a918dec648c))
+* **core:** 改进日志缓存输出机制 ([419198c](https://gitee.com/zhangfisher/voerkalogger/commits/419198c46c6aa33d2db197bdbd701484382b8778))
 * **core:** 默认自动创建日志实例 ([bce2110](https://gitee.com/zhangfisher/voerkalogger/commits/bce211087898c57ace5db3b3995e07d1d60e87bd))
 * **core:** 升级内置的consoleTransport，支持着色输出 ([ae31829](https://gitee.com/zhangfisher/voerkalogger/commits/ae318292e87b24d761b14140236469c67dd49e90))
 * **core:** 新增加levelName用来返回当前级别名称 ([02b1676](https://gitee.com/zhangfisher/voerkalogger/commits/02b1676ae36ccb2ba3091c2170b27ce13f0350e1))

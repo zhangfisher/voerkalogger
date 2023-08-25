@@ -275,6 +275,11 @@ export interface VoerkaLoggerRecord{
 
 每个`Transport`内部均具有一个输出缓冲区，当调用日志输出方法时，会先保存到该缓冲区，然后等缓冲区满或超过指定时间间隔时会调用`Transport.output`方法执行输出操作。
 
+- 控制台输出的缓冲区大小为`0`，因此会马上输出
+- 当应用程序退出前，应该调用`flush`方法输出缓冲区中的日志，否则可能造成缓冲区中的日志丢失。
+- 默认缓冲区大小为`20`
+
+
 **缓冲区控制参数：**
 
 ```typescript
@@ -291,11 +296,6 @@ logger.use("file",new FileTransport({
 `VoerkaLogger`内置了一个`console`用来将日志输出到控制台。该控制台输出不支持着色输出。支持在 `nodejs` 和 `浏览器` 环境下使用。
 
 如果要在`Nodejs`环境进行着色输出，可以使用`@voerkalogger/console`模块。
-
-
-## 销毁日志实例
-
-建议在退出应用程序时调用`logger.destory()`方法用来销毁日志实例，如果退出`nodejs`程序出现不能正常退出时，可能需要调用该方法。
 
 ## Transport
 

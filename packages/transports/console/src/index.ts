@@ -11,6 +11,7 @@ import { assignObject } from 'flex-tools/object/assignObject';
 import ansicolor from "ansicolor"
 import { isNumber } from 'flex-tools/typecheck/isNumber';
 import {isNothing} from 'flex-tools/typecheck/isNothing'
+import { isTest } from "std-env"; 
 
  
 export interface ColorizedConsoleTransportOptions extends TransportBaseOptions<void>{
@@ -25,6 +26,7 @@ export default class ColorizedConsoleTransport extends TransportBase<ColorizedCo
         },options)) 
     }
     format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
+        if(isTest) return               // 测试阶段不输出到控制台
         const { format } = this.options
         try{         
             const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format           

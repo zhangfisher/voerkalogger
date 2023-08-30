@@ -31,7 +31,6 @@ import { assignObject } from "flex-tools/object/assignObject";
 import { isPlainObject } from 'flex-tools/typecheck/isPlainObject';
 
 
-
 export class VoerkaLogger{
     static LoggerInstance:VoerkaLogger;
     private _transportInstances:Record<string,TransportBase>={}                     // 后端实例

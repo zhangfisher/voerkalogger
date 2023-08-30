@@ -3,7 +3,6 @@ import { timer } from "flex-tools"
 
 let log = new VoerkaLogger()
 //log.level = VoerkaLoggerLevel.NOTSET
-
 timer.begin()
 log.options.scope.app="xyz"
 log.debug("打开程序{a}{b}",()=>({a:11,b:2}),{module:"auth",app:"voerka",lineno:123})

@@ -11,6 +11,7 @@ import {  LogMethodVars,  VoerkaLoggerRecord } from "./types"
 import { assignObject } from 'flex-tools/object/assignObject';
 import {isNothing} from 'flex-tools/typecheck/isNothing'
 import { DefaultFormatTemplate } from './consts';
+import { isTest } from "std-env"; 
 
 const consoleMethods=[
     console.log,
@@ -31,7 +32,8 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
             format:DefaultFormatTemplate
         },options)) 
     }
-    format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{      
+    format(record: VoerkaLoggerRecord,interpVars:LogMethodVars):void{              
+        if(isTest) return               // 测试阶段不输出到控制台
         const { format } = this.options
         try{         
             const template = typeof(format) == 'function'  ? format.call(this, record, interpVars) as unknown as string : format           
@@ -59,7 +61,7 @@ export default class ConsoleTransport extends TransportBase<ConsoleTransportOpti
                 }
             })    
             const level = record.level 
-            const logMethod =record.level < 0 && record.level > consoleMethods.length ?  consoleMethods[record.level]  : consoleMethods[record.level] 
+            const logMethod =level < 0 && level> consoleMethods.length ?  consoleMethods[level]  : consoleMethods[level] 
             logMethod(output.params(vars))              
         }catch(e:any){   
             console.error(e.stack)

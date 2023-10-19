@@ -98,6 +98,9 @@ export class VoerkaLogger{
     */
     use<T extends TransportBase=TransportBase>(name:string,transportInstance:T){
         transportInstance._bind(this)     
+        if(name in this._transportInstances && name == 'console'){
+            transportInstance.buffer.push(...this._transportInstances[name].buffer)
+        }
         this._transportInstances[name] =  transportInstance
     }      
     /**

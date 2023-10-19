@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/console",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Colorized console transport for voerkalogger",
   "main": "src/index.ts",
   "publishConfig": {

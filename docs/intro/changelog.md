@@ -1,4 +1,4 @@
-# 1.0.0 (2023-08-30)
+# 1.0.0 (2023-10-19)
 
 
 ### Bug Fixes
@@ -37,6 +37,7 @@
 * **core:** 升级内置的consoleTransport，支持着色输出 ([ae31829](https://gitee.com/zhangfisher/voerkalogger/commits/ae318292e87b24d761b14140236469c67dd49e90))
 * **core:** 新增加levelName用来返回当前级别名称 ([02b1676](https://gitee.com/zhangfisher/voerkalogger/commits/02b1676ae36ccb2ba3091c2170b27ce13f0350e1))
 * **core:** 优化配置更新时的容错处理 ([15c7849](https://gitee.com/zhangfisher/voerkalogger/commits/15c7849bc71c432be09ec1709c651624723603eb))
+* **core:** 优化引入coloriedConsoleTransport ([85d7c53](https://gitee.com/zhangfisher/voerkalogger/commits/85d7c536c56d30c8b4ba4cbb154dbd2686446c1f))
 * **core:** 支持通过`logger.options={...}`对配置进行局部更新 ([48e7d99](https://gitee.com/zhangfisher/voerkalogger/commits/48e7d997c96e08caaf6ebe304c186e9baf4e5408))
 * **core:** LoggerScope现在允许单独指定level ([7cdcb61](https://gitee.com/zhangfisher/voerkalogger/commits/7cdcb61096cfff194a0b3964ab762586d6cbf045))
 * **file-backend:** 更新文件名称生成策略 ([2d99c38](https://gitee.com/zhangfisher/voerkalogger/commits/2d99c3862ddb8f616e717a5ea95584986bcf3a95))

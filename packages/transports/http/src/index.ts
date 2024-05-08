@@ -13,7 +13,7 @@ export default class HttpTransport<Output=VoerkaLoggerRecord> extends TransportB
                 url      : '',
                 method   : 'post',                      // 访问方法
                 contentType : 'application/json'
-            },options)
+            },options) as TransportOptions<HttpTransportOptions<Output>>
         );
        this.createAxiosInstance()
     } 

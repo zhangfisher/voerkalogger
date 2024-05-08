@@ -10,7 +10,7 @@ import {  omit } from "flex-tools/object/omit";
  * 用来标识日志的作用域信息
  */
 export interface VoerkaLoggerScopeOptions{
-    level?: VoerkaLoggerLevel | VoerkaLoggerLevelName       // 日志级别
+    level?: VoerkaLoggerLevel //| VoerkaLoggerLevelName       // 日志级别
     version?: string                                        // 设备或应用软件版本号   
     app?: string                                            // 应用名称
     module?: string                                         // 模块名称

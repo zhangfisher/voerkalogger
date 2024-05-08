@@ -1,4 +1,4 @@
-# 1.0.0 (2023-10-19)
+# 1.0.0 (2024-05-08)
 
 
 ### Bug Fixes
@@ -18,6 +18,7 @@
 * **core:** 修复`VoerkaLoggerScopeOptions`类型冲突 ([40964c8](https://gitee.com/zhangfisher/voerkalogger/commits/40964c8e1dc089310c0d44b9f07801f53553fc06))
 * **core:** 修复延迟输出不能正常工作的问题 ([5f9ea6d](https://gitee.com/zhangfisher/voerkalogger/commits/5f9ea6d2191ded55f1acaa198aaae523e14655d5))
 * **core:** 修复level==NaN的写法 ([c7f7335](https://gitee.com/zhangfisher/voerkalogger/commits/c7f733551545157db5d20d42e72f5a79886e34ec))
+* **core:** remove unuse code block ([2e17141](https://gitee.com/zhangfisher/voerkalogger/commits/2e17141a1a77c4fabf011cd2b0fd1a4c927b107b))
 
 
 ### Features
@@ -40,6 +41,7 @@
 * **core:** 优化引入coloriedConsoleTransport ([85d7c53](https://gitee.com/zhangfisher/voerkalogger/commits/85d7c536c56d30c8b4ba4cbb154dbd2686446c1f))
 * **core:** 支持通过`logger.options={...}`对配置进行局部更新 ([48e7d99](https://gitee.com/zhangfisher/voerkalogger/commits/48e7d997c96e08caaf6ebe304c186e9baf4e5408))
 * **core:** LoggerScope现在允许单独指定level ([7cdcb61](https://gitee.com/zhangfisher/voerkalogger/commits/7cdcb61096cfff194a0b3964ab762586d6cbf045))
+* **core:** transoirt新增加destory方法 ([310b5db](https://gitee.com/zhangfisher/voerkalogger/commits/310b5dbd3c2597ad7ebb53d011cd01c8f2d3c609))
 * **file-backend:** 更新文件名称生成策略 ([2d99c38](https://gitee.com/zhangfisher/voerkalogger/commits/2d99c3862ddb8f616e717a5ea95584986bcf3a95))
 * **file-backend:** 构建FileBackend ([5470862](https://gitee.com/zhangfisher/voerkalogger/commits/54708623f5e7e7e362de6fac07b4b90328d99b31))
 * **log:** fdfdfdf ([fb93ea3](https://gitee.com/zhangfisher/voerkalogger/commits/fb93ea3812907ea2099970d3b1774cd09ad8f9ee))

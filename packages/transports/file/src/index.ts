@@ -118,6 +118,17 @@ export default class FileTransport<Output = string> extends TransportBase<FileTr
             }catch{}
         }))
     } 
+    /**
+     * 将所有缓冲区的日志输出到文件
+     * 
+     * 一般情况下，当程序退出时，会调用此方法,将缓冲区的日志输出到文件
+     * 
+     */
+    destory(): void {
+        if(this.buffer.length>0 && this.#logFilename){
+            fs.appendFileSync(this.#logFilename, this.buffer.join("\n") + "\n",{encoding:"utf8"})
+        }
+    }
 }
  
 

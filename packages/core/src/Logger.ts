@@ -226,5 +226,14 @@ export class VoerkaLogger{
      createScope(options:VoerkaLoggerScopeOptions):VoerkaLoggerScope{
         return new VoerkaLoggerScope(this,options)
     }
+    /**
+     * 销毁日志实例
+     * 
+     * 销毁前会调用所有transport的destory方法
+     * 
+     */
+    destory(){
+        Object.values(this.transports).forEach(transport=>transport.destory()) 
+    }
 }
  

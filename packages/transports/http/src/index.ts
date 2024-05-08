@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { VoerkaLoggerLevel,TransportBase, TransportBaseOptions, TransportOptions, VoerkaLoggerRecord } from '@voerkalogger/core';
 import type { AxiosRequestConfig} from 'axios';
-import { assignObject } from 'flex-tools';
+import { assignObject } from 'flex-tools/object/assignObject';
 import { AxiosInstance } from 'axios';
 
 export type HttpTransportOptions<Output> = TransportBaseOptions<Output>  & AxiosRequestConfig & { url: string } 

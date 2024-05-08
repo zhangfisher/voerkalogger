@@ -231,6 +231,12 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     async getLogs(query: string) {
         //throw new NotImplementedError()
     }
+    /**
+     * 当日志实例销毁时调用 
+     */
+    destory(){
+        this.flush()
+    }
 }
 
 

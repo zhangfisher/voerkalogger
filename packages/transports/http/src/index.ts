@@ -1,13 +1,11 @@
-import axios from 'axios';
-import { VoerkaLoggerLevel,TransportBase, TransportBaseOptions, TransportOptions, VoerkaLoggerRecord } from '@voerkalogger/core';
-import type { AxiosRequestConfig} from 'axios';
+import { TransportBase, TransportBaseOptions, TransportOptions, VoerkaLoggerRecord } from '@voerkalogger/core';
 import { assignObject } from 'flex-tools/object/assignObject';
-import { AxiosInstance } from 'axios';
 
-export type HttpTransportOptions<Output> = TransportBaseOptions<Output>  & AxiosRequestConfig & { url: string } 
+export type HttpTransportOptions<Output> = TransportBaseOptions<Output>      
+    & { url: string } 
+    & Omit<RequestInit,'Body'>
 
 export default class HttpTransport<Output=VoerkaLoggerRecord> extends TransportBase<HttpTransportOptions<Output>> {
-    #http?: AxiosInstance
     constructor(options?: TransportOptions<HttpTransportOptions<Output>>) {
         super(assignObject({ 
                 url      : '',
@@ -15,23 +13,12 @@ export default class HttpTransport<Output=VoerkaLoggerRecord> extends TransportB
                 contentType : 'application/json'
             },options) as TransportOptions<HttpTransportOptions<Output>>
         );
-       this.createAxiosInstance()
-    } 
-    get http(){return this.#http!}
-    set http(value: AxiosInstance){this.#http = value}     
+    }      
     /**
      * 当配置变更时重新实例化Axios
      */
     onOptionUpdated(){        
-        this.createAxiosInstance()
-    }
-    private createAxiosInstance(){
-        try{
-            this.#http = axios.create(this.options as AxiosRequestConfig)
-            this.isAvailable()
-        }catch(e:any){
-            this.logger?.log("Error while create axio instance for logger transport<{}>:{}",[this.constructor.name,e],{level:VoerkaLoggerLevel.ERROR},['console'])            
-        }
+         
     }
     /**
      * 检测http配置是否正确
@@ -42,12 +29,19 @@ export default class HttpTransport<Output=VoerkaLoggerRecord> extends TransportB
     isAvailable(){
         const url = this.options.url
         let available = typeof(url)=='string' && url.length>0
-        return available && typeof(this.#http)=='object'
+        return available 
     }
     async output(results:Output[]) {
-        await this.#http?.request({
-            ...this.options as AxiosRequestConfig,
-            data: results
-        })  
+        try {
+            const response = await fetch(this.options.url, { 
+                ...this.options,
+                body: JSON.stringify(results)
+            });            
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.statusText}`);
+            }             
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } 
     } 
 }

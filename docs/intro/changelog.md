@@ -1,4 +1,4 @@
-# 1.0.0 (2024-05-08)
+# 1.0.0 (2024-06-11)
 
 
 ### Bug Fixes
@@ -44,6 +44,7 @@
 * **core:** transoirt新增加destory方法 ([310b5db](https://gitee.com/zhangfisher/voerkalogger/commits/310b5dbd3c2597ad7ebb53d011cd01c8f2d3c609))
 * **file-backend:** 更新文件名称生成策略 ([2d99c38](https://gitee.com/zhangfisher/voerkalogger/commits/2d99c3862ddb8f616e717a5ea95584986bcf3a95))
 * **file-backend:** 构建FileBackend ([5470862](https://gitee.com/zhangfisher/voerkalogger/commits/54708623f5e7e7e362de6fac07b4b90328d99b31))
+* **http-transport:** 将`axios`替换为`fetch` ([a2958c2](https://gitee.com/zhangfisher/voerkalogger/commits/a2958c2766f58873e2856ff1e6c43470b4374b2c))
 * **log:** fdfdfdf ([fb93ea3](https://gitee.com/zhangfisher/voerkalogger/commits/fb93ea3812907ea2099970d3b1774cd09ad8f9ee))
 
 

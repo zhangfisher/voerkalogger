@@ -17,6 +17,7 @@
     "flex-tools": "^1.3.69"
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.21.2"
+    "axios-mock-adapter": "^1.21.2",
+    "tsx": "^4.19.2"
   }
 }

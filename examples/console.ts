@@ -4,6 +4,7 @@ import { timer } from "flex-tools"
 let log = new VoerkaLogger()
 //log.level = VoerkaLoggerLevel.NOTSET
 timer.begin()
+log.level = VoerkaLoggerLevel.DEBUG
 log.options.scope.app="xyz"
 log.debug("打开程序{a}{b}",()=>({a:11,b:2}),{module:"auth",app:"voerka",lineno:123})
 log.error("程序出错{}",new TypeError("数据类型出错"))

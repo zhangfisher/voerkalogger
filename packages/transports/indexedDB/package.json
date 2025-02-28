@@ -1,5 +1,5 @@
 {
-  "name": "@voerkalogger/indexeddb",
+  "name": "@voerkalogger/indexed-db",
   "version": "0.0.1",
   "description": "",
   "types": "dist/index.d.ts",

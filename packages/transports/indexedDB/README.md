@@ -1,5 +1,5 @@
-# voerka-logger-indexdb
-> 一个基于indexdb的日志记录器
+# voerka-logger/indexed-db
+> 一个基于voerkalogger,存储在indexed-db的日志记录器
 ## 功能
 日志 
 - 配置包括日志最大数量等 策略是自动删除最旧日志

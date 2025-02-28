@@ -11,7 +11,7 @@ import { createStorage } from "unstorage";
 import "idb-keyval";
 import indexedDbDriver from "unstorage/drivers/indexedb";
 
-export type IndexDbOptions<Output> = TransportBaseOptions<Output> & {
+export type IndexedDbOptions<Output> = TransportBaseOptions<Output> & {
   // 可以在这里添加一些特定的选项，例如存储库的名称等
   dbName?: string;
   maxFileCount?: number;
@@ -20,11 +20,11 @@ export type IndexDbOptions<Output> = TransportBaseOptions<Output> & {
   clearLogs?: (query: any) => Promise<any>;
 };
 
-export default class IndexDbTransport<Output = string> extends TransportBase<
-  IndexDbOptions<Output>
+export default class IndexedDbTransport<Output = string> extends TransportBase<
+  IndexedDbOptions<Output>
 > {
   #storage: any;
-  constructor(options?: TransportOptions<IndexDbOptions<Output>>) {
+  constructor(options?: TransportOptions<IndexedDbOptions<Output>>) {
     super(
       assignObject(
         {
@@ -49,7 +49,7 @@ export default class IndexDbTransport<Output = string> extends TransportBase<
     }
   }
   async output(result: any[]) {
-    //判断是否已初始化indexDb数据库
+    //判断是否已初始化indexedDb数据库
     if (this.#storage) {
       //判断日志是否已满，如果超过限制数量，则删除旧数据
       await this.cleanupOldLogs();

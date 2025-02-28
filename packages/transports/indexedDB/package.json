@@ -1,6 +1,6 @@
 {
-  "name": "@voerkalogger/indexdb",
-  "version": "0.0.0",
+  "name": "@voerkalogger/indexeddb",
+  "version": "0.0.1",
   "description": "",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",

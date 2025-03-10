@@ -15,9 +15,6 @@ export type IndexedDbOptions<Output> = TransportBaseOptions<Output> & {
   // 可以在这里添加一些特定的选项，例如存储库的名称等
   dbName?: string;
   maxFileCount?: number;
-  getLogsPaginated?: (query: any) => Promise<any>;
-  exportLogsToFile?: (query: any) => Promise<any>;
-  clearLogs?: (query: any) => Promise<any>;
 };
 
 export default class IndexedDbTransport<Output = string> extends TransportBase<
@@ -86,9 +83,6 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
       await this.#storage.setItem("logs::index::timestamp", {});
       console.log("LoggerDB initialized with unstorage");
     }
-    this.options.getLogsPaginated = this.getLogsPaginated.bind(this);
-    this.options.exportLogsToFile = this.exportLogsToFile.bind(this);
-    this.options.clearLogs = this.clearLogs.bind(this);
   }
 
   // 添加日志
@@ -122,7 +116,9 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
     index.push(logId);
     await this.#storage.setItem(indexKey, index);
   }
-
+  getLogs(query: any) {
+    return this.getLogsPaginated(query);
+  }
   // 分页查询日志
   async getLogsPaginated({
     page = 1,

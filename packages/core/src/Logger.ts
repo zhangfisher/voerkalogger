@@ -229,11 +229,11 @@ export class VoerkaLogger{
     /**
      * 销毁日志实例
      * 
-     * 销毁前会调用所有transport的destory方法
+     * 销毁前会调用所有transport的destroy方法
      * 
      */
-    destory(){
-        Object.values(this.transports).forEach(transport=>transport.destory()) 
+    destroy(){
+        Object.values(this.transports).forEach(transport=>transport.destroy()) 
     }
 }
  

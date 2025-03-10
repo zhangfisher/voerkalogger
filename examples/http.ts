@@ -51,6 +51,6 @@ timer.end()
 setTimeout(async () => { 
     await delay(100)
     await logger.flush()
-    await logger.destory()        
+    await logger.destroy()        
     console.log("End")
 })

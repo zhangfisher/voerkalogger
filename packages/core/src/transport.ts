@@ -221,20 +221,20 @@ export class TransportBase<Options extends TransportBaseOptions<any> = Transport
     /**
      * 清除所有存储的日志
      */
-     async clear() { 
+     async clear():Promise<any>{ 
         //throw new NotImplementedError()
     }
     /**
      * 读取日志
      * @param query  查询字符串，取决具体的实现
      */
-    async getLogs(query: string) {
-        //throw new NotImplementedError()
+    async getLogs(query: any): Promise<any> {
+        // throw new NotImplementedError()
     }
     /**
      * 当日志实例销毁时调用 
      */
-    destory(){
+    destroy(){
         this.flush()
     }
 }

@@ -110,7 +110,7 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
   }
 
   // 更新索引
-  async updateIndex(indexName: string, indexValue: string, logId: string) {
+  private async updateIndex(indexName: string, indexValue: string, logId: string) {
     const indexKey = `logs::index::${indexName}::${indexValue}`;
     const index = (await this.#storage.getItem(indexKey)) || [];
     index.push(logId);
@@ -120,7 +120,7 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
     return this.getLogsPaginated(query);
   }
   // 分页查询日志
-  async getLogsPaginated({
+  private async getLogsPaginated({
     page = 1,
     pageSize = 10,
     level = "",
@@ -172,7 +172,7 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
   /**
    * 清理超出数量限制的旧日志
    */
-  async cleanupOldLogs() {
+  private async cleanupOldLogs() {
     // 获取所有日志键名
     const keys = await this.#storage.getKeys(
       `${this.options.dbName}:::logs:data::`
@@ -211,7 +211,7 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
   /**
    * 从索引中移除指定日志 ID
    */
-  async removeFromIndex(indexName: string, indexValue: string, logId: string) {
+  private async removeFromIndex(indexName: string, indexValue: string, logId: string) {
     const indexKey = `logs::index::${indexName}::${indexValue}`;
     const index = (await this.#storage.getItem(indexKey)) || [];
     const updatedIndex = index.filter((id: string) => id !== logId);
@@ -290,7 +290,7 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
   /**
    * 清空所有日志数据和索引
    */
-  async clearLogs(): Promise<void> {
+  async clear() {
     // 获取所有日志数据的键名
     const logKeys = await this.#storage.getKeys(
       `${this.options.dbName}:::logs:data::`

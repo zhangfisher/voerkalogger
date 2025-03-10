@@ -39,6 +39,7 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
       const vars: Record<string, any> = {
         ...this.getInterpVars(record),
         ...record,
+        message: super.format(record, interpVars),
       };
       return vars;
     } catch (e: any) {
@@ -110,7 +111,11 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
   }
 
   // 更新索引
-  private async updateIndex(indexName: string, indexValue: string, logId: string) {
+  private async updateIndex(
+    indexName: string,
+    indexValue: string,
+    logId: string
+  ) {
     const indexKey = `logs::index::${indexName}::${indexValue}`;
     const index = (await this.#storage.getItem(indexKey)) || [];
     index.push(logId);
@@ -211,7 +216,11 @@ export default class IndexedDbTransport<Output = string> extends TransportBase<
   /**
    * 从索引中移除指定日志 ID
    */
-  private async removeFromIndex(indexName: string, indexValue: string, logId: string) {
+  private async removeFromIndex(
+    indexName: string,
+    indexValue: string,
+    logId: string
+  ) {
     const indexKey = `logs::index::${indexName}::${indexValue}`;
     const index = (await this.#storage.getItem(indexKey)) || [];
     const updatedIndex = index.filter((id: string) => id !== logId);

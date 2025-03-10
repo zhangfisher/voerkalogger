@@ -1,10 +1,10 @@
 import { defineConfig } from 'tsup';
 import packageJson from './package.json';
 const name = packageJson.name;
-export default defineConfig((options: any) => ({
-  // 入口文件
-  // 不直接指定index 是为了支持直接使用某个文件
-  entry: [`lib/**/*.ts`, '!lib/**/*.test.ts'],
+export default defineConfig((options: any) => ({ 
+  entry: [
+    'src/index.ts'
+  ],
   // 格式化
   format: ['cjs', 'esm'],
   // typescript 注释

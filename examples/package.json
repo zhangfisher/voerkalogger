@@ -14,7 +14,7 @@
     "@voerkalogger/core": "workspace:^1.0.0",
     "@voerkalogger/file": "workspace:^1.0.0",
     "@voerkalogger/http": "workspace:^1.0.0",
-    "flex-tools": "^1.4.23"
+    "flex-tools": "^1.4.33"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.21.2",

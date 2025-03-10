@@ -17,7 +17,7 @@
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.0.0",
     "ansicolor": "^1.1.100",
-    "flex-tools": "^1.4.23",
+    "flex-tools": "^1.4.33",
     "std-env": "^3.4.3"
   },
   "keywords": [],

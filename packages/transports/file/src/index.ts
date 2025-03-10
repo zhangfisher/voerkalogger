@@ -105,7 +105,7 @@ export default class FileTransport<Output = string> extends TransportBase<FileTr
      * 清空日志 
      */
     async clear(){
-        const counts =  new Array(this.options.maxFileCount).fill(0)
+        const counts = Array.from({ length: this.options.maxFileCount }).fill(0)
         const logs = counts.map((v,i) =>{
             return path.join(this.#outputPath,`${i+1}.log`)
         })

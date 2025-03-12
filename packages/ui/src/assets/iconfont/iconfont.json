@@ -1,0 +1,114 @@
+{
+  "id": "4654736",
+  "name": "voerka-indoor-poisitioning",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1287707",
+      "name": "垃圾桶",
+      "font_class": "trash-can",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "9279383",
+      "name": "中心点",
+      "font_class": "circle-point",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "5804540",
+      "name": "体征告警2",
+      "font_class": "heart-circle",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "41801883",
+      "name": "体征告警",
+      "font_class": "people-circle",
+      "unicode": "ed1c",
+      "unicode_decimal": 60700
+    },
+    {
+      "icon_id": "41714787",
+      "name": "beacon_grey",
+      "font_class": "beacon_grey",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "21237439",
+      "name": "编辑",
+      "font_class": "edit",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "7407893",
+      "name": "手表功能",
+      "font_class": "shoubiaogongneng",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "26759582",
+      "name": "智能手表数",
+      "font_class": "watch-circle",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "31329150",
+      "name": "手表管理",
+      "font_class": "watch-rounded",
+      "unicode": "e831",
+      "unicode_decimal": 59441
+    },
+    {
+      "icon_id": "40920743",
+      "name": "SOS告警",
+      "font_class": "sos-alarm",
+      "unicode": "e788",
+      "unicode_decimal": 59272
+    },
+    {
+      "icon_id": "7947755",
+      "name": "设备脱落告警",
+      "font_class": "fall-off-alarm",
+      "unicode": "ed1b",
+      "unicode_decimal": 60699
+    },
+    {
+      "icon_id": "9411038",
+      "name": "告警已超时",
+      "font_class": "time-alarm",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "11391508",
+      "name": "告警已完成",
+      "font_class": "complete-alarm",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "23306621",
+      "name": "position",
+      "font_class": "position",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "8106275",
+      "name": "refresh",
+      "font_class": "refresh",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    }
+  ]
+}

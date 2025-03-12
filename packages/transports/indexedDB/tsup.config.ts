@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 import packageJson from './package.json';
 const name = packageJson.name;
-export default defineConfig((options: any) => ({ 
+export default defineConfig((options: any) => ({
   entry: [
     'src/index.ts'
   ],
@@ -14,6 +14,7 @@ export default defineConfig((options: any) => ({
   sourcemap: true,
   clean: true,
   treeshake: true,
+  noExternal:['flex-tools','idb-keyval','unstorage','unstorage/drivers/indexedb'],
   // 压缩代码
   minify: !options.watch,
   banner: {

@@ -10,10 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@voerkalogger/console": "workspace:^1.0.0",
-    "@voerkalogger/core": "workspace:^1.0.0",
-    "@voerkalogger/file": "workspace:^1.0.0",
-    "@voerkalogger/http": "workspace:^1.0.0",
+    "@voerkalogger/console": "workspace:^1.1.13",
+    "@voerkalogger/core": "workspace:^1.1.13",
+    "@voerkalogger/file": "workspace:^1.1.13",
+    "@voerkalogger/http": "workspace:^1.1.13",
     "flex-tools": "^1.4.33"
   },
   "devDependencies": {

@@ -11,11 +11,11 @@
 [34mESM[39m Build start
 [34mCJS[39m Build start
 [34mDTS[39m Build start
-[32mESM[39m [1mdist\index.mjs     [22m[32m2.79 KB[39m
-[32mESM[39m [1mdist\index.mjs.map [22m[32m9.59 KB[39m
-[32mESM[39m ⚡️ Build success in 1299ms
 [32mCJS[39m [1mdist\index.js     [22m[32m3.29 KB[39m
 [32mCJS[39m [1mdist\index.js.map [22m[32m9.59 KB[39m
-[32mCJS[39m ⚡️ Build success in 1305ms
-[32mDTS[39m ⚡️ Build success in 10288ms
+[32mCJS[39m ⚡️ Build success in 7541ms
+[32mESM[39m [1mdist\index.mjs     [22m[32m2.79 KB[39m
+[32mESM[39m [1mdist\index.mjs.map [22m[32m9.59 KB[39m
+[32mESM[39m ⚡️ Build success in 7554ms
+[32mDTS[39m ⚡️ Build success in 17296ms
 [32mDTS[39m [1mdist\index.d.ts [22m[32m1010.00 B[39m

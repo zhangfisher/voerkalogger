@@ -7,13 +7,11 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "commit": "git add . && git cz",
     "docs": "docsify serve docs",
-    "prepare": "husky install",
     "build": "turbo build",
-    "release": "changeset version && changeset publish",
+    "publish:all": "changeset version && changeset publish",
     "changeset": "changeset",
-    "sync": "cnpm sync @voerkalogger/core @voerkalogger/console @voerkalogger/file @voerkalogger/http @voerkalogger/syslog"
+    "sync": "cnpm sync @voerkalogger/core @voerkalogger/console @voerkalogger/file @voerkalogger/http @voerkalogger/storage @voerkalogger/syslog"
   },
   "keywords": [],
   "author": "",
@@ -21,11 +19,11 @@
   "dependencies": {
     "@voerkalogger/http": "workspace:^1.0.0",
     "dayjs": "^1.11.7",
-    "lodash": "^4.17.21",
     "path-browserify": "^1.0.1",
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.28.1",
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@commitlint/cz-commitlint": "^17.4.4",
@@ -34,14 +32,8 @@
     "@types/path-browserify": "^1.0.0",
     "commitizen": "^4.3.0",
     "conventional-changelog-cli": "^2.2.2",
-    "husky": "^8.0.3",
     "tsx": "^4.19.2",
     "turbo": "^2.4.4"
-  },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
   },
   "packageManager": "pnpm@9.0.0"
 }

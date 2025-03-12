@@ -16,5 +16,5 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["examples"]
+  "ignore": []
 }

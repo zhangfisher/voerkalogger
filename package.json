@@ -10,9 +10,9 @@
     "commit": "git add . && git cz",
     "docs": "docsify serve docs",
     "prepare": "husky install",
-    "build:all": "pnpm -r build",
-    "release:all": "pnpm -r version:patch && pnpm build:all && pnpm changelog && git add . && git commit -m \"build: release all packages\" && pnpm -r release",
-    "changelog": "conventional-changelog -p angular -i ./docs/intro/changelog.md -s -r 0 && git add ./docs/intro/changelog.md",
+    "build": "turbo build",
+    "release": "changeset version && changeset publish",
+    "changeset": "changeset",
     "sync": "cnpm sync @voerkalogger/core @voerkalogger/console @voerkalogger/file @voerkalogger/http @voerkalogger/syslog"
   },
   "keywords": [],
@@ -35,11 +35,13 @@
     "commitizen": "^4.3.0",
     "conventional-changelog-cli": "^2.2.2",
     "husky": "^8.0.3",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "turbo": "^2.4.4"
   },
   "config": {
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
     }
-  }
+  },
+  "packageManager": "pnpm@9.0.0"
 }

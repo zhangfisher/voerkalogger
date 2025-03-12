@@ -1,0 +1,21 @@
+
+> @voerkalogger/core@1.1.12 build E:\Work\Code\sources\voerkalogger\packages\core
+> tsup
+
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v6.7.0
+[34mCLI[39m Using tsup config: E:\Work\Code\sources\voerkalogger\packages\core\tsup.config.ts
+[34mCLI[39m Target: es2017
+[34mCLI[39m Cleaning output folder
+[34mESM[39m Build start
+[34mCJS[39m Build start
+[34mDTS[39m Build start
+[32mCJS[39m [1mdist\index.js     [22m[32m10.20 KB[39m
+[32mCJS[39m [1mdist\index.js.map [22m[32m46.17 KB[39m
+[32mCJS[39m ⚡️ Build success in 2613ms
+[32mESM[39m [1mdist\index.mjs     [22m[32m9.99 KB[39m
+[32mESM[39m [1mdist\index.mjs.map [22m[32m46.17 KB[39m
+[32mESM[39m ⚡️ Build success in 4531ms
+[32mDTS[39m ⚡️ Build success in 9859ms
+[32mDTS[39m [1mdist\index.d.ts [22m[32m9.67 KB[39m

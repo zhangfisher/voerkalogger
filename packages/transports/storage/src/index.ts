@@ -16,12 +16,14 @@ export type StorageTransportOptions<VoerkaLoggerRecord> = TransportBaseOptions<V
 export type StorageTransportVoerkaLoggerRecord = string
 
 export type StorageTransportQuery = {
-    page?:number,
-    pageSize?:number,
-    level?:string,
-    tags?:string[],
-    module?:string,
+    page?    : number,
+    pageSize?: number,
+    levels?  : string | string[]
+    sort     : 'asc' | 'desc'
 }
+export type StorageTransportQueryFilter = (record:VoerkaLoggerRecord)=>boolean
+
+
 export type StorageTransportLogMeta = {
     beginIndex:number,                  // 起始日志索引
     endIndex:number,                    // 结束日志索引    
@@ -35,7 +37,7 @@ export default class StorageTransport extends TransportBase<StorageTransportOpti
                driver   : 'auto',
                appName  : 'voerka',
                storeName: 'voerkalogs', 
-               maxCount : 1000                       // 最大日志数量
+               maxCount : 1000                       // 最大日志数量 
             },options) as TransportOptions<StorageTransportOptions<VoerkaLoggerRecord>>
         );
         this._initStorage()
@@ -73,10 +75,12 @@ export default class StorageTransport extends TransportBase<StorageTransportOpti
 
     private async _initStorage(){
         try{
-            this._storage = localForage.createInstance({
+            const opts = {
                 name: this.options.appName,
                 storeName: this.options.storeName,
-            })            
+            }
+            
+            this._storage = localForage.createInstance(opts)            
             this._initMeta()
         }catch(e:any){
             this.logger?.error(e.stack)
@@ -102,9 +106,7 @@ export default class StorageTransport extends TransportBase<StorageTransportOpti
             elapsed += interval;
         } 
         await this.storage.setItem('_locking',true)
-    }
-
-    
+    } 
 
     async VoerkaLoggerRecord(items:VoerkaLoggerRecord[]) {
         if(!this.isAvailable()) return
@@ -130,6 +132,7 @@ export default class StorageTransport extends TransportBase<StorageTransportOpti
         type LogLevelIndexes = Record<VoerkaLoggerLevelName,any[]>
 
         let oldIndex:LogLevelIndexes | null = await this.storage.getItem(`_level_indexes`) 
+
         let levelIndex:LogLevelIndexes = oldIndex ? oldIndex : {
                 NOTSET:[],
                 DEBUG:[],
@@ -145,6 +148,7 @@ export default class StorageTransport extends TransportBase<StorageTransportOpti
             levelIndex[levelName].push(item.id)
         }
         await this.storage.setItem(`_level_indexes`,levelIndex)
+
     }
 
     private async _clearExpiredLogs(){
@@ -152,33 +156,79 @@ export default class StorageTransport extends TransportBase<StorageTransportOpti
         const { beginIndex,endIndex } = meta
         const maxCount = this.options.maxCount
         if(endIndex - beginIndex > maxCount){
-            const keys = Array.from({length:endIndex-beginIndex},(_,i)=>`${beginIndex+i}`)
+            const keys = Array.from({
+                length:endIndex-beginIndex-maxCount
+            },(_,i)=>`${beginIndex+i}`)
             await Promise.all(keys.map(async key=>{
                 await this.storage.removeItem(key)
             }))
-            meta.beginIndex = endIndex
+            meta.beginIndex = meta.beginIndex + keys.length
             await this.storage.setItem('meta',meta)
         }
     }
-     
-    async getLogs(query:StorageTransportQuery):Promise<VoerkaLoggerRecord[]>{
-        const { page=0,pageSize=0 } = Object.assign({},query)
-        const isPaging = page>0 && pageSize>0
-        const {beginIndex,endIndex } = await this._getMeta()
+
+     /**
+      * 
+      * getLogs({
+      *     page:1,pageSize:10,
+      *     sort:"desc" | 'asc' ,
+      *     levels:['DEBUG',"INFO"],
+      *     modules:['a','b'],
+      * )})
+      * 
+      * getLogs(record=>record.message.includes('xssss'))
+      * 
+      * @param query 
+      * @returns 
+      */
+    async getLogs(query:StorageTransportQuery | StorageTransportQueryFilter):Promise<VoerkaLoggerRecord[]>{
+        
+        if(typeof query == 'function'){            
+            const {beginIndex,endIndex } = await this._getMeta()
+            const keys = Array.from({
+                length:endIndex - beginIndex
+            },(_,i)=>`${beginIndex+i}`).reverse() 
+
+            const results:VoerkaLoggerRecord[] = []
+            for(let key of keys){
+                const record = await this.storage.getItem<VoerkaLoggerRecord>(key)
+                if(record && query(record)){
+                    results.push(record)
+                }
+            }
+            return results
+        }else{
+            const { sort= 'desc', page=0,pageSize=0,levels=[] } = Object.assign({},query)
+            const isPaging = page>0 && pageSize>0
+            const {beginIndex,endIndex } = await this._getMeta()
+        
+            const pageStartIndex = isPaging ? (page-1) * pageSize : 0
     
-        const pageStartIndex = isPaging ? (page-1) * pageSize : 0
+            let keys:string[] = Array.from({
+                length:page==0 || pageSize==0 ?
+                    endIndex - beginIndex :                         // 读取所有日志
+                    pageSize                                        // 读取指定页数的日志
+            },(_,i)=>`${pageStartIndex+i}`)
+    
+            // 当指定日志级别
+            if(levels.length>0){
+                const levelIndexes = await this.storage.getItem<Record<VoerkaLoggerLevelName,string[]>>(`_level_indexes`)
+                if(levelIndexes){
+                    const lvs = Array.isArray(levels) ? levels : [levels]
+                    keys = lvs.reduce((prev,level)=>{
+                        return prev.concat(levelIndexes[level.toUpperCase() as VoerkaLoggerLevelName] || [])
+                    },[] as string[])
+                }            
+            }        
+            const logs = (await Promise.all(keys.map(async key=>{
+                return this.storage.getItem<VoerkaLoggerRecord>(key)
+            })))
+                .filter((item)=>item!=null)
+                .sort((a,b)=>Number(a!.id) - Number(b!.id))                 as VoerkaLoggerRecord[]
+    
 
-        const keys = Array.from({
-            length:page==0 || pageSize==0 ?
-                endIndex - beginIndex :                         // 读取所有日志
-                pageSize                                        // 读取指定页数的日志
-        },(_,i)=>`${pageStartIndex+i}`)
-
-        const logs = (await Promise.all(keys.map(async key=>{
-            return this.storage.getItem<VoerkaLoggerRecord>(key)
-        }))).filter((item)=>item!=null) as VoerkaLoggerRecord[]
-
-        return logs
+            return sort==='desc' ? logs.reverse() : logs
+        }        
     }
 
 

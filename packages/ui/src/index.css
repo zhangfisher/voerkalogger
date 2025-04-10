@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.line-height-none {
+  line-height: 0px !important;
+}
+
+/* 设置全局样式 */
+html,
+body {
+  @apply bg-gray-100 dark:bg-gray-900 dark:text-white;
+}

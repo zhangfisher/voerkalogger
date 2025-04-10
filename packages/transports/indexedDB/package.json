@@ -33,7 +33,7 @@
   "license": "ISC",
   "dependencies": {
     "@voerkalogger/core": "workspace:*",
-    "flex-tools": "^1.4.33",
+    "flex-tools": "^1.4.41",
     "idb-keyval": "^6.2.1",
     "std-env": "^3.4.3",
     "typescript": "^5.8.2",

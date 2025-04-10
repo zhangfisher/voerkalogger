@@ -26,7 +26,7 @@
     "license": "MIT",
     "dependencies": {
         "ansicolor": "^1.1.100",
-        "flex-tools": "^1.4.33",
+        "flex-tools": "^1.4.41",
         "std-env": "^3.4.3",
         "ts-essentials": "^9.3.0"
     },

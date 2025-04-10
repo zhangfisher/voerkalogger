@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@voerkalogger/core": "workspace:^1.1.14",
-    "flex-tools": "^1.4.33",
+    "flex-tools": "^1.4.41",
     "localforage": "^1.10.0"
   },
   "devDependencies": {

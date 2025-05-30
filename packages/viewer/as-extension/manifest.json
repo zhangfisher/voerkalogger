@@ -9,5 +9,5 @@
         "16": "public/hyt16.png"
     },
     "action": {},
-    "devtools_page": "../dist/index.html"
+    "devtools_page": "index.html"
 }

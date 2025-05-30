@@ -1,5 +1,5 @@
 {
-    "name": "@voerka-phone/web",
+    "name": "@voerka-logger/viewer",
     "version": "1.0.2",
     "type": "module",
     "files": [

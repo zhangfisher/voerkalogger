@@ -8,6 +8,6 @@
     "icons": {
         "16": "public/hyt16.png"
     },
-    "action": {},
-    "devtools_page": "index.html"
+    "devtools_page": "index.html",
+    "action": { "default_popup": "index.html" }
 }

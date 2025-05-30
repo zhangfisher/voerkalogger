@@ -24,7 +24,6 @@
         "dev:lib": "vite -c vite.config.lib.ts",
         "build:lib_": "vite build -c vite.config.lib.ts && tsc",
         "build:lib": "node --max_old_space_size=1024000 ./node_modules/vite/bin/vite.js build -c vite.config.lib.ts && tsc",
-        "build:extension": "vite build -c vite.config.extension.ts && tsc",
         "build:all": "pnpm build && pnpm build:lib && pnpm build:extension",
         "test": "vitest",
         "prepare": "npx tw-patch install"

@@ -30,15 +30,14 @@ export default defineConfig(({ mode }) => {
             host: '0.0.0.0',
             proxy: {
                 '^/peer': {
-                    target:
-                        env.VITE__VOERKA__PEER_SERVER__PROXY || 'http://127.0.0.1:8000/api/peer/',
+                    target: env.VITE__VOERKA__PEER_SERVER__PROXY || 'http://127.0.0.1:8000/api/peer/',
                     // rewrite: (path) => path.replace(/^\/peer/, ""),
                     // ws: true,
                     changeOrigin: true,
                 },
                 '^/api': {
                     target: env.VITE__VOERKA__SERVER__PROXY || 'http://127.0.0.1:8000/api/',
-                    rewrite: (path) => path.replace(/^\/api/, ''),
+                    rewrite: (path: string) => path.replace(/^\/api/, ''),
                     // ws: true,
                     changeOrigin: true,
                 },

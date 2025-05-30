@@ -7,39 +7,36 @@
  * @Description:
  * @TODO:
  */
+import { findUnreadCallCount } from '@/api/call-read';
+import { cn, UserModule } from '@/app';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { SidebarFooter, SidebarMenu } from '@/components/ui/sidebar';
+import { SidebarFooter } from '@/components/ui/sidebar';
+import { useModuleStore } from '@voerka/react';
+import { useRequest } from 'alova/client';
 import {
-    Contact,
-    FlaskConical,
-    Info,
-    NotepadText,
-    Phone,
-    Settings,
-    Star,
-    TriangleAlert,
-    UserPen,
-    Users,
+  Contact,
+  FlaskConical,
+  Info,
+  NotepadText,
+  Phone,
+  Settings,
+  UserPen,
+  Users
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Button } from '../ui/button';
-import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { UserPanel } from '../user-panel';
-import { findUnreadCallCount } from '@/api/call-read';
-import { useModuleStore } from '@voerka/react';
-import { cn, UserModule } from '@/app';
+import CallStatusCornerBadge from './call-status-corner-badge';
+import CountBadge from './count-badge';
 import MenuItem from './MenuItem';
 import WrapBadge from './wrap-badge';
-import CountBadge from './count-badge';
-import { useRequest } from 'alova/client';
-import CallStatusCornerBadge from './call-status-corner-badge';
 const testItems = import.meta.env.DEV
     ? [
           {

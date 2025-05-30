@@ -1,8 +1,9 @@
-# React + Vite
+# web客户端
+实现web前端电话应用.
+## 技术栈
+采用 vite+react+typescript+shadcn+tailwindcss 技术栈编写前端页面
+采用 @crxjs/vite-plugin 打包为插件格式
+采用 @voerka/react 作为应用构建框架
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 插件
+将这个spa应用以dialog的方式插入到浏览器的任何页面当中

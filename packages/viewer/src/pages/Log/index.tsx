@@ -52,7 +52,6 @@ export const LogPage: React.FC<ErrorLogProps> = () => {
     refreshDeps: [filterText, isAsc, selectedLevels, pageSize],
     defaultPageSize: pageSize,
   });
-  console.log('data,loading', data, loading, pagination);
   return (
     <main className="flex flex-col h-screen space-y-2 overflow-hidden">
       <LogTopBar

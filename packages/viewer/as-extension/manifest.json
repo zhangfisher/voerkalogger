@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cezaraugusto/chrome-extension-manifest-json-schema/refs/heads/main/manifest/manifest.schema.v3.json",
+  "manifest_version": 3,
+  "name": "voerka-phone",
+  "version": "1.0.0",
+  "description": "A simple Chrome extension using Vite and React",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "videoCapture",
+    "audio",
+    "scripting",
+    "cookies",
+    "http://*/*"
+  ],
+  "icons": {
+    "16": "public/hyt16.png"
+  },
+  "action": {},
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["as-extension/contentScript.ts"],
+      "run_at": "document_end"
+    }
+  ]
+}

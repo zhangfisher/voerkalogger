@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Voerka Logger</title>
+</head>
+
+<body style="display: none;">
+  <script>
+    console.log(`111111111111111111111111111`, 111111111111111111111111111)
+    chrome.devtools.panels.create(
+      "Voerka Logger", // 面板标题
+      "", // 图标路径，可选
+      "index.html" // SPA 应用的入口 HTML 文件
+    );
+  </script>
+</body>
+
+</html>

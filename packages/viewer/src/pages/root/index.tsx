@@ -14,7 +14,7 @@ export interface RootProps {
   // value: any
 }
 
-const Root: React.FC<RootProps> = () => {
+export const Root: React.FC<RootProps> = () => {
   return (
     <div className="flex h-full">
       {/* <SidebarProvider> */}

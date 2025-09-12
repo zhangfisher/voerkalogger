@@ -1,5 +1,11 @@
 # @voerkalogger/core
 
+## 1.1.16
+
+### Patch Changes
+
+-   6efa6e2: feat: add library mode
+
 ## 1.1.15
 
 ### Patch Changes

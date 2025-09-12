@@ -1,6 +1,6 @@
 {
   "name": "@voerkalogger/storage",
-  "version": "1.1.15",
+  "version": "1.1.16",
   "description": "Http transport for voerkalogger",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@voerkalogger/core": "workspace:^1.1.15",
+    "@voerkalogger/core": "workspace:^1.1.16",
     "flex-tools": "^1.5.6",
     "localforage": "^1.10.0"
   },

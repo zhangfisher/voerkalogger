@@ -1,21 +1,22 @@
 
-> @voerkalogger/console@1.1.11 build E:\Work\Code\sources\voerkalogger\packages\transports\console
+> @voerkalogger/console@1.1.15 build E:\Work\Code\sources\voerkalogger\packages\transports\console
 > tsup
 
 [34mCLI[39m Building entry: src/index.ts
 [34mCLI[39m Using tsconfig: tsconfig.json
-[34mCLI[39m tsup v6.7.0
+[34mCLI[39m tsup v8.4.0
 [34mCLI[39m Using tsup config: E:\Work\Code\sources\voerkalogger\packages\transports\console\tsup.config.ts
 [34mCLI[39m Target: es2017
 [34mCLI[39m Cleaning output folder
 [34mESM[39m Build start
 [34mCJS[39m Build start
+[32mCJS[39m [1mdist\index.js     [22m[32m2.13 KB[39m
+[32mCJS[39m [1mdist\index.js.map [22m[32m7.61 KB[39m
+[32mCJS[39m ⚡️ Build success in 457ms
+[32mESM[39m [1mdist\index.mjs     [22m[32m1.84 KB[39m
+[32mESM[39m [1mdist\index.mjs.map [22m[32m7.59 KB[39m
+[32mESM[39m ⚡️ Build success in 739ms
 [34mDTS[39m Build start
-[32mESM[39m [1mdist\index.mjs     [22m[32m1.82 KB[39m
-[32mESM[39m [1mdist\index.mjs.map [22m[32m5.82 KB[39m
-[32mESM[39m ⚡️ Build success in 7346ms
-[32mCJS[39m [1mdist\index.js     [22m[32m2.14 KB[39m
-[32mCJS[39m [1mdist\index.js.map [22m[32m5.82 KB[39m
-[32mCJS[39m ⚡️ Build success in 7345ms
-[32mDTS[39m ⚡️ Build success in 17039ms
-[32mDTS[39m [1mdist\index.d.ts [22m[32m668.00 B[39m
+[32mDTS[39m ⚡️ Build success in 8406ms
+[32mDTS[39m [1mdist\index.d.mts [22m[32m655.00 B[39m
+[32mDTS[39m [1mdist\index.d.ts  [22m[32m655.00 B[39m

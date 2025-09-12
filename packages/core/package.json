@@ -26,13 +26,14 @@
     "license": "MIT",
     "dependencies": {
         "ansicolor": "^1.1.100",
-        "flex-tools": "^1.4.41",
-        "std-env": "^3.4.3",
-        "ts-essentials": "^9.3.0"
+        "asyncsignal": "^0.0.5",
+        "flex-tools": "^1.5.6",
+        "std-env": "^3.4.3"
     },
     "devDependencies": {
         "@swc/core": "^1.11.8",
         "@types/node": "^22.13.10",
+        "ts-essentials": "^9.3.0",
         "ts-node": "^10.9.1",
         "tsup": "^8.4.0",
         "typescript": "^5.8.2",

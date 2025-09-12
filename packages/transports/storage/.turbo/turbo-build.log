@@ -1,21 +1,23 @@
 
-> @voerkalogger/storage@1.1.11 build E:\Work\Code\sources\voerkalogger\packages\transports\storage
+> @voerkalogger/storage@1.1.15 build E:\Work\Code\sources\voerkalogger\packages\transports\storage
 > tsup
 
 [34mCLI[39m Building entry: src/index.ts
 [34mCLI[39m Using tsconfig: tsconfig.json
-[34mCLI[39m tsup v6.7.0
+[34mCLI[39m tsup v8.4.0
 [34mCLI[39m Using tsup config: E:\Work\Code\sources\voerkalogger\packages\transports\storage\tsup.config.ts
 [34mCLI[39m Target: esnext
 [34mCLI[39m Cleaning output folder
 [34mESM[39m Build start
 [34mCJS[39m Build start
+Entry module "dist/index.js" is using named and default exports together. Consumers of your bundle will have to use `chunk.default` to access the default export, which may not be what you want. Use `output.exports: "named"` to disable this warning.
+[32mCJS[39m [1mdist\index.js     [22m[32m3.97 KB[39m
+[32mCJS[39m [1mdist\index.js.map [22m[32m18.34 KB[39m
+[32mCJS[39m ⚡️ Build success in 931ms
+[32mESM[39m [1mdist\index.mjs     [22m[32m3.78 KB[39m
+[32mESM[39m [1mdist\index.mjs.map [22m[32m18.34 KB[39m
+[32mESM[39m ⚡️ Build success in 933ms
 [34mDTS[39m Build start
-[32mCJS[39m [1mdist\index.js     [22m[32m3.32 KB[39m
-[32mCJS[39m [1mdist\index.js.map [22m[32m13.44 KB[39m
-[32mCJS[39m ⚡️ Build success in 7577ms
-[32mESM[39m [1mdist\index.mjs     [22m[32m3.17 KB[39m
-[32mESM[39m [1mdist\index.mjs.map [22m[32m13.44 KB[39m
-[32mESM[39m ⚡️ Build success in 7579ms
-[32mDTS[39m ⚡️ Build success in 17069ms
-[32mDTS[39m [1mdist\index.d.ts [22m[32m1.88 KB[39m
+[32mDTS[39m ⚡️ Build success in 8340ms
+[32mDTS[39m [1mdist\index.d.mts [22m[32m2.00 KB[39m
+[32mDTS[39m [1mdist\index.d.ts  [22m[32m2.00 KB[39m

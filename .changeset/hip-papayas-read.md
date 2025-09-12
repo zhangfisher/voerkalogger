@@ -8,4 +8,4 @@
 '@voerkalogger/core': patch
 ---
 
-add library modefeat:
+feat: add library mode

@@ -1,11 +1,17 @@
 {
-  "workbench.colorCustomizations": {
-    "commandCenter.border": "#e7e7e799",
-    "sash.hoverBorder": "#1467af",
-    "titleBar.activeBackground": "#0f4c81",
-    "titleBar.activeForeground": "#e7e7e7",
-    "titleBar.inactiveBackground": "#0f4c8199",
-    "titleBar.inactiveForeground": "#e7e7e799"
+  "terminal.integrated.persistentSessionReviveProcess": "onExitAndWindowClose",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": false
   },
-  "peacock.color": "#0F4C81"
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "prettier.tabWidth": 4,
 }

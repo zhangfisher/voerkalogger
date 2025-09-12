@@ -1,23 +1,18 @@
-
-import {
-	VoerkaLoggerLevelNames,
-	VoerkaLoggerLevel,
-	VoerkaLoggerLevelName,
-} from "./consts";
-import { formatDateTime } from "flex-tools/misc/formatDateTime";
-
+import { VoerkaLoggerLevelNames, VoerkaLoggerLevel, VoerkaLoggerLevelName } from './consts';
+import { formatDateTime } from 'flex-tools/misc/formatDateTime';
+import type { VoerkaLogger } from './Logger';
 
 export function isFunction(fn: any) {
-	return typeof fn === "function";
+    return typeof fn === 'function';
 }
 export function isError(err: any) {
-	return err instanceof Error;
+    return err instanceof Error;
 }
 
 export function safeCall(fn: Function) {
-	try {
-		return fn();
-	} catch {}
+    try {
+        return fn();
+    } catch {}
 }
 
 /**
@@ -25,8 +20,8 @@ export function safeCall(fn: Function) {
  * @param e
  */
 export function outputError(e: Error, now?: number) {
-	const datetime = formatDateTime(now || new Date(),"YYYY-MM-DD HH:mm:ss SSS");
-	console.error(`[ERROR] - ${datetime} : ${e.stack}`);
+    const datetime = formatDateTime(now || new Date(), 'YYYY-MM-DD HH:mm:ss SSS');
+    console.error(`[ERROR] - ${datetime} : ${e.stack}`);
 }
 
 /**
@@ -40,21 +35,23 @@ export function outputError(e: Error, now?: number) {
  *
  * @param level
  */
-export function normalizeLevel(
-	level: string | number | VoerkaLoggerLevel | VoerkaLoggerLevelName
-): VoerkaLoggerLevel {
-	let result: VoerkaLoggerLevel;
-	if (level === undefined || level === null || Number.isNaN(level)) {
-		result = VoerkaLoggerLevel.WARN;
-	} else if (typeof level == "string") {
-		const levelValue = VoerkaLoggerLevelNames.indexOf(level.toUpperCase());
-		result = levelValue <= 0 ? VoerkaLoggerLevel.WARN : levelValue;
-	} else if (typeof level == "number") {
-		result = level < 0 || level > 5 ? VoerkaLoggerLevel.WARN : level;
-	} else {
-		result = VoerkaLoggerLevel.WARN;
-	}
-	return result;
+export function normalizeLevel(level: string | number | VoerkaLoggerLevel | VoerkaLoggerLevelName): VoerkaLoggerLevel {
+    let result: VoerkaLoggerLevel;
+    if (level === undefined || level === null || Number.isNaN(level)) {
+        result = VoerkaLoggerLevel.WARN;
+    } else if (typeof level == 'string') {
+        const levelValue = VoerkaLoggerLevelNames.indexOf(level.toUpperCase());
+        result = levelValue <= 0 ? VoerkaLoggerLevel.WARN : levelValue;
+    } else if (typeof level == 'number') {
+        result = level < 0 || level > 5 ? VoerkaLoggerLevel.WARN : level;
+    } else {
+        result = VoerkaLoggerLevel.WARN;
+    }
+    return result;
+}
+
+export function isVoerkaLogger(obj: any): obj is VoerkaLogger {
+    return obj['__VOERKA_LOGGER__'];
 }
 
 // const presetColors: any = {
@@ -157,7 +154,7 @@ export function normalizeLevel(
 // 		} else {
 // 			interpVars = [String(interpVars)];
 // 		}
- 
+
 // 		const msg = isError(message) ? (message as any).stack
 // 			: isFunction(message) ? callWithError(message as any)
 // 			: String(message);

@@ -1,5 +1,13 @@
 # @voerkalogger/syslog
 
+## 1.1.4
+
+### Patch Changes
+
+-   6efa6e2: feat: add library mode
+-   Updated dependencies [6efa6e2]
+    -   @voerkalogger/core@1.1.16
+
 ## 1.1.3
 
 ### Patch Changes

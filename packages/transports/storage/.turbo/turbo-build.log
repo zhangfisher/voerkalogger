@@ -1,5 +1,5 @@
 
-> @voerkalogger/storage@1.1.15 build E:\Work\Code\sources\voerkalogger\packages\transports\storage
+> @voerkalogger/storage@1.1.16 build E:\Work\Code\sources\voerkalogger\packages\transports\storage
 > tsup
 
 [34mCLI[39m Building entry: src/index.ts
@@ -13,11 +13,11 @@
 Entry module "dist/index.js" is using named and default exports together. Consumers of your bundle will have to use `chunk.default` to access the default export, which may not be what you want. Use `output.exports: "named"` to disable this warning.
 [32mCJS[39m [1mdist\index.js     [22m[32m3.97 KB[39m
 [32mCJS[39m [1mdist\index.js.map [22m[32m18.34 KB[39m
-[32mCJS[39m ⚡️ Build success in 931ms
+[32mCJS[39m ⚡️ Build success in 1242ms
 [32mESM[39m [1mdist\index.mjs     [22m[32m3.78 KB[39m
 [32mESM[39m [1mdist\index.mjs.map [22m[32m18.34 KB[39m
-[32mESM[39m ⚡️ Build success in 933ms
+[32mESM[39m ⚡️ Build success in 1327ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 8340ms
+[32mDTS[39m ⚡️ Build success in 9519ms
 [32mDTS[39m [1mdist\index.d.mts [22m[32m2.00 KB[39m
 [32mDTS[39m [1mdist\index.d.ts  [22m[32m2.00 KB[39m

@@ -9,12 +9,15 @@
       "@voerkalogger/indexeddb",
       "@voerkalogger/core",
       "@voerkalogger/http",
-      "@voerkalogger/file"
+      "@voerkalogger/file",
+      "@voerkalogger/syslog"
     ]
   ],
   "linked": [],
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": [
+    "voerka-positioning"
+  ]
 }

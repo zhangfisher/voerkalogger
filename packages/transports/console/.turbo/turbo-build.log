@@ -1,5 +1,5 @@
 
-> @voerkalogger/console@1.1.15 build E:\Work\Code\sources\voerkalogger\packages\transports\console
+> @voerkalogger/console@1.1.16 build E:\Work\Code\sources\voerkalogger\packages\transports\console
 > tsup
 
 [34mCLI[39m Building entry: src/index.ts
@@ -10,13 +10,13 @@
 [34mCLI[39m Cleaning output folder
 [34mESM[39m Build start
 [34mCJS[39m Build start
-[32mCJS[39m [1mdist\index.js     [22m[32m2.13 KB[39m
-[32mCJS[39m [1mdist\index.js.map [22m[32m7.61 KB[39m
-[32mCJS[39m ⚡️ Build success in 457ms
 [32mESM[39m [1mdist\index.mjs     [22m[32m1.84 KB[39m
 [32mESM[39m [1mdist\index.mjs.map [22m[32m7.59 KB[39m
-[32mESM[39m ⚡️ Build success in 739ms
+[32mESM[39m ⚡️ Build success in 621ms
+[32mCJS[39m [1mdist\index.js     [22m[32m2.13 KB[39m
+[32mCJS[39m [1mdist\index.js.map [22m[32m7.61 KB[39m
+[32mCJS[39m ⚡️ Build success in 627ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 8406ms
+[32mDTS[39m ⚡️ Build success in 10181ms
 [32mDTS[39m [1mdist\index.d.mts [22m[32m655.00 B[39m
 [32mDTS[39m [1mdist\index.d.ts  [22m[32m655.00 B[39m

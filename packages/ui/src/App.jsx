@@ -12,10 +12,10 @@
  * @example
  */
 
-import { useEffect } from "react";
-import { RouterProvider } from "react-router";
-import mqttClient from "./messageManager";
-import router from "./router";
+// import { useEffect } from "react";
+// import { RouterProvider } from "react-router";
+// import mqttClient from "./messageManager";
+// import router from "./router";
 // function Navigation() {
 //   useGlobalRouter();
 //   return (

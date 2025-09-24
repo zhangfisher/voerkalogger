@@ -4,7 +4,6 @@ import { ClickScrollPlugin, OverlayScrollbars } from "overlayscrollbars";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
-import "./plugins/vconsole.js";
 import "overlayscrollbars/overlayscrollbars.css";
 import "./assets/iconfont/iconfont.css";
 import "@tikkhun/react-ui/dist/style.css";

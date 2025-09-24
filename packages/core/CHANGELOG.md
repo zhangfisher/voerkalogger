@@ -1,5 +1,11 @@
 # @voerkalogger/core
 
+## 1.1.17
+
+### Patch Changes
+
+-   9391f65: fix some error
+
 ## 1.1.16
 
 ### Patch Changes

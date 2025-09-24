@@ -1,5 +1,12 @@
 # @voerkalogger/storage
 
+## 1.1.17
+
+### Patch Changes
+
+-   Updated dependencies [9391f65]
+    -   @voerkalogger/core@1.1.17
+
 ## 1.1.16
 
 ### Patch Changes

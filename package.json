@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "docs": "docsify serve docs",
-    "build": "turbo build",
+    "build": "turbo build --filter=!voerka-positioning",
     "publish:all": "changeset version && changeset publish",
     "changeset": "changeset",
     "sync": "cnpm sync @voerkalogger/core @voerkalogger/console @voerkalogger/file @voerkalogger/http @voerkalogger/storage @voerkalogger/syslog"
